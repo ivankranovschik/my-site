@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Электронный дневник</title>
+    <title>Мой Дневник</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,36 +19,45 @@
         </section>
 
         <section id="section-grades" class="content-section">
-            <p style="text-align:center; color:#666; margin-top:50px;">Раздел оценок в разработке.</p>
+            <p style="text-align:center; color:#64748b; margin-top:50px; font-size: 18px;">Раздел оценок находится в разработке.</p>
         </section>
     </main>
 
     <script>
-        const subjects = ["Математика", "Русский язык", "Литература", "История", "Физика", "Химия", "Биология", "География", "Английский язык", "Физкультура", "Информатика"];
+        const subjects = ["Математика", "Русский язык", "Литература", "История", "Физика", "Химия", "Биология", "География", "Английский язык", "Физкультура", "Информатика", "Обществознание"];
+        const times = ["08:00 - 08:45", "08:55 - 09:40", "09:50 - 10:35", "10:55 - 11:40", "11:55 - 12:40", "12:50 - 13:35", "13:45 - 14:30"];
         const days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"];
+        
         const grid = document.getElementById("schedule-grid");
 
         days.forEach(day => {
             const dayCard = document.createElement("div");
             dayCard.className = "day-card";
             
-            const dayTitle = document.createElement("h3");
-            dayTitle.innerText = day;
-            dayCard.appendChild(dayTitle);
-
-            const list = document.createElement("ol");
-            const lessonsCount = Math.floor(Math.random() * 2) + 6; // 6 или 7 уроков
+            // Генерируем 6 или 7 уроков
+            const lessonsCount = Math.floor(Math.random() * 2) + 6; 
+            
+            dayCard.innerHTML = `<h3>${day} <span>${lessonsCount} ур.</span></h3>`;
+            const list = document.createElement("ul");
 
             for (let i = 0; i < lessonsCount; i++) {
                 const li = document.createElement("li");
                 const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
                 
-                // Создаем структуру ячеек (Номер, Предмет, ДЗ, Оценка)
+                // Рандомно ставим оценку (с шансом 30%)
+                let gradeHTML = '';
+                if (Math.random() > 0.7) {
+                    const randomGrade = Math.floor(Math.random() * 2) + 4; // 4 или 5
+                    gradeHTML = `<span class="grade-badge grade-${randomGrade}">${randomGrade}</span>`;
+                }
+
                 li.innerHTML = `
-                    <div class="lesson-number">${i}</div>
-                    <div class="subject-name">${randomSubject}</div>
-                    <div class="homework-text">не задано</div>
-                    <div class="grade-value"></div>
+                    <div class="lesson-number">${i + 1}</div>
+                    <div class="lesson-info">
+                        <div class="subject-name">${randomSubject}</div>
+                        <div class="lesson-time">${times[i]}</div>
+                    </div>
+                    ${gradeHTML}
                 `;
                 list.appendChild(li);
             }
@@ -57,7 +66,7 @@
             grid.appendChild(dayCard);
         });
 
-        // Логика кнопок
+        // Логика переключения вкладок
         const btnSchedule = document.getElementById("btn-schedule");
         const btnGrades = document.getElementById("btn-grades");
         const secSchedule = document.getElementById("section-schedule");
