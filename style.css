@@ -1,7 +1,7 @@
-/* Общие стили для страницы */
+/* Общие стили страницы */
 body {
-    font-family: sans-serif;
-    background-color: #f4f6f9;
+    font-family: Arial, sans-serif;
+    background-color: #f7f9fa;
     margin: 0;
     padding: 20px;
 }
@@ -10,86 +10,148 @@ body {
 .diary-header {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     justify-content: center;
 }
 
 .nav-btn {
-    padding: 10px 20px;
+    padding: 10px 25px;
     font-size: 16px;
-    border: none;
-    border-radius: 5px;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     cursor: pointer;
-    background-color: #e0e0e0;
-    transition: 0.3s;
-}
-
-.nav-btn.active {
-    background-color: #007bff;
-    color: white;
-}
-
-/* Контейнер расписания на всю ширину */
-.content-container {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Сетка для дней недели (5 колонок) */
-.schedule-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
-    width: 100%;
-}
-
-/* Карточка дня */
-.day-card {
-    background: #ffffff;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    border-top: 5px solid #007bff;
-}
-
-.day-card h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    text-align: center;
-    color: #007bff;
-}
-
-.day-card ol {
-    padding-left: 20px;
-    margin: 0;
-}
-
-.day-card li {
-    margin-bottom: 12px;
+    background-color: #f0f0f0;
     color: #333;
 }
 
-/* Управление видимостью вкладок */
+.nav-btn.active {
+    background-color: #4ca64c;
+    color: white;
+    border-color: #3d8b3d;
+}
+
+/* Контейнер на всю ширину экрана */
+.content-container {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Сетка для дней недели (растягивается во всю ширь) */
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 больших дневных блока в ряд */
+    gap: 25px;
+    width: 100%;
+}
+
+/* Карточка дня (зеленая рамка) */
+.day-card {
+    background: #ffffff;
+    border: 3px solid #a3c9a8;
+    border-radius: 4px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Шапка таблицы внутри дня */
+.day-card h3 {
+    margin: 0;
+    padding: 12px;
+    background-color: #cbdccb;
+    color: #2b512b;
+    text-align: center;
+    font-size: 16px;
+    border-bottom: 2px solid #a3c9a8;
+}
+
+/* Стилизация таблицы-списка */
+.day-card ol {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Строка урока */
+.day-card li {
+    display: grid;
+    grid-template-columns: 40px 2fr 3fr 70px; /* Колонки: №, Урок, ДЗ, Оценка */
+    border-bottom: 1px solid #e2e8e2;
+    min-height: 45px;
+    align-items: center;
+    font-size: 14px;
+}
+
+.day-card li:last-child {
+    border-bottom: none;
+}
+
+/* Чередование цветов строк (как в оригинале) */
+.day-card li:nth-child(even) {
+    background-color: #fcfdfe;
+}
+.day-card li:nth-child(odd) {
+    background-color: #f5f8f5;
+}
+
+/* Оформление ячеек внутри строки */
+.day-card li::before {
+    counter-increment: section -1; /* Костыль для нумерации с 0 */
+}
+
+/* Нумерация уроков (0, 1, 2...) */
+.day-card li .lesson-number {
+    text-align: center;
+    font-weight: bold;
+    color: #444;
+    border-right: 1px solid #e2e8e2;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Название предмета */
+.day-card li .subject-name {
+    padding: 5px 10px;
+    color: #0066cc;
+    font-weight: bold;
+}
+
+/* Текст домашнего задания */
+.day-card li .homework-text {
+    padding: 5px 10px;
+    color: #555;
+    border-left: 1px solid #e2e8e2;
+    border-right: 1px solid #e2e8e2;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Поле для оценки */
+.day-card li .grade-value {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    color: #2b512b;
+}
+
+/* Управление вкладками */
 .content-section {
     display: none;
 }
-
 .content-section.active {
     display: block;
 }
-
 .section-title {
-    text-align: center;
-    margin-bottom: 30px;
+    display: none; /* Прячем заголовок, чтобы было точь-в-точь как на скрине */
 }
 
-.placeholder-text {
-    text-align: center;
-    color: #777;
-}
-
-/* Если экран маленький */
-@media (max-width: 1000px) {
+/* Адаптивность для узких экранов */
+@media (max-width: 1100px) {
     .schedule-grid {
         grid-template-columns: 1fr;
     }
