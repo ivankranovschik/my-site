@@ -30,11 +30,39 @@
 
         <!-- СЕКЦИЯ 1: ГЛАВНАЯ СТРАНИЦА -->
         <section id="section-main" class="content-section active">
-            <div class="welcome-box">
-                <h1>Мы строим <span>Миры</span></h1>
-                <div class="accent-line"></div>
-                <!-- ИСПРАВЛЕННЫЙ ТЕКСТ (САЙТ И ВЫМЫШЛЕННЫЕ) -->
-                <p>Добро пожаловать на официальный сайт строителей Minecraft-сервера <strong>Мирополис RP</strong>. Наша команда создает масштабные вымышленные города с нуля: мы проектируем реалистичные дороги, сложные transport-ные развязки, государственные учреждения, жилые кварталы и уникальные коммерческие объекты для различных работ и профессий, обеспечивая полное погружение в Роле Плей атмосферу.</p>
+            
+            <!-- СОЧНЫЙ СЛАЙДЕР С КАРТИНКАМИ ДОРОГ И МОСКВЫ ВМЕСТО СТАРЫХ ТЕКСТОВ -->
+            <div class="moscow-slider">
+                <div class="slider-track">
+                    <!-- Слайд 1: Развязка -->
+                    <div class="slide active" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.6)), url('https://unsplash.com');">
+                        <div class="slide-content">
+                            <h2>Проектирование дорожных сетей</h2>
+                            <p>Строим сложные транспортные развязки и эстакады по реальным чертежам</p>
+                        </div>
+                    </div>
+                    <!-- Слайд 2: Москва-Сити -->
+                    <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.6)), url('https://unsplash.com');">
+                        <div class="slide-content">
+                            <h2>Современная архитектура</h2>
+                            <p>Переносим величие небоскребов и бизнес-центров прямо в мир Minecraft</p>
+                        </div>
+                    </div>
+                    <!-- Слайд 3: Ночные дороги -->
+                    <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.6)), url('https://unsplash.com');">
+                        <div class="slide-content">
+                            <h2>Инфраструктура мегаполиса</h2>
+                            <p>Создаем функциональные города для полноценной RolePlay игры</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Точки навигации слайдера -->
+                <div class="slider-dots">
+                    <span class="dot active" onclick="currentSlide(0)"></span>
+                    <span class="dot" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                </div>
             </div>
 
             <h2 class="section-title">🏆 Топ Строителей Сервера</h2>
@@ -118,7 +146,7 @@
                         </select>
                     </div>
                     <div class="input-field full-width">
-                        <label>Расскажите о своем опыте на других servers</label>
+                        <label>Расскажите о своем опыте на других серверах</label>
                         <input type="text" id="app-experience" placeholder="Где строили раньше, почему ушли...">
                     </div>
                 </div>
@@ -129,7 +157,7 @@
 
     </main>
 
-    <!-- СКРИПТ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК И ОТПРАВКИ -->
+    <!-- СКРИПТЫ СЛАЙДЕРА И ВКЛАДОК -->
     <script>
         function switchSection(targetId) {
             const sections = document.querySelectorAll('.content-section');
@@ -166,6 +194,36 @@
                 toast.style.display = 'none';
             }, 5000);
         }
+
+        // ЛОГИКА АВТОМАТИЧЕСКОГО СЛАЙДЕРА
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlides() {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1; }
+            
+            slides[slideIndex - 1].classList.add('active');
+            dots[slideIndex - 1].classList.add('active');
+            
+            setTimeout(showSlides, 4000); // Смена слайда каждые 4 секунды
+        }
+
+        function currentSlide(n) {
+            slideIndex = n;
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            slides[slideIndex].classList.add('active');
+            dots[slideIndex].classList.add('active');
+        }
+
+        // Запуск автослайдера при загрузке
+        setTimeout(showSlides, 4000);
     </script>
 </body>
 </html>
