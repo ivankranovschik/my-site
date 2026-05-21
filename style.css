@@ -1,0 +1,96 @@
+/* Общие стили для страницы */
+body {
+    font-family: sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Шапка с кнопками */
+.diary-header {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.nav-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #e0e0e0;
+    transition: 0.3s;
+}
+
+.nav-btn.active {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Контейнер расписания на всю ширину */
+.content-container {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Сетка для дней недели (5 колонок) */
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    width: 100%;
+}
+
+/* Карточка дня */
+.day-card {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-top: 5px solid #007bff;
+}
+
+.day-card h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #007bff;
+}
+
+.day-card ol {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.day-card li {
+    margin-bottom: 12px;
+    color: #333;
+}
+
+/* Управление видимостью вкладок */
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.placeholder-text {
+    text-align: center;
+    color: #777;
+}
+
+/* Если экран маленький */
+@media (max-width: 1000px) {
+    .schedule-grid {
+        grid-template-columns: 1fr;
+    }
+}
