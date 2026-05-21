@@ -16,55 +16,75 @@
             box-shadow: 0 2px 4px rgba(67, 56, 202, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
-        /* Стилизация выпадающего списка ролей */
-        .input-group select {
-            width: 100%;
-            padding: 14px 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 15px;
-            outline: none;
-            box-sizing: border-box;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .input-group select option {
-            background: #764ba2;
-            color: white;
-        }
-        .input-group select:focus {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #ffffff;
-        }
+
+        /* Обновленный контейнер приветствия */
         .user-greeting {
-            font-size: 14px;
-            color: #64748b;
+            font-size: 15px;
+            color: #1e293b;
             font-weight: 600;
             margin-left: auto;
             background: #ffffff;
-            padding: 8px 16px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            padding: 6px 16px;
+            border-radius: 14px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
+            border: 1px solid #f1f5f9;
         }
-        /* Цветной тег роли в шапке */
+
+        /* БАЗОВЫЙ СТИЛЬ ДЛЯ ВСЕХ ПРЕФИКСОВ (Ультра-красота) */
         .role-tag {
-            background: #e0e7ff;
-            color: #4338ca;
-            padding: 2px 8px;
-            border-radius: 6px;
+            padding: 5px 14px;
+            border-radius: 10px;
             font-size: 12px;
+            font-weight: 800;
             text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* УНИКАЛЬНЫЕ ДИЗАЙНЫ ДЛЯ КАЖДОЙ РОЛИ */
+        .role-creator {
+            background: linear-gradient(135deg, #ff007f 0%, #7928ca 100%);
+            box-shadow: 0 4px 14px rgba(244, 63, 94, 0.4);
+        }
+
+        .role-admin {
+            background: linear-gradient(135deg, #ff9900 0%, #ff5e62 100%);
+            box-shadow: 0 4px 14px rgba(255, 94, 98, 0.4);
+        }
+
+        .role-director {
+            background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+            color: #2e2300;
+            box-shadow: 0 4px 14px rgba(218, 165, 32, 0.4);
+        }
+
+        .role-teacher {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            box-shadow: 0 4px 14px rgba(79, 172, 254, 0.4);
+        }
+
+        .role-pedagogue {
+            background: linear-gradient(135deg, #20bf55 0%, #01baef 100%);
+            box-shadow: 0 4px 14px rgba(32, 191, 85, 0.4);
+        }
+
+        .role-student {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            color: #1e40af;
+            box-shadow: 0 4px 14px rgba(161, 196, 253, 0.4);
         }
     </style>
 </head>
 <body>
 
-    <!-- ЭКРАН АВТОРИЗАЦИИ С ВЫБОРОМ РОЛИ -->
+    <!-- ЭКРАН АВТОРИЗАЦИИ -->
     <div id="login-screen" class="login-screen">
         <div class="login-card">
             <h2>Электронный Дневник</h2>
@@ -75,14 +95,13 @@
                 <input type="text" id="display-name" placeholder="Например: Иван">
             </div>
 
-            <!-- ВЫБОР РОЛИ -->
             <div class="input-group">
                 <label>Выберите роль</label>
                 <select id="user-role">
                     <option value="Создатель">Создатель</option>
                     <option value="Администратор">Администратор</option>
-                    <option value="Учитель">Учитель</option>
                     <option value="Директор">Директор</option>
+                    <option value="Учитель">Учитель</option>
                     <option value="Педагог">Педагог</option>
                     <option value="Ученик" selected>Ученик</option>
                 </select>
@@ -103,7 +122,7 @@
         </div>
     </div>
 
-    <!-- ОСНОВНОЙ КОНТЕНТ ДНЕВНИКА -->
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
     <header class="diary-header">
         <button id="btn-schedule" class="nav-btn active">📅 Расписание</button>
         <button id="btn-grades" class="nav-btn">📊 Оценки</button>
@@ -138,13 +157,23 @@
             const userVal = document.getElementById('username').value.trim();
             const passVal = document.getElementById('password').value.trim();
 
-            // Проверка админ-данных (Иван / admin / 1234)
             if (nameVal === 'Иван' && userVal === 'admin' && passVal === '1234') {
                 loginScreen.classList.add('hidden');
                 
-                // Подставляем имя и выбранную роль в шапку
                 greetName.innerText = `👤 ${nameVal}`;
                 greetRole.innerText = roleVal;
+                
+                // Очищаем старые стили ролей
+                greetRole.className = 'role-tag';
+                
+                // Присваиваем красивый класс градиента в зависимости от роли
+                if (roleVal === 'Создатель') greetRole.classList.add('role-creator');
+                else if (roleVal === 'Администратор') greetRole.classList.add('role-admin');
+                else if (roleVal === 'Директор') greetRole.classList.add('role-director');
+                else if (roleVal === 'Учитель') greetRole.classList.add('role-teacher');
+                else if (roleVal === 'Педагог') greetRole.classList.add('role-pedagogue');
+                else if (roleVal === 'Ученик') greetRole.classList.add('role-student');
+
                 userDisplay.style.display = 'flex';
             } else {
                 errorMsg.style.display = 'block';
