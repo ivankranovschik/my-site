@@ -43,7 +43,6 @@
             transition: all 0.2s;
         }
         .tab-btn:hover { background-color: #d8dadf; }
-        /* Стиль для активной (нажатой) вкладки */
         .tab-btn.active {
             background-color: #007bff;
             color: white;
@@ -51,13 +50,13 @@
 
         /* Стили для контента вкладок */
         .tab-content {
-            display: none; /* По умолчанию скрываем все вкладки */
+            display: none;
         }
         .tab-content.active {
-            display: block; /* Показываем только активную вкладку */
+            display: block;
         }
 
-        /* Стили для формы дневника */
+        /* Стили для формы оценок */
         .form-group {
             display: grid;
             grid-template-columns: 2fr 1fr 2fr auto;
@@ -100,7 +99,6 @@
         }
         .delete-btn:hover { background-color: #bd2130; }
         
-        /* Временная заглушка для пустых вкладок */
         .placeholder-text {
             color: #777;
             font-style: italic;
@@ -111,16 +109,17 @@
 <body>
 
 <div class="container">
-    <!-- Навигационное меню (Вкладки) -->
+    <!-- Навигационное меню (Теперь только 2 вкладки) -->
     <div class="tabs-menu">
-        <button class="tab-btn active" onclick="switchTab('diaryTab', this)">📘 Дневник</button>
+        <button class="tab-btn active" onclick="switchTab('gradesTab', this)">📊 Оценки</button>
         <button class="tab-btn" onclick="switchTab('scheduleTab', this)">📅 Расписание</button>
-        <button class="tab-btn" onclick="switchTab('gradesTab', this)">📊 Оценки</button>
     </div>
 
-    <!-- ВКЛАДКА 1: ДНЕВНИК (Уже работает) -->
-    <div id="diaryTab" class="tab-content active">
-        <h1>Панель управления дневником</h1>
+    <!-- ВКЛАДКА 1: ОЦЕНКИ (Сюда переехал весь функционал) -->
+    <div id="gradesTab" class="tab-content active">
+        <h1>📊 Успеваемость и оценки</h1>
+        
+        <!-- Форма для добавления данных -->
         <div class="form-group">
             <input type="text" id="nameInput" placeholder="ФИО ученика">
             <input type="number" id="gradeInput" placeholder="Оценка" min="1" max="5">
@@ -128,7 +127,7 @@
             <button onclick="addRecord()">Добавить</button>
         </div>
 
-        <h2>Список успеваемости</h2>
+        <h2>Список класса</h2>
         <table>
             <thead>
                 <tr>
@@ -139,41 +138,32 @@
                 </tr>
             </thead>
             <tbody id="diaryTableBody">
-                <!-- Сюда JavaScript будет добавлять строки -->
+                <!-- Сюда JavaScript добавляет строки -->
             </tbody>
         </table>
     </div>
 
-    <!-- ВКЛАДКА 2: РАСПИСАНИЕ (Пока пустая) -->
+    <!-- ВКЛАДКА 2: РАСПИСАНИЕ -->
     <div id="scheduleTab" class="tab-content">
         <h1>📅 Расписание уроков</h1>
-        <p class="placeholder-text">Здесь пока ничего нет. Раздел находится в разработке.</p>
-    </div>
-
-    <!-- ВКЛАДКА 3: ОЦЕНКИ (Пока пустая) -->
-    <div id="gradesTab" class="tab-content">
-        <h1>📊 Сводный отчет по оценкам</h1>
         <p class="placeholder-text">Здесь пока ничего нет. Раздел находится в разработке.</p>
     </div>
 </div>
 
 <script>
-    // ФУНКЦИЯ ДЛЯ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК
+    // Функция переключения вкладок
     function switchTab(tabId, buttonElement) {
-        // 1. Скрываем весь контент вкладок
         const contents = document.querySelectorAll('.tab-content');
         contents.forEach(content => content.classList.remove('active'));
 
-        // 2. Делаем все кнопки меню неактивными
         const buttons = document.querySelectorAll('.tab-btn');
         buttons.forEach(btn => btn.classList.remove('active'));
 
-        // 3. Показываем нужный контент и делаем кликнутую кнопку активной
         document.getElementById(tabId).classList.add('active');
         buttonElement.classList.add('active');
     }
 
-    // ЛОГИКА ДНЕВНИКА (из прошлого шага)
+    // Логика работы с данными
     let diaryData = JSON.parse(localStorage.getItem('myDiaryData')) || [];
 
     window.onload = function() {
