@@ -5,6 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мой Дневник</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Дополнительные стили для новой вертикальной структуры внутри урока */
+        .lesson-block {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 100%;
+        }
+        .lesson-row {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .lesson-label {
+            font-weight: bold;
+            color: #64748b; /* Серый цвет для подписей */
+            margin-right: 5px;
+        }
+        .lesson-value {
+            color: #1e293b; /* Темный цвет для значений */
+        }
+        /* Делаем название предмета чуть выделяющимся */
+        .subject-highlight {
+            font-weight: 600;
+            color: #4f46e5; 
+        }
+        /* Подстраиваем высоту кружка с номером под новый размер карточки */
+        .day-card li {
+            align-items: flex-start;
+            padding: 16px;
+        }
+        .lesson-number {
+            margin-top: 2px;
+        }
+    </style>
 </head>
 <body>
 
@@ -34,7 +68,6 @@
             const dayCard = document.createElement("div");
             dayCard.className = "day-card";
             
-            // Генерируем 6 или 7 уроков
             const lessonsCount = Math.floor(Math.random() * 2) + 6; 
             
             dayCard.innerHTML = `<h3>${day} <span>${lessonsCount} ур.</span></h3>`;
@@ -44,20 +77,27 @@
                 const li = document.createElement("li");
                 const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
                 
-                // Рандомно ставим оценку (с шансом 30%)
-                let gradeHTML = '';
-                if (Math.random() > 0.7) {
-                    const randomGrade = Math.floor(Math.random() * 2) + 4; // 4 или 5
-                    gradeHTML = `<span class="grade-badge grade-${randomGrade}">${randomGrade}</span>`;
-                }
-
+                // Создаем строго структурированный блок с подписями по строкам
                 li.innerHTML = `
                     <div class="lesson-number">${i + 1}</div>
-                    <div class="lesson-info">
-                        <div class="subject-name">${randomSubject}</div>
-                        <div class="lesson-time">${times[i]}</div>
+                    <div class="lesson-block">
+                        <div class="lesson-time" style="margin-bottom: 5px;">⏰ ${times[i]}</div>
+                        
+                        <div class="lesson-row">
+                            <span class="lesson-label">Урок:</span>
+                            <span class="lesson-value subject-highlight">${randomSubject}</span>
+                        </div>
+                        
+                        <div class="lesson-row">
+                            <span class="lesson-label">Домашнее задание:</span>
+                            <span class="lesson-value">не задано</span>
+                        </div>
+                        
+                        <div class="lesson-row">
+                            <span class="lesson-label">Оценка:</span>
+                            <span class="lesson-value"></span>
+                        </div>
                     </div>
-                    ${gradeHTML}
                 `;
                 list.appendChild(li);
             }
