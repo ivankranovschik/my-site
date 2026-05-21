@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Электронный дневник</title>
     <style>
-        /* CSS: Делаем красивый дизайн */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f2f5;
@@ -23,6 +22,42 @@
             max-width: 800px;
         }
         h1, h2 { color: #333; }
+        
+        /* Стили для вкладок (меню) */
+        .tabs-menu {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            background-color: #e4e6eb;
+            color: #333;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { background-color: #d8dadf; }
+        /* Стиль для активной (нажатой) вкладки */
+        .tab-btn.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Стили для контента вкладок */
+        .tab-content {
+            display: none; /* По умолчанию скрываем все вкладки */
+        }
+        .tab-content.active {
+            display: block; /* Показываем только активную вкладку */
+        }
+
+        /* Стили для формы дневника */
         .form-group {
             display: grid;
             grid-template-columns: 2fr 1fr 2fr auto;
@@ -64,105 +99,127 @@
             font-size: 12px;
         }
         .delete-btn:hover { background-color: #bd2130; }
+        
+        /* Временная заглушка для пустых вкладок */
+        .placeholder-text {
+            color: #777;
+            font-style: italic;
+            padding: 20px 0;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>📘 Электронный дневник класса</h1>
-    
-    <!-- Форма для добавления данных -->
-    <div class="form-group">
-        <input type="text" id="nameInput" placeholder="ФИО ученика">
-        <input type="number" id="gradeInput" placeholder="Оценка" min="1" max="5">
-        <input type="text" id="homeworkInput" placeholder="Домашнее задание">
-        <button onclick="addRecord()">Добавить</button>
+    <!-- Навигационное меню (Вкладки) -->
+    <div class="tabs-menu">
+        <button class="tab-btn active" onclick="switchTab('diaryTab', this)">📘 Дневник</button>
+        <button class="tab-btn" onclick="switchTab('scheduleTab', this)">📅 Расписание</button>
+        <button class="tab-btn" onclick="switchTab('gradesTab', this)">📊 Оценки</button>
     </div>
 
-    <!-- Таблица, куда будут вставляться строки -->
-    <h2>Список успеваемости</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Ученик</th>
-                <th>Оценка</th>
-                <th>Домашнее задание</th>
-                <th>Действие</th>
-            </tr>
-        </thead>
-        <tbody id="diaryTableBody">
-            <!-- Сюда JavaScript будет добавлять строки -->
-        </tbody>
-    </table>
+    <!-- ВКЛАДКА 1: ДНЕВНИК (Уже работает) -->
+    <div id="diaryTab" class="tab-content active">
+        <h1>Панель управления дневником</h1>
+        <div class="form-group">
+            <input type="text" id="nameInput" placeholder="ФИО ученика">
+            <input type="number" id="gradeInput" placeholder="Оценка" min="1" max="5">
+            <input type="text" id="homeworkInput" placeholder="Домашнее задание">
+            <button onclick="addRecord()">Добавить</button>
+        </div>
+
+        <h2>Список успеваемости</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ученик</th>
+                    <th>Оценка</th>
+                    <th>Домашнее задание</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody id="diaryTableBody">
+                <!-- Сюда JavaScript будет добавлять строки -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ВКЛАДКА 2: РАСПИСАНИЕ (Пока пустая) -->
+    <div id="scheduleTab" class="tab-content">
+        <h1>📅 Расписание уроков</h1>
+        <p class="placeholder-text">Здесь пока ничего нет. Раздел находится в разработке.</p>
+    </div>
+
+    <!-- ВКЛАДКА 3: ОЦЕНКИ (Пока пустая) -->
+    <div id="gradesTab" class="tab-content">
+        <h1>📊 Сводный отчет по оценкам</h1>
+        <p class="placeholder-text">Здесь пока ничего нет. Раздел находится в разработке.</p>
+    </div>
 </div>
 
 <script>
-    // JavaScript: Логика работы сайта
+    // ФУНКЦИЯ ДЛЯ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК
+    function switchTab(tabId, buttonElement) {
+        // 1. Скрываем весь контент вкладок
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.remove('active'));
 
-    // 1. Создаем массив, куда будем сохранять данные. 
-    // Если в памяти браузера уже есть данные, берем их. Если нет — создаем пустой список.
+        // 2. Делаем все кнопки меню неактивными
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+
+        // 3. Показываем нужный контент и делаем кликнутую кнопку активной
+        document.getElementById(tabId).classList.add('active');
+        buttonElement.classList.add('active');
+    }
+
+    // ЛОГИКА ДНЕВНИКА (из прошлого шага)
     let diaryData = JSON.parse(localStorage.getItem('myDiaryData')) || [];
 
-    // 2. Эта функция запускается сама при открытии страницы. Она показывает сохраненных учеников.
     window.onload = function() {
         renderTable();
     };
 
-    // 3. Функция, которая рисует таблицу на экране
     function renderTable() {
         const tableBody = document.getElementById('diaryTableBody');
-        tableBody.innerHTML = ''; // Очищаем таблицу перед обновлением
+        tableBody.innerHTML = '';
 
-        // Проходимся циклом по каждому ученику в нашем списке
         diaryData.forEach((item, index) => {
             const row = document.createElement('tr');
-
             row.innerHTML = `
                 <td><strong>${item.name}</strong></td>
                 <td>${item.grade}</td>
                 <td>${item.homework}</td>
                 <td><button class="delete-btn" onclick="deleteRecord(${index})">Удалить</button></td>
             `;
-
-            tableBody.appendChild(row); // Добавляем строку в таблицу
+            tableBody.appendChild(row);
         });
     }
 
-    // 4. Функция добавления нового ученика
     function addRecord() {
         const name = document.getElementById('nameInput').value;
         const grade = document.getElementById('gradeInput').value;
         const homework = document.getElementById('homeworkInput').value;
 
-        // Проверяем, чтобы поля не были пустыми
         if (!name || !grade || !homework) {
             alert('Пожалуйста, заполните все поля!');
             return;
         }
 
-        // Создаем объект с данными нового ученика
-        const newStudent = {
-            name: name,
-            grade: grade,
-            homework: homework
-        };
+        const newStudent = { name, grade, homework };
+        diaryData.push(newStudent);
+        saveAndRefresh();
 
-        diaryData.push(newStudent); // Добавляем его в наш массив
-        saveAndRefresh(); // Сохраняем в память и обновляем экран
-
-        // Очищаем поля ввода для новой записи
         document.getElementById('nameInput').value = '';
         document.getElementById('gradeInput').value = '';
         document.getElementById('homeworkInput').value = '';
     }
 
-    // 5. Функция удаления записи
     function deleteRecord(index) {
-        diaryData.splice(index, 1); // Удаляем 1 элемент из массива по его номеру
-        saveAndRefresh(); // Сохраняем изменения и обновляем экран
+        diaryData.splice(index, 1);
+        saveAndRefresh();
     }
 
-    // 6. Вспомогательная функция: сохраняет массив в память браузера и перерисовывает таблицу
     function saveAndRefresh() {
         localStorage.setItem('myDiaryData', JSON.stringify(diaryData));
         renderTable();
