@@ -6,11 +6,11 @@
     <title>Мой Дневник</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Стильный бейдж для даты */
+        /* Обновленный минималистичный бейдж для даты */
         .date-badge {
             background: linear-gradient(135deg, #e0e7ff 0%, #ccfbf1 100%);
             color: #4338ca;
-            padding: 4px 12px;
+            padding: 5px 14px;
             border-radius: 20px;
             font-size: 13px;
             font-weight: 600;
@@ -39,30 +39,29 @@
     <script>
         const subjects = ["Математика", "Русский язык", "Литература", "История", "Физика", "Химия", "Биология", "География", "Английский язык", "Физкультура", "Информатика", "Обществознание"];
         const days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"];
-        const months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+        const months = ["мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря", "января", "февраля", "марта", "апреля"];
         
         const grid = document.getElementById("schedule-grid");
 
         // Вычисляем даты для текущей недели (начиная с понедельника)
         const current = new Date();
         const currentDay = current.getDay();
-        const distanceToMonday = currentDay === 0 ? -6 : 1 - currentDay; // Корректировка, если сегодня воскресенье
+        const distanceToMonday = currentDay === 0 ? -6 : 1 - currentDay; 
         const monday = new Date(current.setDate(current.getDate() + distanceToMonday));
 
         days.forEach((day, index) => {
             const dayCard = document.createElement("div");
             dayCard.className = "day-card";
             
-            // Вычисляем точную дату для конкретного дня недели
             const dateForDay = new Date(monday);
             dateForDay.setDate(monday.getDate() + index);
             const dateString = `${dateForDay.getDate()} ${months[dateForDay.getMonth()]}`;
 
             const lessonsCount = Math.floor(Math.random() * 2) + 6; // 6-7 уроков
             
-            // Вставляем название дня и красивый бейдж даты вместо счётчика уроков
+            // Здесь теперь чистый текст без лишних иконок перед датой
             dayCard.innerHTML = `
-                <h3>${day} <span class="date-badge">🗓️ ${dateString}</span></h3>
+                <h3>${day} <span class="date-badge">${dateString}</span></h3>
                 <div class="table-header">
                     <div style="text-align: center;">№</div>
                     <div>УРОК</div>
