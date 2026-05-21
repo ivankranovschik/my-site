@@ -40,10 +40,34 @@
         .school-display { color: #4f46e5; }
         .class-display { color: #10b981; background: #ecfdf5; border-color: #d1fae5; }
 
-        .constructor-day { background: #ffffff; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 10px; }
-        .constructor-day h4 { margin: 0 0 10px 0; color: #475569; }
+        /* Конструктор дней */
+        .constructor-day { 
+            background: #ffffff; padding: 15px; border-radius: 12px; 
+            border: 1px solid #e2e8f0; margin-bottom: 12px;
+            display: flex; flex-direction: column; gap: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+            animation: slideDown 0.2s ease-out;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .constructor-day-header {
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .constructor-day h4 { margin: 0; color: #334155; font-size: 15px; }
         
-        /* Стили для нового блока просмотра расписания */
+        .day-action-btn {
+            background: #fee2e2; color: #ef4444; border: none; padding: 4px 10px;
+            border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer;
+        }
+        .day-action-btn:hover { background: #fca5a5; }
+
+        .day-add-box {
+            display: flex; gap: 10px; background: #f1f5f9; padding: 12px; border-radius: 10px; margin-bottom: 15px;
+        }
+
+        /* Стили для блока просмотра расписания */
         .viewer-box {
             background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
             border: 2px dashed #3b82f6; border-radius: 14px; padding: 20px; margin-top: 15px;
@@ -127,28 +151,24 @@
             <div class="admin-panel" style="max-width: 800px; display: grid; gap: 20px; grid-template-columns: 1fr;">
                 <h2>Панель управления системой</h2>
                 
-                <!-- ОБНОВЛЕННЫЙ БЛОК ПРОСМОТРА РАСПИСАНИЯ КЛАССА -->
-                <div class="admin-form" style="border: 2px solid #3b82f6; background: #ffffff; box-shadow: 0 8px 20px rgba(59,130,246,0.05);">
-                    <h3 style="color: #1d4ed8; display:flex; align-items:center; gap:8px;">🔍 Просмотр расписания класса</h3>
-                    
+                <!-- БЛОК ПРОСМОТРА РАСПИСАНИЯ КЛАССА -->
+                <div class="admin-form" style="border: 2px solid #3b82f6; background: #ffffff;">
+                    <h3 style="color: #1d4ed8;">🔍 Просмотр расписания класса</h3>
                     <div class="form-group">
                         <label>1. Выберите школу</label>
                         <select id="view-school-select"></select>
                     </div>
-                    
                     <div class="form-group">
                         <label>2. Выберите класс</label>
                         <select id="view-class-select">
                             <option value="">-- Сначала выберите школу --</option>
                         </select>
                     </div>
-                    
                     <button id="load-class-schedule-btn" class="submit-btn" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); margin-top:5px;">Показать расписание</button>
-                    
                     <div id="schedule-viewer-output" class="viewer-box" style="display: none;"></div>
                 </div>
 
-                <!-- КОНСТРУКТОР КЛАССОВ -->
+                <!-- УЛУЧШЕННЫЙ КОНСТРУКТОР КЛАССОВ С ДОБАВЛЕНИЕМ ДНЕЙ -->
                 <div class="admin-form">
                     <h3>📐 Конструктор классов и расписания</h3>
                     <div class="form-group">
@@ -161,26 +181,45 @@
                     </div>
                     
                     <div class="form-group">
-                        <label style="margin-bottom:10px;">Заполните предметы (через запятую)</label>
-                        <div class="constructor-day">
-                            <h4>Понедельник</h4>
-                            <input type="text" class="constructor-input" data-day="Понедельник" placeholder="Математика, Физика, Русский...">
+                        <label style="margin-bottom:8px;">Управление учебными днями</label>
+                        
+                        <!-- ПАНЕЛЬ ДОБАВЛЕНИЯ НОВОГО ДНЯ -->
+                        <div class="day-add-box">
+                            <select id="constructor-day-selector" style="flex-grow:1; padding:8px;">
+                                <option value="Понедельник">Понедельник</option>
+                                <option value="Вторник">Вторник</option>
+                                <option value="Среда">Среда</option>
+                                <option value="Четверг">Четверг</option>
+                                <option value="Пятница">Пятница</option>
+                                <option value="Суббота">Суббота</option>
+                                <option value="Воскресенье">Воскресенье</option>
+                            </select>
+                            <button type="button" id="add-day-field-btn" style="padding: 8px 16px; background:#4f46e5; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">➕ Добавить день</button>
                         </div>
-                        <div class="constructor-day">
-                            <h4>Вторник</h4>
-                            <input type="text" class="constructor-input" data-day="Вторник" placeholder="Урок 1, Урок 2...">
-                        </div>
-                        <div class="constructor-day">
-                            <h4>Среда</h4>
-                            <input type="text" class="constructor-input" data-day="Среда" placeholder="Урок 1, Урок 2...">
-                        </div>
-                        <div class="constructor-day">
-                            <h4>Четверг</h4>
-                            <input type="text" class="constructor-input" data-day="Четверг" placeholder="Урок 1, Урок 2...">
-                        </div>
-                        <div class="constructor-day">
-                            <h4>Пятница</h4>
-                            <input type="text" class="constructor-input" data-day="Пятница" placeholder="Урок 1, Урок 2...">
+
+                        <!-- СЮДА ИНТЕРАКТИВНО ДОБАВЛЯЮТСЯ ДНИ -->
+                        <div id="constructor-days-container">
+                            <div class="constructor-day" id="c-day-Понедельник">
+                                <div class="constructor-day-header">
+                                    <h4>Понедельник</h4>
+                                    <button type="button" class="day-action-btn" onclick="removeDayField('Понедельник')">❌ Убрать день</button>
+                                </div>
+                                <input type="text" class="constructor-input" data-day="Понедельник" placeholder="Математика, Физика, Русский...">
+                            </div>
+                            <div class="constructor-day" id="c-day-Вторник">
+                                <div class="constructor-day-header">
+                                    <h4>Вторник</h4>
+                                    <button type="button" class="day-action-btn" onclick="removeDayField('Вторник')">❌ Убрать день</button>
+                                </div>
+                                <input type="text" class="constructor-input" data-day="Вторник" placeholder="Урок 1, Урок 2...">
+                            </div>
+                            <div class="constructor-day" id="c-day-Среда">
+                                <div class="constructor-day-header">
+                                    <h4>Среда</h4>
+                                    <button type="button" class="day-action-btn" onclick="removeDayField('Среда')">❌ Убрать день</button>
+                                </div>
+                                <input type="text" class="constructor-input" data-day="Среда" placeholder="Урок 1, Урок 2...">
+                            </div>
                         </div>
                     </div>
                     
@@ -266,6 +305,7 @@
         const newUserClassSelect = document.getElementById('new-user-class');
         const viewClassSelect = document.getElementById('view-class-select');
         const schoolLabel = document.getElementById('school-label');
+        const daysContainer = document.getElementById('constructor-days-container');
 
         userRoleSelect.addEventListener('change', () => {
             if (userRoleSelect.value === 'Создатель') {
@@ -276,7 +316,35 @@
         });
         if (userRoleSelect.value === 'Создатель') { loginSchoolSelect.disabled = true; schoolLabel.style.color = 'rgba(255, 255, 255, 0.4)'; }
 
-        // Генерация списков школ во всех блоках
+        // ЛОГИКА СВОБОДНОГО ДОБАВЛЕНИЯ ДНЕЙ НЕДЕЛИ В КОНСТРУКТОР
+        document.getElementById('add-day-field-btn').addEventListener('click', () => {
+            const selectedDay = document.getElementById('constructor-day-selector').value;
+            
+            // Если такой день уже выведен на экран, не дублируем его
+            if(document.getElementById(`c-day-${selectedDay}`)) {
+                alert('Этот день уже добавлен в конструктор!');
+                return;
+            }
+
+            const dayHTML = document.createElement('div');
+            dayHTML.className = 'constructor-day';
+            dayHTML.id = `c-day-${selectedDay}`;
+            dayHTML.innerHTML = `
+                <div class="constructor-day-header">
+                    <h4>${selectedDay}</h4>
+                    <button type="button" class="day-action-btn" onclick="removeDayField('${selectedDay}')">❌ Убрать день</button>
+                </div>
+                <input type="text" class="constructor-input" data-day="${selectedDay}" placeholder="Введите уроки через запятую">
+            `;
+            daysContainer.appendChild(dayHTML);
+        });
+
+        // Функция глобального удаления дня из формы конструктора
+        window.removeDayField = function(dayName) {
+            const field = document.getElementById(`c-day-${dayName}`);
+            if(field) field.remove();
+        };
+
         function renderSchools() {
             loginSchoolSelect.innerHTML = ''; newUserSchoolSelect.innerHTML = ''; 
             scheduleTargetSchool.innerHTML = ''; viewSchoolSelect.innerHTML = '';
@@ -289,7 +357,6 @@
             });
         }
 
-        // УМНАЯ СВЯЗАННАЯ ФИЛЬТРАЦИЯ ДЛЯ ПРОСМОТРА РАСПИСАНИЯ
         function filterViewerClasses() {
             viewClassSelect.innerHTML = '';
             const selectedSchool = viewSchoolSelect.value;
@@ -299,19 +366,15 @@
                 const [schoolName, className] = key.split('::');
                 if (schoolName === selectedSchool) {
                     const opt = document.createElement('option');
-                    opt.value = key; // Полный ключ: Школа::Класс
+                    opt.value = key;
                     opt.innerText = className;
                     viewClassSelect.appendChild(opt);
                     hasClasses = true;
                 }
             });
-
-            if(!hasClasses) {
-                viewClassSelect.innerHTML = '<option value="">-- В этой школе нет классов --</option>';
-            }
+            if(!hasClasses) viewClassSelect.innerHTML = '<option value="">-- В этой школе нет классов --</option>';
         }
 
-        // УМНАЯ СВЯЗАННАЯ ФИЛЬТРАЦИЯ ДЛЯ ФОРМЫ СОЗДАНИЯ ЮЗЕРА
         function filterUserCreationClasses() {
             newUserClassSelect.innerHTML = '<option value="Без класса">Без класса (Для Администрации)</option>';
             const selectedSchool = newUserSchoolSelect.value;
@@ -320,14 +383,12 @@
                 const [schoolName, className] = key.split('::');
                 if (schoolName === selectedSchool) {
                     const opt = document.createElement('option');
-                    opt.value = className;
-                    opt.innerText = className;
+                    opt.value = className; opt.innerText = className;
                     newUserClassSelect.appendChild(opt);
                 }
             });
         }
 
-        // Вешаем слушатели на изменение селекторов школ
         viewSchoolSelect.addEventListener('change', filterViewerClasses);
         newUserSchoolSelect.addEventListener('change', filterUserCreationClasses);
 
@@ -382,7 +443,6 @@
             document.getElementById('password').value = ''; document.getElementById('btn-schedule').click();
         });
 
-        // КНОПКА ЗАГРУЗКИ РАСПИСАНИЯ В ДИАГНОСТИЧЕСКОМ БЛОКЕ
         document.getElementById('load-class-schedule-btn').addEventListener('click', () => {
             const selectedKey = viewClassSelect.value;
             const viewerOutput = document.getElementById('schedule-viewer-output');
@@ -412,7 +472,7 @@
             viewerOutput.style.display = 'block';
         });
 
-        // СОХРАНЕНИЕ КОНСТРУКТОРА КЛАССОВ
+        // СОХРАНЕНИЕ КОНСТРУКТОРА КЛАССОВ И ДНЕЙ
         document.getElementById('save-class-schedule-btn').addEventListener('click', () => {
             const targetSchool = scheduleTargetSchool.value;
             const className = document.getElementById('new-class-name').value.trim();
@@ -420,23 +480,22 @@
             const toast = document.getElementById('schedule-success-toast');
 
             if (!className) { alert('Введите название класса!'); return; }
+            if (inputs.length === 0) { alert('Пожалуйста, добавьте хотя бы один день в конструктор!'); return; }
 
             const scheduleObj = {};
             inputs.forEach(input => {
                 const day = input.getAttribute('data-day');
                 const lessonsArray = input.value.split(',').map(s => s.trim()).filter(s => s.length > 0);
-                scheduleObj[day] = lessonsArray;
+                scheduleObj[day] = lessonsArray; // Сохраняем строго выбранные дни
             });
 
             schedulesDatabase[`${targetSchool}::${className}`] = scheduleObj;
             localStorage.setItem('customSchedules', JSON.stringify(schedulesDatabase));
             
-            // Перевызываем фильтрацию связанных списков классов
             filterViewerClasses();
             filterUserCreationClasses();
 
             document.getElementById('new-class-name').value = '';
-            inputs.forEach(input => input.value = '');
             toast.style.display = 'block'; setTimeout(() => toast.style.display = 'none', 3000);
         });
 
@@ -447,11 +506,7 @@
             if (!schoolName) return;
             schoolsDatabase.push(schoolName);
             localStorage.setItem('registeredSchools', JSON.stringify(schoolsDatabase));
-            
-            renderSchools();
-            filterViewerClasses();
-            filterUserCreationClasses();
-            
+            renderSchools(); filterViewerClasses(); filterUserCreationClasses();
             schoolNameInput.value = '';
             document.getElementById('school-success-toast').style.display = 'block';
             setTimeout(() => document.getElementById('school-success-toast').style.display = 'none', 3000);
@@ -476,84 +531,17 @@
             setTimeout(() => document.getElementById('success-toast').style.display = 'none', 3000);
         });
 
-        // ГЕНЕРАЦИЯ СЕТКИ
+        // УМНАЯ ДИНАМИЧЕСКАЯ ГЕНЕРАЦИЯ СЕТКИ НА ОСНОВЕ ВЫБРАННЫХ ДНЕЙ
         function generateScheduleGrid(school, userClass) {
             const grid = document.getElementById("schedule-grid");
             grid.innerHTML = '';
-            const days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"];
+            
             const months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
             const defaultSubjects = ["Математика", "Русский язык", "Литература", "История", "Физика", "Химия", "Биология", "География"];
+            
+            // Базовая разметка сдвига дат для классических дней
+            const dayOffsetMap = { "Понедельник": 0, "Вторник": 1, "Среда": 2, "Четверг": 3, "Пятница": 4, "Суббота": 5, "Воскресенье": 6 };
 
             const current = new Date();
             const distanceToMonday = current.getDay() === 0 ? -6 : 1 - current.getDay(); 
-            const monday = new Date(current.setDate(current.getDate() + distanceToMonday));
-
-            const customScheduleKey = `${school}::${userClass}`;
-            const hasCustomSchedule = schedulesDatabase[customScheduleKey];
-
-            days.forEach((day, index) => {
-                const dayCard = document.createElement("div");
-                dayCard.className = "day-card";
-                const dateForDay = new Date(monday);
-                dateForDay.setDate(monday.getDate() + index);
-                const dateString = `${dateForDay.getDate()} ${months[dateForDay.getMonth()]}`;
-                
-                dayCard.innerHTML = `
-                    <h3>${day} <span class="date-badge">${dateString}</span></h3>
-                    <div class="table-header">
-                        <div style="text-align: center;">№</div>
-                        <div>УРОК</div>
-                        <div>ДОМАШНЕЕ ЗАДАНИЕ</div>
-                        <div style="text-align: center;">ОЦЕНКА</div>
-                    </div>
-                `;
-                
-                const listContainer = document.createElement("div");
-                let lessonsList = [];
-
-                if (hasCustomSchedule && schedulesDatabase[customScheduleKey][day]) {
-                    lessonsList = schedulesDatabase[customScheduleKey][day];
-                } else {
-                    const randCount = Math.floor(Math.random() * 2) + 6;
-                    for(let k=0; k<randCount; k++) {
-                        lessonsList.push(defaultSubjects[Math.floor(Math.random() * defaultSubjects.length)]);
-                    }
-                }
-
-                lessonsList.forEach((subject, i) => {
-                    const row = document.createElement("div");
-                    row.className = "lesson-row";
-                    row.innerHTML = `
-                        <div class="col-num">${i + 1}</div>
-                        <div class="col-subject">${subject}</div>
-                        <div class="col-homework">не задано</div>
-                        <div class="col-grade"></div>
-                    `;
-                    listContainer.appendChild(row);
-                });
-
-                if (lessonsList.length === 0) {
-                    const emptyRow = document.createElement("div");
-                    emptyRow.style.padding = "20px"; emptyRow.style.textAlign = "center"; emptyRow.style.color = "#94a3b8";
-                    emptyRow.innerText = "Уроков нет";
-                    listContainer.appendChild(emptyRow);
-                }
-                dayCard.appendChild(listContainer);
-                grid.appendChild(dayCard);
-            });
-        }
-
-        const tabs = [
-            { btn: document.getElementById('btn-schedule'), section: document.getElementById('section-schedule') },
-            { btn: document.getElementById('btn-grades'), section: document.getElementById('section-grades') },
-            { btn: document.getElementById('btn-admin'), section: document.getElementById('section-admin') }
-        ];
-        tabs.forEach(tab => {
-            tab.btn.addEventListener('click', () => {
-                tabs.forEach(t => { t.btn.classList.remove('active'); t.section.classList.remove('active'); });
-                tab.btn.classList.add('active'); tab.section.classList.add('active');
-            });
-        });
-    </script>
-</body>
-</html>
+            const monday = new Date(current
