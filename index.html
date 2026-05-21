@@ -16,7 +16,28 @@
             box-shadow: 0 2px 4px rgba(67, 56, 202, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
-        /* Небольшое приветствие в шапке после входа */
+        /* Стилизация выпадающего списка ролей */
+        .input-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 15px;
+            outline: none;
+            box-sizing: border-box;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .input-group select option {
+            background: #764ba2;
+            color: white;
+        }
+        .input-group select:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ffffff;
+        }
         .user-greeting {
             font-size: 14px;
             color: #64748b;
@@ -26,12 +47,24 @@
             padding: 8px 16px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        /* Цветной тег роли в шапке */
+        .role-tag {
+            background: #e0e7ff;
+            color: #4338ca;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
-    <!-- ЭКРАН АВТОРИЗАЦИИ (3 поля) -->
+    <!-- ЭКРАН АВТОРИЗАЦИИ С ВЫБОРОМ РОЛИ -->
     <div id="login-screen" class="login-screen">
         <div class="login-card">
             <h2>Электронный Дневник</h2>
@@ -40,6 +73,19 @@
             <div class="input-group">
                 <label>Имя пользователя</label>
                 <input type="text" id="display-name" placeholder="Например: Иван">
+            </div>
+
+            <!-- ВЫБОР РОЛИ -->
+            <div class="input-group">
+                <label>Выберите роль</label>
+                <select id="user-role">
+                    <option value="Создатель">Создатель</option>
+                    <option value="Администратор">Администратор</option>
+                    <option value="Учитель">Учитель</option>
+                    <option value="Директор">Директор</option>
+                    <option value="Педагог">Педагог</option>
+                    <option value="Ученик" selected>Ученик</option>
+                </select>
             </div>
 
             <div class="input-group">
@@ -61,8 +107,10 @@
     <header class="diary-header">
         <button id="btn-schedule" class="nav-btn active">📅 Расписание</button>
         <button id="btn-grades" class="nav-btn">📊 Оценки</button>
-        <!-- Сюда подставится имя после успешного входа -->
-        <div id="user-display" class="user-greeting" style="display: none;">👤 Пользователь: </div>
+        <div id="user-display" class="user-greeting" style="display: none;">
+            <span id="greet-name">👤 Пользователь</span>
+            <span id="greet-role" class="role-tag">Роль</span>
+        </div>
     </header>
 
     <main class="content-container">
@@ -76,24 +124,30 @@
     </main>
 
     <script>
-        // Логика проверки авторизации
+        // Логика авторизации
         const loginScreen = document.getElementById('login-screen');
         const loginBtn = document.getElementById('login-btn');
         const errorMsg = document.getElementById('error-msg');
         const userDisplay = document.getElementById('user-display');
+        const greetName = document.getElementById('greet-name');
+        const greetRole = document.getElementById('greet-role');
 
         loginBtn.addEventListener('click', () => {
             const nameVal = document.getElementById('display-name').value.trim();
+            const roleVal = document.getElementById('user-role').value;
             const userVal = document.getElementById('username').value.trim();
             const passVal = document.getElementById('password').value.trim();
 
-            // Проверка всех трёх параметров (Иван / admin / 1234)
+            // Проверка админ-данных (Иван / admin / 1234)
             if (nameVal === 'Иван' && userVal === 'admin' && passVal === '1234') {
-                loginScreen.classList.add('hidden'); // Прячем окно входа
-                userDisplay.innerText = `👤 ${nameVal}`; // Выводим имя в шапку
-                userDisplay.style.display = 'block';
+                loginScreen.classList.add('hidden');
+                
+                // Подставляем имя и выбранную роль в шапку
+                greetName.innerText = `👤 ${nameVal}`;
+                greetRole.innerText = roleVal;
+                userDisplay.style.display = 'flex';
             } else {
-                errorMsg.style.display = 'block'; // Если хоть одно поле неверно
+                errorMsg.style.display = 'block';
             }
         });
 
