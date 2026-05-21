@@ -47,7 +47,6 @@
         }
         .logout-btn:hover { background: #fca5a5; }
 
-        /* Отображение выбранной школы в шапке */
         .school-display {
             font-size: 13px; color: #4f46e5; font-weight: bold;
             background: #eef2ff; padding: 6px 12px; border-radius: 8px;
@@ -63,11 +62,10 @@
             <h2>Электронный Дневник</h2>
             <p>Пожалуйста, войдите в свой аккаунт</p>
             
-            <!-- ВЫБОР ШКОЛЫ ПРИ ВХОДЕ -->
             <div class="input-group">
                 <label>Выберите школу</label>
                 <select id="login-school">
-                    <!-- Заполняется автоматически из JS -->
+                    <!-- Заполняется динамически -->
                 </select>
             </div>
 
@@ -99,7 +97,7 @@
             </div>
             
             <button id="login-btn" class="login-btn">Войти</button>
-            <div id="error-msg" class="error-message">Неверные данные для входа!</div>
+            <div id="error-msg" class="error-message">Неверные данные или школа выбрана неправильно!</div>
         </div>
     </div>
 
@@ -110,7 +108,6 @@
         <button id="btn-admin" class="nav-btn" style="display: none;">🛡️ Модерирование</button>
         
         <div id="user-display" class="user-greeting" style="display: none;">
-            <!-- Название школы в шапке -->
             <span id="greet-school" class="school-display">Школа</span>
             <span id="greet-name">👤 Пользователь</span>
             <span id="greet-role" class="role-tag">Роль</span>
@@ -132,20 +129,28 @@
             <div class="admin-panel" style="max-width: 700px; display: grid; gap: 20px; grid-template-columns: 1fr;">
                 <h2>Панель управления системой</h2>
                 
-                <!-- ФОРМА ДОБАВЛЕНИЯ НОВОЙ ШКОЛЫ -->
+                <!-- РЕГИСТРАЦИЯ ШКОЛЫ -->
                 <div class="admin-form">
                     <h3>🏫 Зарегистрировать новую школу</h3>
                     <div class="form-group">
                         <label>Название учебного заведения</label>
                         <input type="text" id="new-school-name" placeholder="Например: МБОУ СОШ №1">
                     </div>
-                    <button id="create-school-btn" class="submit-btn" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);">Добавить школу</button>
+                    <button id="create-school-btn" class="submit-btn" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">Добавить школу</button>
                     <div id="school-success-toast" class="success-toast">Школа успешно добавлена в общую базу! 🏫</div>
                 </div>
 
-                <!-- ФОРМА ДОБАВЛЕНИЯ ПОЛЬЗОВАТЕЛЯ -->
+                <!-- ДОБАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯ С ПРИВЯЗКОЙ К ШКОЛЕ -->
                 <div class="admin-form">
                     <h3>➕ Добавить нового пользователя</h3>
+                    
+                    <div class="form-group">
+                        <label>Прикрепить к школе</label>
+                        <select id="new-user-school">
+                            <!-- Заполняется динамически из базы -->
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label>Имя пользователя</label>
                         <input type="text" id="new-name" placeholder="Например: Алексей">
@@ -176,7 +181,6 @@
     </main>
 
     <script>
-        // Базы данных в localStorage
         let usersDatabase = JSON.parse(localStorage.getItem('registeredUsers')) || [];
         let schoolsDatabase = JSON.parse(localStorage.getItem('registeredSchools')) || ["Гимназия №1", "Лицей №12", "Школа №5"];
 
@@ -189,19 +193,28 @@
         const greetSchool = document.getElementById('greet-school');
         const btnAdmin = document.getElementById('btn-admin');
         const logoutBtn = document.getElementById('logout-btn');
+        
         const loginSchoolSelect = document.getElementById('login-school');
+        const newUserSchoolSelect = document.getElementById('new-user-school');
 
-        // Функция обновления списков школ на экране входа
+        // Функция обновления всех списков школ во всех выпадающих меню сайта
         function renderSchools() {
             loginSchoolSelect.innerHTML = '';
+            newUserSchoolSelect.innerHTML = '';
+            
             schoolsDatabase.forEach(school => {
-                const opt = document.createElement('option');
-                opt.value = school;
-                opt.innerText = school;
-                loginSchoolSelect.appendChild(opt);
+                // Опция для экрана входа
+                const opt1 = document.createElement('option');
+                opt1.value = school; opt1.innerText = school;
+                loginSchoolSelect.appendChild(opt1);
+
+                // Опция для формы создания пользователя
+                const opt2 = document.createElement('option');
+                opt2.value = school; opt2.innerText = school;
+                newUserSchoolSelect.appendChild(opt2);
             });
         }
-        renderSchools(); // Сразу генерируем при загрузке
+        renderSchools();
 
         function applyRoleStyle(role) {
             greetRole.innerText = role;
@@ -221,10 +234,11 @@
             const userVal = document.getElementById('username').value.trim();
             const passVal = document.getElementById('password').value.trim();
 
+            // Создатель обходит проверку школы, чтобы зайти в любое место
             if (nameVal === 'Иван' && userVal === 'admin' && passVal === '1234') {
                 loginScreen.classList.add('hidden');
                 greetName.innerText = `👤 ${nameVal}`;
-                greetSchool.innerText = schoolVal; // Выводим выбранную школу
+                greetSchool.innerText = schoolVal; 
                 applyRoleStyle(roleVal);
                 if (roleVal === 'Создатель' || roleVal === 'Администратор') btnAdmin.style.display = 'flex';
                 userDisplay.style.display = 'flex';
@@ -232,19 +246,26 @@
                 return;
             }
 
-            const foundUser = usersDatabase.find(u => u.login === userVal && u.password === passVal && u.name === nameVal && u.role === roleVal);
+            // Ищем пользователя с учетом привязанной школы
+            const foundUser = usersDatabase.find(u => 
+                u.login === userVal && 
+                u.password === passVal && 
+                u.name === nameVal && 
+                u.role === roleVal && 
+                u.school === schoolVal
+            );
 
             if (foundUser) {
                 loginScreen.classList.add('hidden');
                 greetName.innerText = `👤 ${foundUser.name}`;
-                greetSchool.innerText = schoolVal;
+                greetSchool.innerText = foundUser.school;
                 applyRoleStyle(foundUser.role);
                 if (foundUser.role === 'Создатель' || foundUser.role === 'Администратор') btnAdmin.style.display = 'flex';
                 else btnAdmin.style.display = 'none';
                 userDisplay.style.display = 'flex';
                 errorMsg.style.display = 'none';
             } else {
-                errorMsg.style.display = 'block';
+                errorMsg.style.display = 'block'; // Ошибка, если школа не совпала
             }
         });
 
@@ -255,7 +276,7 @@
             document.getElementById('btn-schedule').click();
         });
 
-        // ЛОГИКА ДОБАВЛЕНИЯ НОВОЙ ШКОЛЫ
+        // ЛОГИКА ДОБАВЛЕНИЯ ШКОЛЫ
         document.getElementById('create-school-btn').addEventListener('click', () => {
             const schoolNameInput = document.getElementById('new-school-name');
             const schoolName = schoolNameInput.value.trim();
@@ -266,11 +287,8 @@
                 return;
             }
 
-            // Добавляем в базу данных и сохраняем
             schoolsDatabase.push(schoolName);
             localStorage.setItem('registeredSchools', JSON.stringify(schoolsDatabase));
-            
-            // Сразу перерисовываем выпадающий список авторизации
             renderSchools();
 
             schoolNameInput.value = '';
@@ -278,8 +296,9 @@
             setTimeout(() => { schoolToast.style.display = 'none'; }, 3000);
         });
 
-        // Добавление пользователя
+        // ЛОГИКА ДОБАВЛЕНИЯ ПОЛЬЗОВАТЕЛЯ С ПРИВЯЗКОЙ
         document.getElementById('create-user-btn').addEventListener('click', () => {
+            const targetSchool = newUserSchoolSelect.value;
             const newName = document.getElementById('new-name').value.trim();
             const newRole = document.getElementById('new-role').value;
             const newLogin = document.getElementById('new-login').value.trim();
@@ -291,7 +310,14 @@
                 return;
             }
 
-            usersDatabase.push({ name: newName, role: newRole, login: newLogin, password: newPassword });
+            // Добавляем параметр school в объект пользователя
+            usersDatabase.push({ 
+                name: newName, 
+                role: newRole, 
+                login: newLogin, 
+                password: newPassword, 
+                school: targetSchool 
+            });
             localStorage.setItem('registeredUsers', JSON.stringify(usersDatabase));
 
             document.getElementById('new-name').value = '';
