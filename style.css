@@ -1,4 +1,4 @@
-/* Общие стили страницы */
+/* Базовые настройки страницы */
 body {
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
@@ -8,7 +8,7 @@ body {
     color: #2d3748;
 }
 
-/* ЭКРАН ВХОДА — ТЕПЕРЬ ОН ПЕРЕКРЫВАЕТ ВСЁ СВЕРХУ */
+/* ЭКРАН ВХОДА */
 .login-screen {
     position: fixed;
     top: 0;
@@ -19,19 +19,17 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 99999; /* Очень высокий приоритет, чтобы перекрыть расписание */
+    z-index: 99999;
     opacity: 1;
     visibility: visible;
     transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
-/* Этот класс скроет экран входа после успешной авторизации */
 .login-screen.hidden {
     opacity: 0;
     visibility: hidden;
 }
 
-/* Карточка авторизации */
 .login-card {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(15px);
@@ -47,198 +45,128 @@ body {
     box-sizing: border-box;
 }
 
-.login-card h2 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 26px;
-    font-weight: 700;
-}
+.login-card h2 { margin: 0 0 10px 0; font-size: 26px; font-weight: 700; }
+.login-card p { color: #e2e8f0; font-size: 14px; margin-bottom: 30px; }
 
-.login-card p {
-    color: #e2e8f0;
-    font-size: 14px;
-    margin-bottom: 30px;
-}
+.input-group { margin-bottom: 20px; text-align: left; }
+.input-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px; }
 
-/* Поля ввода */
-.input-group {
-    margin-bottom: 20px;
-    text-align: left;
+.input-group input, .input-group select {
+    width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1); color: white; font-size: 15px; outline: none; box-sizing: border-box; transition: all 0.3s ease;
 }
+.input-group select option { background: #764ba2; color: white; }
+.input-group input:focus, .input-group select:focus { background: rgba(255, 255, 255, 0.2); border-color: #ffffff; }
 
-.input-group label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #cbd5e1;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 14px 16px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 15px;
-    outline: none;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-}
-
-.input-group input::placeholder {
-    color: #cbd5e1;
-}
-
-.input-group input:focus {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: #ffffff;
-}
-
-/* Кнопка Войти */
 .login-btn {
-    width: 100%;
-    padding: 14px;
-    background: #ffffff;
-    color: #4f46e5;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    margin-top: 10px;
+    width: 100%; padding: 14px; background: #ffffff; color: #4f46e5; border: none; border-radius: 12px;
+    font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; margin-top: 10px;
 }
+.login-btn:hover { transform: translateY(-2px); background: #f8fafc; }
+.error-message { color: #fda4af; font-size: 13px; margin-top: 15px; display: none; font-weight: 600; }
 
-.login-btn:hover {
-    transform: translateY(-2px);
-    background: #f8fafc;
-}
-
-/* Ошибка авторизации */
-.error-message {
-    color: #fda4af;
-    font-size: 13px;
-    margin-top: 15px;
-    display: none;
-    font-weight: 600;
-}
-
-/* СТИЛИ ДЛЯ РАСПИСАНИЯ */
+/* УЛЬТРА-СОВРЕМЕННАЯ ПАНЕЛЬ ВКЛАДОК */
 .diary-header {
     display: flex;
-    gap: 15px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 8px 16px;
+    border-radius: 20px;
     margin-bottom: 35px;
-    justify-content: center;
     align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    gap: 8px;
 }
 
+/* Кнопки-вкладки с "парящим" эффектом */
 .nav-btn {
-    padding: 12px 28px;
-    font-size: 15px;
+    padding: 12px 24px;
+    font-size: 14px;
     font-weight: 600;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     cursor: pointer;
-    background: #ffffff;
-    color: #718096;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
+    background: transparent;
+    color: #64748b;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
+.nav-btn:hover {
+    color: #1e293b;
+    background: rgba(0, 0, 0, 0.03);
+}
+
+/* Активная вкладка с сочным градиентом и тенью */
 .nav-btn.active {
     background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
     color: white;
-    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);
+    transform: translateY(-1px);
 }
 
-.content-container {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.schedule-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-    gap: 30px;
-    width: 100%;
-}
-
-.day-card {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-}
-
-.day-card h3 {
-    margin: 0;
-    padding: 15px 20px;
-    font-size: 18px;
-    font-weight: 700;
-    color: #1e293b;
-    background-color: #f1f5f9;
-    border-bottom: 1px solid #e2e8f0;
-    display: flex;
-    justify-content: space-between;
-}
-
-.table-header, .lesson-row {
-    display: grid;
-    grid-template-columns: 50px 2fr 3fr 80px;
-    align-items: center;
-    border-bottom: 1px solid #edf2f7;
-}
-
-.table-header {
-    background-color: #f8fafc;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #64748b;
-    padding: 10px 0;
-}
-
-.table-header div, .lesson-row div {
-    padding: 0 10px;
-}
-
-.lesson-row {
-    padding: 12px 0;
-    background: #ffffff;
+/* Приветствие пользователя справа */
+.user-greeting {
     font-size: 14px;
+    color: #1e293b;
+    font-weight: 600;
+    margin-left: auto;
+    background: #ffffff;
+    padding: 6px 14px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border: 1px solid #e2e8f0;
 }
 
-.lesson-row:last-child {
-    border-bottom: none;
+/* Базовый стиль префиксов ролей */
+.role-tag {
+    padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.6px; color: white; display: inline-flex;
+}
+.role-creator { background: linear-gradient(135deg, #ff007f 0%, #7928ca 100%); }
+.role-admin { background: linear-gradient(135deg, #ff9900 0%, #ff5e62 100%); }
+.role-director { background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%); color: #2e2300; }
+.role-teacher { background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); }
+.role-pedagogue { background: linear-gradient(135deg, #20bf55 0%, #01baef 100%); }
+.role-student { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); color: #1e40af; }
+
+/* КОНТЕНТ */
+.content-container { width: 100%; box-sizing: border-box; }
+.content-section { display: none; }
+.content-section.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.lesson-row:nth-child(even) {
-    background-color: #f8fafc;
-}
+/* СТРУКТУРА ТАБЛИЦ */
+.schedule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 30px; width: 100%; }
+.day-card { background: #ffffff; border-radius: 18px; overflow: hidden; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02); border: 1px solid #e2e8f0; }
+.day-card h3 { margin: 0; padding: 18px 20px; font-size: 18px; font-weight: 700; color: #1e293b; background-color: #f8fafc; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center; }
+
+.table-header, .lesson-row { display: grid; grid-template-columns: 50px 2fr 3fr 80px; align-items: center; border-bottom: 1px solid #edf2f7; }
+.table-header { background-color: #f8fafc; font-size: 12px; font-weight: 700; text-transform: uppercase; color: #64748b; padding: 12px 0; }
+.table-header div, .lesson-row div { padding: 0 12px; }
+.lesson-row { padding: 14px 0; background: #ffffff; font-size: 14px; }
+.lesson-row:last-child { border-bottom: none; }
+.lesson-row:nth-child(even) { background-color: #fafbfc; }
 
 .col-num { text-align: center; font-weight: bold; color: #94a3b8; }
 .col-subject { font-weight: 600; color: #4f46e5; }
 .col-homework { color: #475569; }
 .col-grade { text-align: center; font-weight: bold; }
 
-.content-section { display: none; }
-.content-section.active { display: block; }
-
-/* Приветствие пользователя */
-.user-greeting {
-    font-size: 14px;
-    color: #64748b;
-    font-weight: 600;
-    margin-left: auto;
-    background: #ffffff;
-    padding: 8px 16px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+/* Дизайн админ-панели */
+.admin-panel {
+    background: #ffffff; padding: 30px; border-radius: 20px; border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02); max-width: 600px; margin: 0 auto;
 }
+.admin-panel h2 { margin-top: 0; color: #1e293b; font-size: 22px; margin-bottom: 15px; }
+.admin-card { background: #f8fafc; padding: 15px 20px; border-radius: 12px; border-left: 4px solid #4f46e5; margin-bottom: 15px; font-size: 15px; color: #475569; }
