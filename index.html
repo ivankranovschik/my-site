@@ -8,77 +8,9 @@
     <style>
         .date-badge {
             background: linear-gradient(135deg, #e0e7ff 0%, #ccfbf1 100%);
-            color: #4338ca;
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            box-shadow: 0 2px 4px rgba(67, 56, 202, 0.05);
+            color: #4338ca; padding: 5px 14px; border-radius: 20px;
+            font-size: 13px; font-weight: 600; box-shadow: 0 2px 4px rgba(67, 56, 202, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-
-        /* Обновленный контейнер приветствия */
-        .user-greeting {
-            font-size: 15px;
-            color: #1e293b;
-            font-weight: 600;
-            margin-left: auto;
-            background: #ffffff;
-            padding: 6px 16px;
-            border-radius: 14px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            border: 1px solid #f1f5f9;
-        }
-
-        /* БАЗОВЫЙ СТИЛЬ ДЛЯ ВСЕХ ПРЕФИКСОВ (Ультра-красота) */
-        .role-tag {
-            padding: 5px 14px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* УНИКАЛЬНЫЕ ДИЗАЙНЫ ДЛЯ КАЖДОЙ РОЛИ */
-        .role-creator {
-            background: linear-gradient(135deg, #ff007f 0%, #7928ca 100%);
-            box-shadow: 0 4px 14px rgba(244, 63, 94, 0.4);
-        }
-
-        .role-admin {
-            background: linear-gradient(135deg, #ff9900 0%, #ff5e62 100%);
-            box-shadow: 0 4px 14px rgba(255, 94, 98, 0.4);
-        }
-
-        .role-director {
-            background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
-            color: #2e2300;
-            box-shadow: 0 4px 14px rgba(218, 165, 32, 0.4);
-        }
-
-        .role-teacher {
-            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-            box-shadow: 0 4px 14px rgba(79, 172, 254, 0.4);
-        }
-
-        .role-pedagogue {
-            background: linear-gradient(135deg, #20bf55 0%, #01baef 100%);
-            box-shadow: 0 4px 14px rgba(32, 191, 85, 0.4);
-        }
-
-        .role-student {
-            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-            color: #1e40af;
-            box-shadow: 0 4px 14px rgba(161, 196, 253, 0.4);
         }
     </style>
 </head>
@@ -122,34 +54,51 @@
         </div>
     </div>
 
-    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <!-- КРАСИВАЯ ПАНЕЛЬ НАВИГАЦИИ -->
     <header class="diary-header">
         <button id="btn-schedule" class="nav-btn active">📅 Расписание</button>
         <button id="btn-grades" class="nav-btn">📊 Оценки</button>
+        <!-- Секретная вкладка для админов (по умолчанию скрыта) -->
+        <button id="btn-admin" class="nav-btn" style="display: none;">🛡️ Модерирование</button>
+        
         <div id="user-display" class="user-greeting" style="display: none;">
             <span id="greet-name">👤 Пользователь</span>
             <span id="greet-role" class="role-tag">Роль</span>
         </div>
     </header>
 
+    <!-- КОНТЕНТНЫЕ БЛОКИ -->
     <main class="content-container">
+        <!-- БЛОК 1: РАСПИСАНИЕ -->
         <section id="section-schedule" class="content-section active">
             <div id="schedule-grid" class="schedule-grid"></div>
         </section>
 
+        <!-- БЛОК 2: ОЦЕНКИ -->
         <section id="section-grades" class="content-section">
             <p style="text-align:center; color:#64748b; margin-top:50px; font-size: 18px;">Раздел оценок находится в разработке.</p>
+        </section>
+
+        <!-- БЛОК 3: МОДЕРИРОВАНИЕ -->
+        <section id="section-admin" class="content-section">
+            <div class="admin-panel">
+                <h2>Панель управления системой</h2>
+                <div class="admin-card">⚙️ <strong>Доступ разрешен:</strong> Вы вошли с максимальными привилегиями управления.</div>
+                <div class="admin-card">👥 <strong>Логи системы:</strong> База данных работает стабильно. Все пользователи активны.</div>
+                <p style="color:#94a3b8; font-size:13px; text-align:center; margin-top:20px;">Версия ядра дневника: v2.4.1 Premium</p>
+            </div>
         </section>
     </main>
 
     <script>
-        // Логика авторизации
+        // Элементы управления входом
         const loginScreen = document.getElementById('login-screen');
         const loginBtn = document.getElementById('login-btn');
         const errorMsg = document.getElementById('error-msg');
         const userDisplay = document.getElementById('user-display');
         const greetName = document.getElementById('greet-name');
         const greetRole = document.getElementById('greet-role');
+        const btnAdmin = document.getElementById('btn-admin');
 
         loginBtn.addEventListener('click', () => {
             const nameVal = document.getElementById('display-name').value.trim();
@@ -162,17 +111,22 @@
                 
                 greetName.innerText = `👤 ${nameVal}`;
                 greetRole.innerText = roleVal;
-                
-                // Очищаем старые стили ролей
                 greetRole.className = 'role-tag';
                 
-                // Присваиваем красивый класс градиента в зависимости от роли
+                // Навешиваем стили на префиксы ролей
                 if (roleVal === 'Создатель') greetRole.classList.add('role-creator');
                 else if (roleVal === 'Администратор') greetRole.classList.add('role-admin');
                 else if (roleVal === 'Директор') greetRole.classList.add('role-director');
                 else if (roleVal === 'Учитель') greetRole.classList.add('role-teacher');
                 else if (roleVal === 'Педагог') greetRole.classList.add('role-pedagogue');
                 else if (roleVal === 'Ученик') greetRole.classList.add('role-student');
+
+                // Если роль имеет админские права — показываем секретную вкладку
+                if (roleVal === 'Создатель' || roleVal === 'Администратор') {
+                    btnAdmin.style.display = 'flex';
+                } else {
+                    btnAdmin.style.display = 'none';
+                }
 
                 userDisplay.style.display = 'flex';
             } else {
@@ -186,20 +140,16 @@
         const months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
         
         const grid = document.getElementById("schedule-grid");
-
         const current = new Date();
-        const currentDay = current.getDay();
-        const distanceToMonday = currentDay === 0 ? -6 : 1 - currentDay; 
+        const distanceToMonday = current.getDay() === 0 ? -6 : 1 - current.getDay(); 
         const monday = new Date(current.setDate(current.getDate() + distanceToMonday));
 
         days.forEach((day, index) => {
             const dayCard = document.createElement("div");
             dayCard.className = "day-card";
-            
             const dateForDay = new Date(monday);
             dateForDay.setDate(monday.getDate() + index);
             const dateString = `${dateForDay.getDate()} ${months[dateForDay.getMonth()]}`;
-
             const lessonsCount = Math.floor(Math.random() * 2) + 6; 
             
             dayCard.innerHTML = `
@@ -213,12 +163,10 @@
             `;
             
             const listContainer = document.createElement("div");
-
             for (let i = 0; i < lessonsCount; i++) {
                 const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
                 const row = document.createElement("div");
                 row.className = "lesson-row";
-                
                 row.innerHTML = `
                     <div class="col-num">${i + 1}</div>
                     <div class="col-subject">${randomSubject}</div>
@@ -227,24 +175,26 @@
                 `;
                 listContainer.appendChild(row);
             }
-
             dayCard.appendChild(listContainer);
             grid.appendChild(dayCard);
         });
 
-        // Переключение вкладок
-        const btnSchedule = document.getElementById("btn-schedule");
-        const btnGrades = document.getElementById("btn-grades");
-        const secSchedule = document.getElementById("section-schedule");
-        const secGrades = document.getElementById("section-grades");
+        // Логика переключения между вкладками
+        const tabs = [
+            { btn: document.getElementById('btn-schedule'), section: document.getElementById('section-schedule') },
+            { btn: document.getElementById('btn-grades'), section: document.getElementById('section-grades') },
+            { btn: document.getElementById('btn-admin'), section: document.getElementById('section-admin') }
+        ];
 
-        btnSchedule.addEventListener("click", () => {
-            btnSchedule.classList.add("active"); btnGrades.classList.remove("active");
-            secSchedule.classList.add("active"); secGrades.classList.remove("active");
-        });
-        btnGrades.addEventListener("click", () => {
-            btnGrades.classList.add("active"); btnSchedule.classList.remove("active");
-            secGrades.classList.add("active"); secSchedule.classList.remove("active");
+        tabs.forEach(tab => {
+            tab.btn.addEventListener('click', () => {
+                tabs.forEach(t => {
+                    t.btn.classList.remove('active');
+                    t.section.classList.remove('active');
+                });
+                tab.btn.classList.add('active');
+                tab.section.classList.add('active');
+            });
         });
     </script>
 </body>
