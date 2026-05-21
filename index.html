@@ -2,39 +2,172 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Дневник Игрового Сервера</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Электронный дневник</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: white; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: #16213e; padding: 20px; border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        h1 { text-align: center; color: #4ecca3; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #0f3460; padding: 12px; text-align: left; }
-        th { background: #0f3460; color: #4ecca3; }
-        tr:nth-child(even) { background: #1b262c; }
-        .grade { font-weight: bold; color: #e94560; text-align: center; }
+        /* CSS: Делаем красивый дизайн */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 800px;
+        }
+        h1, h2 { color: #333; }
+        .form-group {
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr auto;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        button:hover { background-color: #0056b3; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th { background-color: #f8f9fa; color: #555; }
+        tr:hover { background-color: #f1f1f1; }
+        .delete-btn {
+            background-color: #dc3545;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        .delete-btn:hover { background-color: #bd2130; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎮 Журнал Игрового Сервера</h1>
-        <table>
+
+<div class="container">
+    <h1>📘 Электронный дневник класса</h1>
+    
+    <!-- Форма для добавления данных -->
+    <div class="form-group">
+        <input type="text" id="nameInput" placeholder="ФИО ученика">
+        <input type="number" id="gradeInput" placeholder="Оценка" min="1" max="5">
+        <input type="text" id="homeworkInput" placeholder="Домашнее задание">
+        <button onclick="addRecord()">Добавить</button>
+    </div>
+
+    <!-- Таблица, куда будут вставляться строки -->
+    <h2>Список успеваемости</h2>
+    <table>
+        <thead>
             <tr>
-                <th>Предмет / Навык</th>
+                <th>Ученик</th>
                 <th>Оценка</th>
                 <th>Домашнее задание</th>
+                <th>Действие</th>
             </tr>
-            <!-- Сюда добавляй новые строки -->
-            <tr>
-                <td>Стрельба (PvP)</td>
-                <td class="grade">4/5</td>
-                <td>Тренировка на Aim-карте 30 мин</td>
-            </tr>
-            <tr>
-                <td>Командная работа</td>
-                <td class="grade">3/5</td>
-                <td>Изучить тактику "Сплит А" на Dust2</td>
-            </tr>
-        </table>
-    </div>
+        </thead>
+        <tbody id="diaryTableBody">
+            <!-- Сюда JavaScript будет добавлять строки -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // JavaScript: Логика работы сайта
+
+    // 1. Создаем массив, куда будем сохранять данные. 
+    // Если в памяти браузера уже есть данные, берем их. Если нет — создаем пустой список.
+    let diaryData = JSON.parse(localStorage.getItem('myDiaryData')) || [];
+
+    // 2. Эта функция запускается сама при открытии страницы. Она показывает сохраненных учеников.
+    window.onload = function() {
+        renderTable();
+    };
+
+    // 3. Функция, которая рисует таблицу на экране
+    function renderTable() {
+        const tableBody = document.getElementById('diaryTableBody');
+        tableBody.innerHTML = ''; // Очищаем таблицу перед обновлением
+
+        // Проходимся циклом по каждому ученику в нашем списке
+        diaryData.forEach((item, index) => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td><strong>${item.name}</strong></td>
+                <td>${item.grade}</td>
+                <td>${item.homework}</td>
+                <td><button class="delete-btn" onclick="deleteRecord(${index})">Удалить</button></td>
+            `;
+
+            tableBody.appendChild(row); // Добавляем строку в таблицу
+        });
+    }
+
+    // 4. Функция добавления нового ученика
+    function addRecord() {
+        const name = document.getElementById('nameInput').value;
+        const grade = document.getElementById('gradeInput').value;
+        const homework = document.getElementById('homeworkInput').value;
+
+        // Проверяем, чтобы поля не были пустыми
+        if (!name || !grade || !homework) {
+            alert('Пожалуйста, заполните все поля!');
+            return;
+        }
+
+        // Создаем объект с данными нового ученика
+        const newStudent = {
+            name: name,
+            grade: grade,
+            homework: homework
+        };
+
+        diaryData.push(newStudent); // Добавляем его в наш массив
+        saveAndRefresh(); // Сохраняем в память и обновляем экран
+
+        // Очищаем поля ввода для новой записи
+        document.getElementById('nameInput').value = '';
+        document.getElementById('gradeInput').value = '';
+        document.getElementById('homeworkInput').value = '';
+    }
+
+    // 5. Функция удаления записи
+    function deleteRecord(index) {
+        diaryData.splice(index, 1); // Удаляем 1 элемент из массива по его номеру
+        saveAndRefresh(); // Сохраняем изменения и обновляем экран
+    }
+
+    // 6. Вспомогательная функция: сохраняет массив в память браузера и перерисовывает таблицу
+    function saveAndRefresh() {
+        localStorage.setItem('myDiaryData', JSON.stringify(diaryData));
+        renderTable();
+    }
+</script>
+
 </body>
 </html>
