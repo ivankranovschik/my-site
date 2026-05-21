@@ -1,158 +1,160 @@
-/* Общие стили страницы */
+/* Современные шрифты и плавный фоновый градиент */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f7f9fa;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
     margin: 0;
-    padding: 20px;
+    padding: 30px;
+    min-height: 100vh;
+    color: #2d3748;
 }
 
-/* Шапка с кнопками */
+/* Элегантная шапка с кнопками-вкладками */
 .diary-header {
     display: flex;
-    gap: 10px;
-    margin-bottom: 25px;
+    gap: 15px;
+    margin-bottom: 35px;
     justify-content: center;
 }
 
 .nav-btn {
-    padding: 10px 25px;
-    font-size: 16px;
-    font-weight: bold;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
     cursor: pointer;
-    background-color: #f0f0f0;
-    color: #333;
+    background: #ffffff;
+    color: #718096;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
 }
 
 .nav-btn.active {
-    background-color: #4ca64c;
+    background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
     color: white;
-    border-color: #3d8b3d;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
 }
 
-/* Контейнер на всю ширину экрана */
+/* Контейнер на всю ширину */
 .content-container {
     width: 100%;
-    max-width: 100%;
     box-sizing: border-box;
 }
 
-/* Сетка для дней недели (растягивается во всю ширь) */
+/* Сетка для дней недели — плавно адаптируется */
 .schedule-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 больших дневных блока в ряд */
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 25px;
     width: 100%;
 }
 
-/* Карточка дня (зеленая рамка) */
+/* Карточка дня с эффектом Glassmorphism */
 .day-card {
-    background: #ffffff;
-    border: 3px solid #a3c9a8;
-    border-radius: 4px;
-    padding: 0;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Шапка таблицы внутри дня */
+.day-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Красивый заголовок дня недели */
 .day-card h3 {
-    margin: 0;
-    padding: 12px;
-    background-color: #cbdccb;
-    color: #2b512b;
-    text-align: center;
-    font-size: 16px;
-    border-bottom: 2px solid #a3c9a8;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    text-align: left;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* Стилизация таблицы-списка */
-.day-card ol {
+/* Контейнер списка уроков */
+.day-card ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-/* Строка урока */
+/* Стильная плашка отдельного урока */
 .day-card li {
-    display: grid;
-    grid-template-columns: 40px 2fr 3fr 70px; /* Колонки: №, Урок, ДЗ, Оценка */
-    border-bottom: 1px solid #e2e8e2;
-    min-height: 45px;
+    display: flex;
     align-items: center;
-    font-size: 14px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 12px 16px;
+    border: 1px solid #edf2f7;
+    transition: all 0.2s ease;
 }
 
-.day-card li:last-child {
-    border-bottom: none;
+.day-card li:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
 }
 
-/* Чередование цветов строк (как в оригинале) */
-.day-card li:nth-child(even) {
-    background-color: #fcfdfe;
-}
-.day-card li:nth-child(odd) {
-    background-color: #f5f8f5;
-}
-
-/* Оформление ячеек внутри строки */
-.day-card li::before {
-    counter-increment: section -1; /* Костыль для нумерации с 0 */
-}
-
-/* Нумерация уроков (0, 1, 2...) */
-.day-card li .lesson-number {
-    text-align: center;
-    font-weight: bold;
-    color: #444;
-    border-right: 1px solid #e2e8e2;
-    height: 100%;
+/* Номер урока в кружочке */
+.lesson-number {
+    width: 28px;
+    height: 28px;
+    background: #f1f5f9;
+    color: #64748b;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    margin-right: 15px;
+    flex-shrink: 0;
 }
 
-/* Название предмета */
-.day-card li .subject-name {
-    padding: 5px 10px;
-    color: #0066cc;
-    font-weight: bold;
+/* Инфо об уроке (Название + время) */
+.lesson-info {
+    flex-grow: 1;
 }
 
-/* Текст домашнего задания */
-.day-card li .homework-text {
-    padding: 5px 10px;
-    color: #555;
-    border-left: 1px solid #e2e8e2;
-    border-right: 1px solid #e2e8e2;
-    height: 100%;
-    display: flex;
-    align-items: center;
+.subject-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: #334155;
+    margin-bottom: 2px;
 }
 
-/* Поле для оценки */
-.day-card li .grade-value {
-    text-align: center;
-    font-weight: bold;
-    font-size: 18px;
-    color: #2b512b;
+.lesson-time {
+    font-size: 12px;
+    color: #94a3b8;
 }
+
+/* Бейдж с оценкой (если она есть) */
+.grade-badge {
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+}
+.grade-5 { background: #dcfce7; color: #15803d; }
+.grade-4 { background: #dbeafe; color: #1d4ed8; }
+.grade-3 { background: #fef9c3; color: #a16207; }
 
 /* Управление вкладками */
-.content-section {
-    display: none;
-}
-.content-section.active {
-    display: block;
-}
-.section-title {
-    display: none; /* Прячем заголовок, чтобы было точь-в-точь как на скрине */
-}
-
-/* Адаптивность для узких экранов */
-@media (max-width: 1100px) {
-    .schedule-grid {
-        grid-template-columns: 1fr;
-    }
-}
+.content-section { display: none; }
+.content-section.active { display: block; }
