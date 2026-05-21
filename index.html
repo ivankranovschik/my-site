@@ -4,50 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Электронный дневник</title>
-    <!-- Подключаем внешний файл стилей style.css -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Шапка с кнопками переключения -->
     <header class="diary-header">
         <button id="btn-schedule" class="nav-btn active">📅 Расписание</button>
         <button id="btn-grades" class="nav-btn">📊 Оценки</button>
     </header>
 
-    <!-- Основной контейнер для контента -->
     <main class="content-container">
-        
-        <!-- БЛОК 1: РАСПИСАНИЕ -->
         <section id="section-schedule" class="content-section active">
-            <h2 class="section-title">Расписание уроков</h2>
-            <div id="schedule-grid" class="schedule-grid">
-                <!-- Сюда JavaScript автоматически вставит карточки дней -->
-            </div>
+            <div id="schedule-grid" class="schedule-grid"></div>
         </section>
 
-        <!-- БЛОК 2: ОЦЕНКИ (Заготовка на будущее) -->
         <section id="section-grades" class="content-section">
-            <h2 class="section-title">Мои оценки</h2>
-            <p class="placeholder-text">Здесь пока ничего нет. Раздел находится в разработке.</p>
+            <p style="text-align:center; color:#666; margin-top:50px;">Раздел оценок в разработке.</p>
         </section>
-
     </main>
 
-    <!-- Скрипт для генерации расписания и работы вкладок -->
     <script>
-        // 1. ГЕНЕРАЦИЯ СЛУЧАЙНОГО РАСПИСАНИЯ
-        const subjects = [
-            "Математика", "Русский язык", "Литература", "История", 
-            "Физика", "Химия", "Биология", "География", 
-            "Английский язык", "Физкультура", "Информатика", "Обществознание"
-        ];
-
+        const subjects = ["Математика", "Русский язык", "Литература", "История", "Физика", "Химия", "Биология", "География", "Английский язык", "Физкультура", "Информатика"];
         const days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"];
         const grid = document.getElementById("schedule-grid");
 
         days.forEach(day => {
-            // Создаем карточку дня
             const dayCard = document.createElement("div");
             dayCard.className = "day-card";
             
@@ -56,14 +37,19 @@
             dayCard.appendChild(dayTitle);
 
             const list = document.createElement("ol");
-            
-            // Случайное количество уроков: от 6 до 7
-            const lessonsCount = Math.floor(Math.random() * 2) + 6; 
+            const lessonsCount = Math.floor(Math.random() * 2) + 6; // 6 или 7 уроков
 
             for (let i = 0; i < lessonsCount; i++) {
                 const li = document.createElement("li");
                 const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
-                li.innerText = randomSubject;
+                
+                // Создаем структуру ячеек (Номер, Предмет, ДЗ, Оценка)
+                li.innerHTML = `
+                    <div class="lesson-number">${i}</div>
+                    <div class="subject-name">${randomSubject}</div>
+                    <div class="homework-text">не задано</div>
+                    <div class="grade-value"></div>
+                `;
                 list.appendChild(li);
             }
 
@@ -71,24 +57,19 @@
             grid.appendChild(dayCard);
         });
 
-        // 2. ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК (Расписание / Оценки)
+        // Логика кнопок
         const btnSchedule = document.getElementById("btn-schedule");
         const btnGrades = document.getElementById("btn-grades");
         const secSchedule = document.getElementById("section-schedule");
         const secGrades = document.getElementById("section-grades");
 
         btnSchedule.addEventListener("click", () => {
-            btnSchedule.classList.add("active");
-            btnGrades.classList.remove("active");
-            secSchedule.classList.add("active");
-            secGrades.classList.remove("active");
+            btnSchedule.classList.add("active"); btnGrades.classList.remove("active");
+            secSchedule.classList.add("active"); secGrades.classList.remove("active");
         });
-
         btnGrades.addEventListener("click", () => {
-            btnGrades.classList.add("active");
-            btnSchedule.classList.remove("active");
-            secGrades.classList.add("active");
-            secSchedule.classList.remove("active");
+            btnGrades.classList.add("active"); btnSchedule.classList.remove("active");
+            secGrades.classList.add("active"); secSchedule.classList.remove("active");
         });
     </script>
 </body>
