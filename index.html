@@ -1,44 +1,95 @@
-<div class="schedule-container">
-    <h2>Расписание уроков</h2>
-    <div id="schedule-grid" class="schedule-grid">
-        <!-- Сюда JavaScript вставит дни недели -->
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Электронный дневник</title>
+    <!-- Подключаем внешний файл стилей style.css -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<script>
-    // Список предметов для генерации
-    const subjects = [
-        "Математика", "Русский язык", "Литература", "История", 
-        "Физика", "Химия", "Биология", "География", 
-        "Английский язык", "Физкультура", "Информатика", "Обществознание"
-    ];
+    <!-- Шапка с кнопками переключения -->
+    <header class="diary-header">
+        <button id="btn-schedule" class="nav-btn active">📅 Расписание</button>
+        <button id="btn-grades" class="nav-btn">📊 Оценки</button>
+    </header>
 
-    const days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"];
-    const grid = document.getElementById("schedule-grid");
-
-    days.forEach(day => {
-        // Создаем колонку дня
-        const dayCard = document.createElement("div");
-        dayCard.className = "day-card";
+    <!-- Основной контейнер для контента -->
+    <main class="content-container">
         
-        const dayTitle = document.createElement("h3");
-        dayTitle.innerText = day;
-        dayCard.appendChild(dayTitle);
+        <!-- БЛОК 1: РАСПИСАНИЕ -->
+        <section id="section-schedule" class="content-section active">
+            <h2 class="section-title">Расписание уроков</h2>
+            <div id="schedule-grid" class="schedule-grid">
+                <!-- Сюда JavaScript автоматически вставит карточки дней -->
+            </div>
+        </section>
 
-        const list = document.createElement("ol");
-        
-        // Случайное количество уроков: 6 или 7
-        const lessonsCount = Math.floor(Math.random() * 2) + 6; 
+        <!-- БЛОК 2: ОЦЕНКИ (Заготовка на будущее) -->
+        <section id="section-grades" class="content-section">
+            <h2 class="section-title">Мои оценки</h2>
+            <p class="placeholder-text">Здесь пока ничего нет. Раздел находится в разработке.</p>
+        </section>
 
-        for (let i = 0; i < lessonsCount; i++) {
-            const li = document.createElement("li");
-            // Выбираем случайный предмет
-            const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
-            li.innerText = randomSubject;
-            list.appendChild(li);
-        }
+    </main>
 
-        dayCard.appendChild(list);
-        grid.appendChild(dayCard);
-    });
-</script>
+    <!-- Скрипт для генерации расписания и работы вкладок -->
+    <script>
+        // 1. ГЕНЕРАЦИЯ СЛУЧАЙНОГО РАСПИСАНИЯ
+        const subjects = [
+            "Математика", "Русский язык", "Литература", "История", 
+            "Физика", "Химия", "Биология", "География", 
+            "Английский язык", "Физкультура", "Информатика", "Обществознание"
+        ];
+
+        const days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"];
+        const grid = document.getElementById("schedule-grid");
+
+        days.forEach(day => {
+            // Создаем карточку дня
+            const dayCard = document.createElement("div");
+            dayCard.className = "day-card";
+            
+            const dayTitle = document.createElement("h3");
+            dayTitle.innerText = day;
+            dayCard.appendChild(dayTitle);
+
+            const list = document.createElement("ol");
+            
+            // Случайное количество уроков: от 6 до 7
+            const lessonsCount = Math.floor(Math.random() * 2) + 6; 
+
+            for (let i = 0; i < lessonsCount; i++) {
+                const li = document.createElement("li");
+                const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
+                li.innerText = randomSubject;
+                list.appendChild(li);
+            }
+
+            dayCard.appendChild(list);
+            grid.appendChild(dayCard);
+        });
+
+        // 2. ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК (Расписание / Оценки)
+        const btnSchedule = document.getElementById("btn-schedule");
+        const btnGrades = document.getElementById("btn-grades");
+        const secSchedule = document.getElementById("section-schedule");
+        const secGrades = document.getElementById("section-grades");
+
+        btnSchedule.addEventListener("click", () => {
+            btnSchedule.classList.add("active");
+            btnGrades.classList.remove("active");
+            secSchedule.classList.add("active");
+            secGrades.classList.remove("active");
+        });
+
+        btnGrades.addEventListener("click", () => {
+            btnGrades.classList.add("active");
+            btnSchedule.classList.remove("active");
+            secGrades.classList.add("active");
+            secSchedule.classList.remove("active");
+        });
+    </script>
+</body>
+</html>
