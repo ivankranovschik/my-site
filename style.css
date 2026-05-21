@@ -8,14 +8,17 @@ body {
     color: #2d3748;
 }
 
-/* ЭКРАН ВХОДА — ТРЕНДОВЫЙ НЕОНОВЫЙ GLASSMORPHISM */
+/* ЭКРАН ВХОДА — УЛЬТРА-ЯРКИЙ СОЧНЫЙ НЕОНОВЫЙ ГРАДИЕНТ */
 .login-screen {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
-    background: #090514; /* Глубокая темная ночь */
+    /* Супер-насыщенный живой градиент без темных тонов */
+    background: linear-gradient(-45deg, #a855f7, #6366f1, #06b6d4, #f43f5e);
+    background-size: 400% 400%;
+    animation: lightGradientAnimation 12s ease infinite;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -26,140 +29,149 @@ body {
     overflow: hidden;
 }
 
+@keyframes lightGradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 .login-screen.hidden {
     opacity: 0;
     visibility: hidden;
 }
 
-/* Стили для летающих неоновых светящихся сфер */
+/* Огромные яркие светящиеся сферы для создания сочных переливов */
 .bg-sphere {
     position: absolute;
     border-radius: 50%;
-    filter: blur(80px);
+    filter: blur(90px);
     z-index: 1;
-    opacity: 0.6;
-    animation: floatAnimation 20s infinite alternate ease-in-out;
+    opacity: 0.8;
+    animation: floatAnimation 15s infinite alternate ease-in-out;
 }
-.sphere-1 { width: 400px; height: 400px; background: #ec4899; top: -10%; left: -10%; animation-duration: 18s; }
-.sphere-2 { width: 500px; height: 500px; background: #3b82f6; bottom: -15%; right: -5%; animation-duration: 25s; }
-.sphere-3 { width: 350px; height: 350px; background: #a855f7; top: 40%; right: 20%; animation-duration: 22s; }
-.sphere-4 { width: 300px; height: 300px; background: #06b6d4; bottom: 20%; left: 15%; animation-duration: 16s; }
+.sphere-1 { width: 550px; height: 550px; background: #ff007f; top: -15%; left: -10%; animation-duration: 14s; }
+.sphere-2 { width: 650px; height: 650px; background: #00f2fe; bottom: -20%; right: -10%; animation-duration: 20s; }
+.sphere-3 { width: 450px; height: 450px; background: #7928ca; top: 30%; right: 15%; animation-duration: 16s; }
+.sphere-4 { width: 400px; height: 400px; background: #ffd700; bottom: 15%; left: 10%; animation-duration: 12s; }
 
 @keyframes floatAnimation {
     0% { transform: translateY(0) scale(1) rotate(0deg); }
-    100% { transform: translateY(50px) scale(1.2) rotate(360deg); }
+    100% { transform: translateY(40px) scale(1.15) rotate(180deg); }
 }
 
-/* Сверх-глянцевое матовое стекло */
+/* Карточка из белоснежного сияющего матового стекла */
 .login-card {
-    background: rgba(15, 10, 25, 0.45);
-    backdrop-filter: blur(35px);
-    -webkit-backdrop-filter: blur(35px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     padding: 45px;
     border-radius: 32px;
     width: 100%;
     max-width: 410px;
-    box-shadow: 0 50px 100px rgba(0, 0, 0, 0.7), 
-                inset 0 0 30px rgba(255, 255, 255, 0.02),
-                0 0 80px rgba(168, 85, 247, 0.2);
+    /* Тень с сочным цветным свечением наружу */
+    box-shadow: 0 40px 80px rgba(79, 70, 229, 0.25), 
+                inset 0 0 20px rgba(255, 255, 255, 0.5),
+                0 0 50px rgba(255, 255, 255, 0.4);
     text-align: center;
-    color: white;
     box-sizing: border-box;
     position: relative;
-    z-index: 5; /* Поверх всех сфер */
+    z-index: 5;
 }
 
-/* Космический трехцветный заголовок */
+/* Насыщенный градиентный заголовок */
 .login-card h2 { 
-    margin: 0 0 5px 0; 
+    margin: 0 0 4px 0; 
     font-size: 32px; 
     font-weight: 900; 
     letter-spacing: -0.5px;
-    background: linear-gradient(135deg, #06b6d4 0%, #a855f7 50%, #f43f5e 100%);
+    background: linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #db2777 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-/* Неоновая разделительная линия под текстом */
+/* Сочная неоновая линия под заголовком */
 .title-line {
-    width: 60px;
-    height: 4px;
-    background: linear-gradient(90deg, #06b6d4, #f43f5e);
+    width: 70px;
+    height: 5px;
+    background: linear-gradient(90deg, #4f46e5, #db2777);
     margin: 12px auto 18px auto;
     border-radius: 10px;
-    box-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
+    box-shadow: 0 3px 10px rgba(79, 70, 229, 0.4);
 }
 
-.login-card p { color: #94a3b8; font-size: 13px; margin-bottom: 35px; font-weight: 500; letter-spacing: 0.5px; }
+.login-card p { color: #475569; font-size: 14px; margin-bottom: 35px; font-weight: 600; }
 
 .input-group { margin-bottom: 24px; text-align: left; }
+/* Яркие контрастные подписи полей */
 .input-group label { 
     display: block; 
-    font-size: 10px; 
+    font-size: 11px; 
     font-weight: 800; 
     margin-bottom: 9px; 
-    color: #06b6d4; /* Яркий бирюзовый неон для подписей */
+    color: #4f46e5; 
     text-transform: uppercase; 
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
 }
 
-/* Полупрозрачные стильные поля */
+/* Светлые стильные поля ввода с легким глянцем */
 .input-group input, .input-group select {
     width: 100%; 
     padding: 16px 20px; 
     border-radius: 16px; 
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    background: rgba(5, 2, 15, 0.7);
-    color: #f8fafc; 
+    border: 1px solid rgba(79, 70, 229, 0.15);
+    background: rgba(255, 255, 255, 0.8);
+    color: #1e293b; 
     font-size: 15px; 
+    font-weight: 600;
     outline: none; 
     box-sizing: border-box; 
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Выпадающие списки */
 .input-group select option { 
-    background: #090514; 
-    color: #f8fafc; 
+    background: #ffffff; 
+    color: #1e293b; 
     padding: 16px;
 }
 
-.input-group input::placeholder { color: rgba(255, 255, 255, 0.2); }
+.input-group input::placeholder { color: #94a3b8; }
 
-/* Мощный неоновый фокус */
+/* Красочный фокус при клике на поля */
 .input-group input:focus, .input-group select:focus { 
-    background: rgba(5, 2, 15, 0.9); 
-    border-color: #a855f7;
-    box-shadow: 0 0 0 1px #a855f7, 0 0 25px rgba(168, 85, 247, 0.35);
+    background: #ffffff; 
+    border-color: #9333ea;
+    box-shadow: 0 0 0 1px #9333ea, 0 0 20px rgba(147, 51, 234, 0.2);
 }
 
-/* СОЧНЕЙШАЯ КНОПКА-ГРАДИЕНТ */
+/* БОМБИЧЕСКАЯ УЛЬТРА-СОЧНАЯ КНОПКА */
 .login-btn {
     width: 100%; 
     padding: 18px; 
-    background: linear-gradient(135deg, #f43f5e 0%, #a855f7 50%, #3b82f6 100%); 
+    background: linear-gradient(135deg, #ff007f 0%, #7928ca 50%, #4facfe 100%); 
     color: #ffffff; 
     border: none; 
     border-radius: 16px;
     font-size: 15px; 
     font-weight: 800; 
     cursor: pointer; 
-    box-shadow: 0 8px 30px rgba(168, 85, 247, 0.4), 
-                0 0 40px rgba(244, 63, 94, 0.2); 
+    box-shadow: 0 10px 30px rgba(121, 40, 202, 0.44), 
+                0 0 30px rgba(255, 0, 127, 0.2); 
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
     margin-top: 15px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
 }
 .login-btn:hover { 
-    transform: translateY(-3px); 
-    box-shadow: 0 14px 35px rgba(168, 85, 247, 0.6), 
-                0 0 50px rgba(6, 182, 212, 0.4); 
-    filter: brightness(1.15);
+    transform: translateY(-3px) scale(1.02); 
+    box-shadow: 0 14px 35px rgba(121, 40, 202, 0.6), 
+                0 0 40px rgba(79, 70, 229, 0.4); 
+    filter: brightness(1.1);
 }
-.login-btn:active { transform: translateY(-1px); }
+.login-btn:active { transform: translateY(-1px) scale(1); }
 
-.error-message { color: #fca5a5; font-size: 13px; margin-top: 15px; display: none; font-weight: 600; }
+.error-message { color: #ef4444; font-size: 13px; margin-top: 15px; display: none; font-weight: 600; }
 
 /* УЛЬТРА-СОВРЕМЕННАЯ ПАНЕЛЬ ВКЛАДОК */
 .diary-header {
