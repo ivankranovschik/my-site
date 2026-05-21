@@ -1,4 +1,4 @@
-/* Общие стили */
+/* Общие стили страницы */
 body {
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
@@ -8,12 +8,133 @@ body {
     color: #2d3748;
 }
 
-/* Шапка с кнопками */
+/* ЭКРАН ВХОДА — ТЕПЕРЬ ОН ПЕРЕКРЫВАЕТ ВСЁ СВЕРХУ */
+.login-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #4f46e5 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999; /* Очень высокий приоритет, чтобы перекрыть расписание */
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+/* Этот класс скроет экран входа после успешной авторизации */
+.login-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Карточка авторизации */
+.login-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 40px;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: white;
+    box-sizing: border-box;
+}
+
+.login-card h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.login-card p {
+    color: #e2e8f0;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* Поля ввода */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #cbd5e1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 15px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.input-group input::placeholder {
+    color: #cbd5e1;
+}
+
+.input-group input:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #ffffff;
+}
+
+/* Кнопка Войти */
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    background: #ffffff;
+    color: #4f46e5;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    background: #f8fafc;
+}
+
+/* Ошибка авторизации */
+.error-message {
+    color: #fda4af;
+    font-size: 13px;
+    margin-top: 15px;
+    display: none;
+    font-weight: 600;
+}
+
+/* СТИЛИ ДЛЯ РАСПИСАНИЯ */
 .diary-header {
     display: flex;
     gap: 15px;
     margin-bottom: 35px;
     justify-content: center;
+    align-items: center;
 }
 
 .nav-btn {
@@ -35,7 +156,6 @@ body {
     box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
 }
 
-/* Сетка на всю ширину страницы */
 .content-container {
     width: 100%;
     box-sizing: border-box;
@@ -43,12 +163,11 @@ body {
 
 .schedule-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); /* Сделали блоки шире, чтобы помещались таблицы */
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
     gap: 30px;
     width: 100%;
 }
 
-/* Карточка дня недели */
 .day-card {
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(10px);
@@ -58,7 +177,6 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.7);
 }
 
-/* Название дня недели сбоку (вертикальный блок) или сверху */
 .day-card h3 {
     margin: 0;
     padding: 15px 20px;
@@ -71,22 +189,19 @@ body {
     justify-content: space-between;
 }
 
-/* Табличная сетка внутри карточки */
 .table-header, .lesson-row {
     display: grid;
-    grid-template-columns: 50px 2fr 3fr 80px; /* Колонки: №, Урок, ДЗ, Оценка */
+    grid-template-columns: 50px 2fr 3fr 80px;
     align-items: center;
     border-bottom: 1px solid #edf2f7;
 }
 
-/* Заголовки столбцов */
 .table-header {
     background-color: #f8fafc;
     font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
     color: #64748b;
-    letter-spacing: 0.5px;
     padding: 10px 0;
 }
 
@@ -94,7 +209,6 @@ body {
     padding: 0 10px;
 }
 
-/* Строки с уроками */
 .lesson-row {
     padding: 12px 0;
     background: #ffffff;
@@ -105,32 +219,26 @@ body {
     border-bottom: none;
 }
 
-/* Чередование цветов для читаемости */
 .lesson-row:nth-child(even) {
     background-color: #f8fafc;
 }
 
-/* Стили для ячеек */
-.col-num {
-    text-align: center;
-    font-weight: bold;
-    color: #94a3b8;
-}
+.col-num { text-align: center; font-weight: bold; color: #94a3b8; }
+.col-subject { font-weight: 600; color: #4f46e5; }
+.col-homework { color: #475569; }
+.col-grade { text-align: center; font-weight: bold; }
 
-.col-subject {
-    font-weight: 600;
-    color: #4f46e5;
-}
-
-.col-homework {
-    color: #475569;
-}
-
-.col-grade {
-    text-align: center;
-    font-weight: bold;
-}
-
-/* Вкладки */
 .content-section { display: none; }
 .content-section.active { display: block; }
+
+/* Приветствие пользователя */
+.user-greeting {
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 600;
+    margin-left: auto;
+    background: #ffffff;
+    padding: 8px 16px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
