@@ -12,15 +12,15 @@
             font-size: 13px; font-weight: 600; box-shadow: 0 2px 4px rgba(67, 56, 202, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
-        /* Стили форм модерирования */
+        /* Стили конструктора и панелей модерирования */
         .admin-form {
-            display: flex; flex-direction: column; gap: 15px; margin-top: 20px;
             background: #ffffff; padding: 25px; border-radius: 20px; border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; gap: 15px;
         }
-        .admin-form h3 { margin: 0 0 10px 0; color: #1e293b; font-size: 18px; display: flex; align-items: center; gap: 8px; }
-        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 5px; }
+        .admin-form h3 { margin: 0 0 5px 0; color: #1e293b; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
         .form-group label { font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+        
         .form-group input, .form-group select {
             padding: 12px 16px; border-radius: 12px; border: 1px solid #cbd5e1;
             font-size: 14px; outline: none; background: #ffffff; color: #1e293b; transition: all 0.2s;
@@ -36,21 +36,24 @@
         .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 15px rgba(244, 63, 94, 0.3); }
         .success-toast { color: #16a34a; font-weight: 600; font-size: 14px; text-align: center; display: none; margin-top: 10px; }
 
-        /* Стили для конструктора расписания */
-        .constructor-section { margin-top: 30px; background: #ffffff; padding: 30px; border-radius: 24px; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px rgba(0,0,0,0.02); }
-        .constructor-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; margin-top: 20px; }
-        .lesson-builder-row { display: grid; grid-template-columns: 50px 1fr; align-items: center; gap: 15px; margin-bottom: 10px; }
-        .lesson-builder-num { font-weight: bold; color: #64748b; text-align: center; }
-        .lessons-actions { display: flex; gap: 10px; margin-top: 15px; }
-        .action-btn { flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 10px; font-weight: bold; cursor: pointer; background: #f8fafc; transition: all 0.2s; }
-        .action-btn:hover { background: #e2e8f0; }
-        .action-btn.danger { background: #fee2e2; color: #ef4444; border-color: #fca5a5; }
-        .action-btn.danger:hover { background: #fca5a5; }
+        /* Конструктор дней */
+        .day-builder-box { border-top: 2px dashed #e2e8f0; padding-top: 15px; margin-top: 10px; }
+        .lessons-list-builder { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+        .lesson-builder-row { display: flex; gap: 10px; align-items: center; }
+        .lesson-builder-row span { font-weight: bold; color: #64748b; min-width: 20px; }
+
+        .action-btn-sm {
+            padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc;
+            cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s;
+        }
+        .action-btn-sm:hover { background: #e2e8f0; }
+        .danger-btn { background: #fee2e2; color: #ef4444; border-color: #fca5a5; }
+        .danger-btn:hover { background: #fca5a5; }
     </style>
 </head>
 <body>
 
-    <!-- ЭКРАН АВТОРИЗАЦИИ -->
+    <!-- ЭКРАН АВТОРИЗАЦИИ (ИСПРАВЛЕННЫЙ) -->
     <div id="login-screen" class="login-screen">
         <div class="bg-sphere sphere-1"></div>
         <div class="bg-sphere sphere-2"></div>
@@ -118,6 +121,16 @@
     <main class="content-container">
         <!-- Вкладка Расписание -->
         <section id="section-schedule" class="content-section">
+            <div style="margin-bottom: 20px; display: flex; gap: 15px; background: white; padding: 15px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                <div style="flex: 1;">
+                    <label style="font-size:11px; font-weight:800; color:#64748b; text-transform:uppercase;">Просмотр школы</label>
+                    <select id="view-schedule-school" style="padding:10px; width:100%; border-radius:10px; border:1px solid #cbd5e1; margin-top:50px;"></select>
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size:11px; font-weight:800; color:#64748b; text-transform:uppercase;">Просмотр класса</label>
+                    <select id="view-schedule-class" style="padding:10px; width:100%; border-radius:10px; border:1px solid #cbd5e1; margin-top:50px;"></select>
+                </div>
+            </div>
             <div id="schedule-grid" class="schedule-grid"></div>
         </section>
 
@@ -134,7 +147,7 @@
                 <h2>🛡️ Модерирование системы</h2>
                 
                 <div class="admin-grid">
-                    <!-- Форма 1: Добавить школу -->
+                    <!-- Добавить школу -->
                     <div class="admin-form">
                         <h3>🏫 Добавить новую школу</h3>
                         <div class="form-group">
@@ -145,88 +158,85 @@
                         <div id="school-success" class="success-toast">Школа успешно добавлена!</div>
                     </div>
 
-                    <!-- Форма 2: Добавить класс -->
+                    <!-- Добавить класс -->
                     <div class="admin-form">
                         <h3>👥 Добавить новый класс для школы</h3>
                         <div class="form-group">
-                            <label>1. Выберите школу</label>
-                            <select id="target-school-select">
-                                <option value="">-- Сначала создайте школу --</option>
-                            </select>
+                            <label>Выберите школу</label>
+                            <select id="target-school-select"></select>
                         </div>
                         <div class="form-group">
-                            <label>2. Название класса</label>
+                            <label>Название класса</label>
                             <input type="text" id="new-class-name" placeholder="Например: 10-А">
                         </div>
                         <button id="create-class-btn" class="submit-btn">Создать класс</button>
-                        <div id="class-success" class="success-toast">Класс успешно привязан и создан!</div>
+                        <div id="class-success" class="success-toast">Класс успешно создан!</div>
                     </div>
 
-                    <!-- Форма 3: Добавить ученика -->
+                    <!-- Добавить ученика -->
                     <div class="admin-form">
-                        <h3>🎓 Добавить нового ученика</h3>
+                        <h3>👤 Добавить нового ученика</h3>
                         <div class="form-group">
                             <label>ФИО Ученика</label>
-                            <input type="text" id="student-name-input" placeholder="Иванов Иван Иванович">
+                            <input type="text" id="student-fio" placeholder="Иванов Иван Иванович">
                         </div>
                         <div class="form-group">
-                            <label>1. Выберите школу</label>
-                            <select id="student-school-select">
-                                <option value="">-- Сначала создайте школу --</option>
-                            </select>
+                            <label>Выберите школу</label>
+                            <select id="student-school-select"></select>
                         </div>
                         <div class="form-group">
-                            <label>2. Выберите класс</label>
-                            <select id="student-class-select">
-                                <option value="">-- Сначала выберите школу --</option>
-                            </select>
+                            <label>Выберите класс</label>
+                            <select id="student-class-select"></select>
                         </div>
                         <button id="create-student-btn" class="submit-btn">Добавить ученика</button>
-                        <div id="student-success" class="success-toast">Ученик успешно добавлен!</div>
+                        <div id="student-success" class="success-toast">Ученик успешно зачислен!</div>
                     </div>
                 </div>
 
-                <!-- НОВЫЙ БЛОК: КОНСТРУКТОР РАСПИСАНИЯ -->
-                <div class="constructor-section">
+                <!-- КОНСТРУКТОР РАСПИСАНИЯ ДЛЯ ШКОЛ И КЛАССОВ -->
+                <div class="admin-form" style="margin-top: 30px; border: 1px dashed #f43f5e; background: #fff1f2;">
                     <h3>🛠️ Конструктор расписания уроков</h3>
-                    <div class="constructor-grid">
-                        <div class="admin-form" style="margin-top:0; padding:20px;">
-                            <div class="form-group">
-                                <label>1. Выберите школу</label>
-                                <select id="const-school-select"></select>
-                            </div>
-                            <div class="form-group">
-                                <label>2. Выберите класс</label>
-                                <select id="const-class-select"></select>
-                            </div>
-                            <div class="form-group">
-                                <label>3. Выберите день</label>
-                                <select id="const-day-select">
-                                    <option value="Понедельник">Понедельник</option>
-                                    <option value="Вторник">Вторник</option>
-                                    <option value="Среда">Среда</option>
-                                    <option value="Четверг">Четверг</option>
-                                    <option value="Пятница">Пятница</option>
-                                    <option value="Суббота">Суббота</option>
-                                    <option value="Воскресенье">Воскресенье</option>
-                                </select>
-                            </div>
-                            <button id="load-const-day-btn" class="action-btn" style="background:#eef2ff; color:#4f46e5; border-color:#c7d2fe;">Загрузить / Настроить день</button>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Шаг 1. Выберите школу</label>
+                            <select id="setup-school-select"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Шаг 2. Выберите класс</label>
+                            <select id="setup-class-select"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Шаг 3. Выберите день недели</label>
+                            <select id="setup-day-select">
+                                <option value="Понедельник">Понедельник</option>
+                                <option value="Вторник">Вторник</option>
+                                <option value="Среда">Среда</option>
+                                <option value="Четверг">Ччетверг</option>
+                                <option value="Пятница">Пятница</option>
+                                <option value="Суббота">Суббота</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="day-builder-box">
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center;">
+                            <button id="action-add-day" class="action-btn-sm" style="background: #ecfdf5; color: #10b981; border-color: #a7f3d0;">+ Включить день в расписание</button>
+                            <button id="action-remove-day" class="action-btn-sm danger-btn">🗑️ Полностью удалить этот день</button>
                         </div>
 
-                        <div class="admin-form" style="margin-top:0; padding:20px;">
-                            <h4 id="const-day-title" style="margin:0 0 15px 0; color:#1e293b;">Настройка предметов: Понедельник</h4>
-                            <div id="lessons-inputs-container">
-                                <!-- Сюда JS будет вставлять строчки уроков -->
+                        <div id="lessons-editor-zone">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <label style="font-size:11px; font-weight:800; color:#64748b;">Список предметов учебного дня:</label>
+                                <div style="display: flex; gap: 5px;">
+                                    <button id="add-lesson-row-btn" class="action-btn-sm">+ Добавить урок</button>
+                                    <button id="remove-lesson-row-btn" class="action-btn-sm danger-btn">- Убрать урок</button>
+                                </div>
                             </div>
-                            <div class="lessons-actions">
-                                <button id="add-lesson-row-btn" class="action-btn">+ Добавить урок</button>
-                                <button id="remove-lesson-row-btn" class="action-btn">- Убрать урок</button>
-                                <button id="delete-day-btn" class="action-btn danger">🗑️ Удалить весь день</button>
-                            </div>
-                            <button id="save-schedule-btn" class="submit-btn" style="margin-top:20px; background:linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow:0 4px 12px rgba(16,185,129,0.2);">Сохранить расписание дня</button>
-                            <div id="schedule-success" class="success-toast">Расписание успешно обновлено!</div>
+                            <div id="lessons-inputs-container" class="lessons-list-builder"></div>
                         </div>
+
+                        <button id="save-day-schedule-btn" class="submit-btn" style="width: 100%; margin-top: 15px; background: #10b981;">Сохранить расписание дня</button>
+                        <div id="schedule-success-toast" class="success-toast">Расписание этого дня успешно сохранено в базу!</div>
                     </div>
                 </div>
 
@@ -235,10 +245,10 @@
     </main>
 
     <script>
-        // Инициализация структуры данных
+        // Инициализация структуры базы данных
         let database = JSON.parse(localStorage.getItem('diary_db')) || { schools: {} };
 
-        // Авторизация элементы
+        // Авторизация
         const loginScreen = document.getElementById('login-screen');
         const userRoleSelect = document.getElementById('user-role');
         const schoolGroup = document.getElementById('school-group');
@@ -248,294 +258,254 @@
         const greetName = document.getElementById('greet-name');
         const logoutBtn = document.getElementById('logout-btn');
 
-        // Вкладки элементы
-        const navButtons = {
-            schedule: document.getElementById('btn-schedule'),
-            grades: document.getElementById('btn-grades'),
-            admin: document.getElementById('btn-admin')
-        };
-        const sections = {
-            schedule: document.getElementById('section-schedule'),
-            grades: document.getElementById('section-grades'),
-            admin: document.getElementById('section-admin')
-        };
+        // Навигация
+        const navButtons = { schedule: document.getElementById('btn-schedule'), grades: document.getElementById('btn-grades'), admin: document.getElementById('btn-admin') };
+        const sections = { schedule: document.getElementById('section-schedule'), grades: document.getElementById('section-grades'), admin: document.getElementById('section-admin') };
 
-        // Элементы форм модерирования
+        // Модерирование
         const newSchoolInput = document.getElementById('new-school-name');
         const createSchoolBtn = document.getElementById('create-school-btn');
         const targetSchoolSelect = document.getElementById('target-school-select');
         const loginSchoolSelect = document.getElementById('login-school');
         const newClassInput = document.getElementById('new-class-name');
         const createClassBtn = document.getElementById('create-class-btn');
-        
-        const studentNameInput = document.getElementById('student-name-input');
+
+        // Ученики
+        const studentFio = document.getElementById('student-fio');
         const studentSchoolSelect = document.getElementById('student-school-select');
         const studentClassSelect = document.getElementById('student-class-select');
         const createStudentBtn = document.getElementById('create-student-btn');
 
-        // Элементы конструктора расписания
-        const constSchoolSelect = document.getElementById('const-school-select');
-        const constClassSelect = document.getElementById('const-class-select');
-        const constDaySelect = document.getElementById('const-day-select');
-        const loadConstDayBtn = document.getElementById('load-const-day-btn');
-        const constDayTitle = document.getElementById('const-day-title');
-        const lessonsContainer = document.getElementById('lessons-inputs-container');
+        // Конструктор расписания
+        const setupSchoolSelect = document.getElementById('setup-school-select');
+        const setupClassSelect = document.getElementById('setup-class-select');
+        const setupDaySelect = document.getElementById('setup-day-select');
+        const lessonsInputsContainer = document.getElementById('lessons-inputs-container');
         const addLessonRowBtn = document.getElementById('add-lesson-row-btn');
         const removeLessonRowBtn = document.getElementById('remove-lesson-row-btn');
-        const deleteDayBtn = document.getElementById('delete-day-btn');
-        const saveScheduleBtn = document.getElementById('save-schedule-btn');
+        const saveDayScheduleBtn = document.getElementById('save-day-schedule-btn');
+        const actionAddDay = document.getElementById('action-add-day');
+        const actionRemoveDay = document.getElementById('action-remove-day');
 
-        const schoolSuccess = document.getElementById('school-success');
-        const classSuccess = document.getElementById('class-success');
-        const studentSuccess = document.getElementById('student-success');
-        const scheduleSuccess = document.getElementById('schedule-success');
+        // Просмотр расписания
+        const viewScheduleSchool = document.getElementById('view-schedule-school');
+        const viewScheduleClass = document.getElementById('view-schedule-class');
 
-        let currentLessonsCount = 6;
-
-        // Показ и скрытие поля школы на логин-экране
         function toggleSchoolField() {
-            if (userRoleSelect.value === 'Создатель') {
-                schoolGroup.style.display = 'none';
-            } else {
-                schoolGroup.style.display = 'block';
-            }
+            schoolGroup.style.display = (userRoleSelect.value === 'Создатель') ? 'none' : 'block';
         }
         userRoleSelect.addEventListener('change', toggleSchoolField);
 
-        // Универсальное обновление всех списков школ во всех формах
-        function updateSchoolSelects() {
-            const selects = [targetSchoolSelect, loginSchoolSelect, studentSchoolSelect, constSchoolSelect];
-            selects.forEach(s => s.innerHTML = '');
+        function updateAllSelects() {
+            const schools = Object.keys(database.schools);
+            
+            // Очистка всех выпадающих списков
+            [targetSchoolSelect, loginSchoolSelect, studentSchoolSelect, setupSchoolSelect, viewScheduleSchool].forEach(s => s.innerHTML = '');
 
-            const schoolNames = Object.keys(database.schools);
-
-            if (schoolNames.length === 0) {
-                selects.forEach(s => s.innerHTML = '<option value="">-- Нет созданных школ --</option>');
+            if(schools.length === 0) {
+                const emptyOpt = () => { const o = document.createElement('option'); o.textContent = '-- Нет созданных школ --'; return o; };
+                [targetSchoolSelect, loginSchoolSelect, studentSchoolSelect, setupSchoolSelect, viewScheduleSchool].forEach(s => s.appendChild(emptyOpt()));
                 return;
             }
 
-            schoolNames.forEach(school => {
-                selects.forEach(s => {
+            schools.forEach(sch => {
+                [targetSchoolSelect, loginSchoolSelect, studentSchoolSelect, setupSchoolSelect, viewScheduleSchool].forEach(selectEl => {
                     const opt = document.createElement('option');
-                    opt.value = school;
-                    opt.textContent = school;
-                    s.appendChild(opt);
+                    opt.value = sch; opt.textContent = sch;
+                    selectEl.appendChild(opt);
                 });
             });
 
-            // Обновляем связанные списки классов для первой школы
-            updateClassSelects(studentSchoolSelect, studentClassSelect);
-            updateClassSelects(constSchoolSelect, constClassSelect);
+            updateClassSelects();
         }
 
-        // Универсальное обновление классов для выбранной школы
-        function updateClassSelects(schoolSelect, classSelect) {
-            classSelect.innerHTML = '';
-            const schoolName = schoolSelect.value;
-            
-            if(!schoolName || !database.schools[schoolName]) {
-                classSelect.innerHTML = '<option value="">-- Нет классов --</option>';
-                return;
-            }
+        function updateClassSelects() {
+            const schoolForClass = targetSchoolSelect.value;
+            const schoolForStudent = studentSchoolSelect.value;
+            const schoolForSetup = setupSchoolSelect.value;
+            const schoolForView = viewScheduleSchool.value;
 
-            const classes = database.schools[schoolName].classes || [];
-            if(classes.length === 0) {
-                classSelect.innerHTML = '<option value="">-- Нет классов --</option>';
-                return;
-            }
+            // Списки классов
+            studentClassSelect.innerHTML = '';
+            setupClassSelect.innerHTML = '';
+            viewScheduleClass.innerHTML = '';
 
-            classes.forEach(c => {
-                const opt = document.createElement('option');
-                opt.value = c;
-                opt.textContent = c;
-                classSelect.appendChild(opt);
-            });
+            const fillClasses = (schName, selectEl) => {
+                if(schName && database.schools[schName] && database.schools[schName].classes) {
+                    const clsList = Object.keys(database.schools[schName].classes);
+                    if(clsList.length === 0) {
+                        selectEl.innerHTML = '<option value="">-- Нет классов --</option>';
+                    } else {
+                        clsList.forEach(c => {
+                            const opt = document.createElement('option');
+                            opt.value = c; opt.textContent = c;
+                            selectEl.appendChild(opt);
+                        });
+                    }
+                }
+            };
+
+            fillClasses(schoolForStudent, studentClassSelect);
+            fillClasses(schoolForSetup, setupClassSelect);
+            fillClasses(schoolForView, viewScheduleClass);
         }
 
-        studentSchoolSelect.addEventListener('change', () => updateClassSelects(studentSchoolSelect, studentClassSelect));
-        constSchoolSelect.addEventListener('change', () => updateClassSelects(constSchoolSelect, constClassSelect));
+        [studentSchoolSelect, setupSchoolSelect, viewScheduleSchool].forEach(s => s.addEventListener('change', updateClassSelects));
 
-        // Создание школы
+        // Добавление школы
         createSchoolBtn.addEventListener('click', () => {
             const name = newSchoolInput.value.trim();
             if(!name) return;
-
             if(!database.schools[name]) {
-                database.schools[name] = { classes: [], schedule: {}, students: [] };
-                localStorage.setItem('diary_db', JSON.stringify(database));
-                updateSchoolSelects();
+                database.schools[name] = { classes: {}, students: [] };
+                saveDB(); updateAllSelects();
                 newSchoolInput.value = '';
-                schoolSuccess.style.display = 'block';
-                setTimeout(() => schoolSuccess.style.display = 'none', 3000);
+                showToast('school-success');
             }
         });
 
-        // Создание класса
+        // Добавление класса
         createClassBtn.addEventListener('click', () => {
-            const selectedSchool = targetSchoolSelect.value;
-            const className = newClassInput.value.trim();
-            if(!selectedSchool || !className) return;
-
-            if(!database.schools[selectedSchool].classes.includes(className)) {
-                database.schools[selectedSchool].classes.push(className);
-                localStorage.setItem('diary_db', JSON.stringify(database));
-                updateClassSelects(studentSchoolSelect, studentClassSelect);
-                updateClassSelects(constSchoolSelect, constClassSelect);
+            const sch = targetSchoolSelect.value;
+            const cls = newClassInput.value.trim();
+            if(!sch || !cls || sch.startsWith('--')) return;
+            if(!database.schools[sch].classes[cls]) {
+                database.schools[sch].classes[cls] = {
+                    schedule: {
+                        'Понедельник': ['Математика', 'Русский язык', 'Литература', 'История', 'Физика', 'Английский язык'],
+                        'Вторник': ['Русский язык', 'Информатика', 'География', 'Математика', 'Биология', 'Химия'],
+                        'Среда': ['Математика', 'Литература', 'История', 'Физика', 'Английский язык', 'Физкультура'],
+                        'Четверг': ['Русский язык', 'География', 'Биология', 'Химия', 'Информатика', 'Обществознание'],
+                        'Пятница': ['Математика', 'История', 'Физика', 'Английский язык', 'ИЗО', 'Музыка']
+                    }
+                };
+                saveDB(); updateClassSelects();
                 newClassInput.value = '';
-                classSuccess.style.display = 'block';
-                setTimeout(() => classSuccess.style.display = 'none', 3000);
+                showToast('class-success');
+                renderLiveSchedule();
             }
         });
 
-        // Создание ученика
+        // Добавить ученика
         createStudentBtn.addEventListener('click', () => {
-            const name = studentNameInput.value.trim();
-            const school = studentSchoolSelect.value;
+            const fio = studentFio.value.trim();
+            const sch = studentSchoolSelect.value;
             const cls = studentClassSelect.value;
-            if(!name || !school || !cls || cls.startsWith('--')) return;
-
-            if(!database.schools[school].students) database.schools[school].students = [];
-            database.schools[school].students.push({ name: name, class: cls });
-            localStorage.setItem('diary_db', JSON.stringify(database));
-
-            studentNameInput.value = '';
-            studentSuccess.style.display = 'block';
-            setTimeout(() => studentSuccess.style.display = 'none', 3000);
+            if(!fio || !sch || !cls) return;
+            database.schools[sch].students.push({ fio: fio, class: cls });
+            saveDB();
+            studentFio.value = '';
+            showToast('student-success');
         });
 
-        // ЛОГИКА КОНСТРУКТОРА УРОКОВ
-        function renderLessonInputs(count, existingLessons = []) {
-            lessonsContainer.innerHTML = '';
-            currentLessonsCount = count;
-            for(let i = 1; i <= count; i++) {
-                const val = existingLessons[i-1] || '';
-                const row = document.createElement('div');
-                row.className = 'lesson-builder-row';
-                row.innerHTML = `
-                    <div class="lesson-builder-num">${i}</div>
-                    <input type="text" class="const-lesson-input" value="${val}" placeholder="Название предмета">
-                `;
-                lessonsContainer.appendChild(row);
+        // Конструктор уроков - динамические поля
+        let currentLessonsCount = 0;
+        function loadSetupDaySchedule() {
+            lessonsInputsContainer.innerHTML = '';
+            const sch = setupSchoolSelect.value;
+            const cls = setupClassSelect.value;
+            const day = setupDaySelect.value;
+
+            if(!sch || !cls || !database.schools[sch] || !database.schools[sch].classes[cls]) {
+                currentLessonsCount = 0; return;
             }
+
+            const activeSchedule = database.schools[sch].classes[cls].schedule || {};
+            const dayLessons = activeSchedule[day] || [];
+
+            currentLessonsCount = dayLessons.length;
+            dayLessons.forEach((les, idx) => {
+                createLessonInputField(idx + 1, les);
+            });
         }
 
-        loadConstDayBtn.addEventListener('click', () => {
-            const school = constSchoolSelect.value;
-            const cls = constClassSelect.value;
-            const day = constDaySelect.value;
-            if(!school || !cls || cls.startsWith('--')) return;
-
-            constDayTitle.textContent = `Настройка предметов: ${day} (${cls})`;
-            
-            if(!database.schools[school].schedule) database.schools[school].schedule = {};
-            if(!database.schools[school].schedule[cls]) database.schools[school].schedule[cls] = {};
-
-            const existing = database.schools[school].schedule[cls][day] || [];
-            if(existing.length > 0) {
-                renderLessonInputs(existing.length, existing);
-            } else {
-                renderLessonInputs(6);
-            }
-        });
+        function createLessonInputField(num, val = '') {
+            const div = document.createElement('div');
+            div.className = 'lesson-builder-row';
+            div.innerHTML = `<span>${num}</span><input type="text" class="setup-lesson-input" value="${val}" placeholder="Название предмета">`;
+            lessonsInputsContainer.appendChild(div);
+        }
 
         addLessonRowBtn.addEventListener('click', () => {
-            if(currentLessonsCount >= 10) return;
             currentLessonsCount++;
-            const inputs = Array.from(document.querySelectorAll('.const-lesson-input')).map(i => i.value);
-            renderLessonInputs(currentLessonsCount, inputs);
+            createLessonInputField(currentLessonsCount);
         });
 
         removeLessonRowBtn.addEventListener('click', () => {
-            if(currentLessonsCount <= 1) return;
-            currentLessonsCount--;
-            const inputs = Array.from(document.querySelectorAll('.const-lesson-input')).map(i => i.value);
-            renderLessonInputs(currentLessonsCount, inputs);
+            if(currentLessonsCount > 0) {
+                lessonsInputsContainer.lastElementChild.remove();
+                currentLessonsCount--;
+            }
         });
 
-        deleteDayBtn.addEventListener('click', () => {
-            const school = constSchoolSelect.value;
-            const cls = constClassSelect.value;
-            const day = constDaySelect.value;
-            if(!school || !cls || !database.schools[school].schedule?.[cls]?.[day]) return;
-
-            delete database.schools[school].schedule[cls][day];
-            localStorage.setItem('diary_db', JSON.stringify(database));
-            renderLessonInputs(0);
-            
-            scheduleSuccess.textContent = 'День полностью удален из расписания!';
-            scheduleSuccess.style.display = 'block';
-            setTimeout(() => { scheduleSuccess.style.display = 'none'; scheduleSuccess.textContent = 'Расписание успешно обновлено!'; }, 3000);
-            generateScheduleView();
+        actionRemoveDay.addEventListener('click', () => {
+            const sch = setupSchoolSelect.value;
+            const cls = setupClassSelect.value;
+            const day = setupDaySelect.value;
+            if(database.schools[sch]?.classes[cls]?.schedule[day]) {
+                delete database.schools[sch].classes[cls].schedule[day];
+                saveDB(); loadSetupDaySchedule(); renderLiveSchedule();
+                alert('День удален из расписания класса!');
+            }
         });
 
-        saveScheduleBtn.addEventListener('click', () => {
-            const school = constSchoolSelect.value;
-            const cls = constClassSelect.value;
-            const day = constDaySelect.value;
-            if(!school || !cls || cls.startsWith('--')) return;
-
-            const inputs = Array.from(document.querySelectorAll('.const-lesson-input')).map(i => i.value.trim());
-
-            if(!database.schools[school].schedule) database.schools[school].schedule = {};
-            if(!database.schools[school].schedule[cls]) database.schools[school].schedule[cls] = {};
-
-            database.schools[school].schedule[cls][day] = inputs;
-            localStorage.setItem('diary_db', JSON.stringify(database));
-
-            scheduleSuccess.style.display = 'block';
-            setTimeout(() => scheduleSuccess.style.display = 'none', 3000);
-            generateScheduleView();
+        actionAddDay.addEventListener('click', () => {
+            const sch = setupSchoolSelect.value;
+            const cls = setupClassSelect.value;
+            const day = setupDaySelect.value;
+            if(database.schools[sch]?.classes[cls]) {
+                if(!database.schools[sch].classes[cls].schedule) database.schools[sch].classes[cls].schedule = {};
+                if(!database.schools[sch].classes[cls].schedule[day]) {
+                    database.schools[sch].classes[cls].schedule[day] = ['Новый предмет'];
+                    saveDB(); loadSetupDaySchedule(); renderLiveSchedule();
+                }
+            }
         });
 
-        // ОТОБРАЖЕНИЕ РАСПИСАНИЯ НА ГЛАВНОЙ СТРАНИЦЕ
-        function generateScheduleView() {
+        saveDayScheduleBtn.addEventListener('click', () => {
+            const sch = setupSchoolSelect.value;
+            const cls = setupClassSelect.value;
+            const day = setupDaySelect.value;
+            if(!sch || !cls || !database.schools[sch]?.classes[cls]) return;
+
+            const inputs = document.querySelectorAll('.setup-lesson-input');
+            const newLessons = [];
+            inputs.forEach(inp => newLessons.push(inp.value.trim() || 'Самоподготовка'));
+
+            if(!database.schools[sch].classes[cls].schedule) database.schools[sch].classes[cls].schedule = {};
+            database.schools[sch].classes[cls].schedule[day] = newLessons;
+            saveDB(); showToast('schedule-success-toast'); renderLiveSchedule();
+        });
+
+        [setupSchoolSelect, setupClassSelect, setupDaySelect].forEach(el => el.addEventListener('change', loadSetupDaySchedule));
+
+        // Вывод интерактивного расписания
+        function renderLiveSchedule() {
             const grid = document.getElementById('schedule-grid');
             grid.innerHTML = '';
-            
-            // Базовые дни для отображения
-            const daysInfo = [
-                { name: 'Понедельник', date: '18 мая' },
-                { name: 'Вторник', date: '19 мая' },
-                { name: 'Среда', date: '20 мая' },
-                { name: 'Четверг', date: '21 мая' },
-                { name: 'Пятница', date: '22 мая' },
-                { name: 'Суббота', date: '23 мая' },
-                { name: 'Воскресенье', date: '24 мая' }
-            ];
 
-            // Нам нужно расписание для какой-то дефолтной школы/класса, если они есть
-            const schoolNames = Object.keys(database.schools);
-            if(schoolNames.length === 0) {
-                grid.innerHTML = '<p style="text-align:center; padding: 40px; color:#64748b; font-weight:600;">Расписание пусто. Перейдите во вкладку модерирования, чтобы заполнить базу школ, классов и составить уроки.</p>';
+            const sch = viewScheduleSchool.value;
+            const cls = viewScheduleClass.value;
+
+            if(!sch || !cls || !database.schools[sch] || !database.schools[sch].classes[cls]) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#64748b; padding:40px;">Создайте школу и выберите класс для отображения расписания.</div>';
                 return;
             }
 
-            const activeSchool = constSchoolSelect.value || schoolNames[0];
-            const activeClass = constClassSelect.value || database.schools[activeSchool]?.classes[0];
+            const scheduleData = database.schools[sch].classes[cls].schedule || {};
+            const datesMapping = { 'Понедельник': '18 мая', 'Вторник': '19 мая', 'Среда': '20 мая', 'Четверг': '21 мая', 'Пятница': '22 мая', 'Суббота': '23 мая' };
 
-            if(!activeClass || activeClass.startsWith('--')) {
-                grid.innerHTML = `<p style="text-align:center; padding: 40px; color:#64748b; font-weight:600;">Для школы "${activeSchool}" ещё не созданы классы или база расписания пуста.</p>`;
-                return;
-            }
-
-            let hasAnyDays = false;
-
-            daysInfo.forEach(day => {
-                const lessonsList = database.schools[activeSchool]?.schedule?.[activeClass]?.[day.name] || [];
-                
-                // Если дня нет в базе расписания (был удален или не создан), мы его вообще не показываем
-                if(lessonsList.length === 0) return;
-
-                hasAnyDays = true;
+            Object.keys(scheduleData).forEach(dayName => {
+                const lessons = scheduleData[dayName] || [];
                 const card = document.createElement('div');
                 card.className = 'day-card';
-                
+
                 let rowsHtml = '';
-                lessonsList.forEach((subject, i) => {
+                lessons.forEach((les, idx) => {
                     rowsHtml += `
                         <div class="lesson-row">
-                            <div class="col-num">${i + 1}</div>
-                            <div class="col-subject">${subject || '—'}</div>
+                            <div class="col-num">${idx + 1}</div>
+                            <div class="col-subject">${les}</div>
                             <div class="col-homework"></div>
                             <div class="col-grade"></div>
                         </div>
@@ -543,7 +513,7 @@
                 });
 
                 card.innerHTML = `
-                    <h3>${day.name} <span class="date-badge">${day.date}</span></h3>
+                    <h3>${dayName} <span class="date-badge">${datesMapping[dayName] || ''}</span></h3>
                     <div class="table-header">
                         <div style="text-align: center;">№</div>
                         <div>Предмет</div>
@@ -554,13 +524,24 @@
                 `;
                 grid.appendChild(card);
             });
-
-            if(!hasAnyDays) {
-                grid.innerHTML = `<p style="text-align:center; padding: 40px; color:#64748b; font-weight:600;">У класса ${activeClass} все дни недели удалены или не заполнены. Настройте их в конструкторе ниже.</p>`;
-            }
         }
 
-        // Вход в систему
+        [viewScheduleSchool, viewScheduleClass].forEach(s => s.addEventListener('change', renderLiveSchedule));
+
+        // Вспомогательные функции
+        function saveDB() { localStorage.setItem('diary_db', JSON.stringify(database)); }
+        function showToast(id) { const t = document.getElementById(id); t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
+
+        // Переключение вкладок
+        function switchTab(targetKey) {
+            Object.keys(sections).forEach(key => {
+                if (key === targetKey) { sections[key].classList.add('active'); navButtons[key].classList.add('active'); }
+                else { sections[key].classList.remove('active'); navButtons[key].classList.remove('active'); }
+            });
+        }
+        Object.keys(navButtons).forEach(key => navButtons[key].addEventListener('click', () => switchTab(key)));
+
+        // Кнопка Входа
         loginBtn.addEventListener('click', () => {
             const name = document.getElementById('display-name').value.trim();
             const login = document.getElementById('username').value.trim();
@@ -569,41 +550,18 @@
             if (name === 'Админ' && login === 'Admin' && pass === '1234') {
                 loginScreen.classList.add('hidden');
                 userDisplay.style.display = 'flex';
-                greetName.textContent = `👤 ${name}`;
                 errorMsg.style.display = 'none';
-                generateScheduleView();
                 switchTab('schedule');
+                renderLiveSchedule();
             } else {
                 errorMsg.style.display = 'block';
             }
         });
 
-        logoutBtn.addEventListener('click', () => {
-            loginScreen.classList.remove('hidden');
-            userDisplay.style.display = 'none';
-        });
-
-        function switchTab(targetKey) {
-            Object.keys(sections).forEach(key => {
-                if (key === targetKey) {
-                    sections[key].classList.add('active');
-                    navButtons[key].classList.add('active');
-                } else {
-                    sections[key].classList.remove('active');
-                    navButtons[key].classList.remove('active');
-                }
-            });
-        }
-
-        Object.keys(navButtons).forEach(key => {
-            navButtons[key].addEventListener('click', () => switchTab(key));
-        });
+        logoutBtn.addEventListener('click', () => { loginScreen.classList.remove('hidden'); userDisplay.style.display = 'none'; });
 
         window.addEventListener('DOMContentLoaded', () => {
-            toggleSchoolField();
-            updateSchoolSelects();
-            renderLessonInputs(6);
-            generateScheduleView();
+            toggleSchoolField(); updateAllSelects(); loadSetupDaySchedule(); renderLiveSchedule();
         });
     </script>
 </body>
