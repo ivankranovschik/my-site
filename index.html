@@ -12,6 +12,32 @@
             font-size: 13px; font-weight: 600; box-shadow: 0 2px 4px rgba(67, 56, 202, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
+        /* Стили формы добавления пользователя */
+        .admin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+        }
+        .admin-form h3 { margin: 0 0 10px 0; color: #1e293b; font-size: 18px; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group label { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+        .form-group input, .form-group select {
+            padding: 10px 14px; border-radius: 8px; border: 1px solid #cbd5e1;
+            font-size: 14px; outline: none; background: #ffffff; color: #2d3748;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        .submit-btn {
+            padding: 12px; background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+            color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(244, 63, 94, 0.2); transition: all 0.2s;
+        }
+        .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 15px rgba(244, 63, 94, 0.3); }
+        .success-toast { color: #16a34a; font-weight: 600; font-size: 14px; text-align: center; display: none; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -58,7 +84,6 @@
     <header class="diary-header">
         <button id="btn-schedule" class="nav-btn active">📅 Расписание</button>
         <button id="btn-grades" class="nav-btn">📊 Оценки</button>
-        <!-- Секретная вкладка для админов (по умолчанию скрыта) -->
         <button id="btn-admin" class="nav-btn" style="display: none;">🛡️ Модерирование</button>
         
         <div id="user-display" class="user-greeting" style="display: none;">
@@ -83,15 +108,44 @@
         <section id="section-admin" class="content-section">
             <div class="admin-panel">
                 <h2>Панель управления системой</h2>
-                <div class="admin-card">⚙️ <strong>Доступ разрешен:</strong> Вы вошли с максимальными привилегиями управления.</div>
-                <div class="admin-card">👥 <strong>Логи системы:</strong> База данных работает стабильно. Все пользователи активны.</div>
-                <p style="color:#94a3b8; font-size:13px; text-align:center; margin-top:20px;">Версия ядра дневника: v2.4.1 Premium</p>
+                <div class="admin-card">⚙️ <strong>Доступ разрешен:</strong> Управление правами пользователей.</div>
+                
+                <!-- ФОРМА ДОБАВЛЕНИЯ ПОЛЬЗОВАТЕЛЯ -->
+                <div class="admin-form">
+                    <h3>➕ Добавить нового пользователя</h3>
+                    <div class="form-group">
+                        <label>Имя пользователя</label>
+                        <input type="text" id="new-name" placeholder="Например: Алексей">
+                    </div>
+                    <div class="form-group">
+                        <label>Роль</label>
+                        <select id="new-role">
+                            <option value="Ученик" selected>Ученик</option>
+                            <option value="Учитель">Учитель</option>
+                            <option value="Педагог">Педагог</option>
+                            <option value="Директор">Директор</option>
+                            <option value="Администратор">Администратор</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Логин</label>
+                        <input type="text" id="new-login" placeholder="Придумайте логин">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="new-password" placeholder="Придумайте пароль">
+                    </div>
+                    <button id="create-user-btn" class="submit-btn">Создать пользователя</button>
+                    <div id="success-toast" class="success-toast">Пользователь успешно создан и сохранен! 🎉</div>
+                </div>
             </div>
         </section>
     </main>
 
     <script>
-        // Элементы управления входом
+        // База данных созданных пользователей (сохраняется в памяти браузера)
+        let usersDatabase = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+
         const loginScreen = document.getElementById('login-screen');
         const loginBtn = document.getElementById('login-btn');
         const errorMsg = document.getElementById('error-msg');
@@ -100,38 +154,75 @@
         const greetRole = document.getElementById('greet-role');
         const btnAdmin = document.getElementById('btn-admin');
 
+        // Функция применения стилей ролей
+        function applyRoleStyle(role) {
+            greetRole.innerText = role;
+            greetRole.className = 'role-tag';
+            if (role === 'Создатель') greetRole.classList.add('role-creator');
+            else if (role === 'Администратор') greetRole.classList.add('role-admin');
+            else if (role === 'Директор') greetRole.classList.add('role-director');
+            else if (role === 'Учитель') greetRole.classList.add('role-teacher');
+            else if (role === 'Педагог') greetRole.classList.add('role-pedagogue');
+            else if (role === 'Ученик') greetRole.classList.add('role-student');
+        }
+
         loginBtn.addEventListener('click', () => {
             const nameVal = document.getElementById('display-name').value.trim();
             const roleVal = document.getElementById('user-role').value;
             const userVal = document.getElementById('username').value.trim();
             const passVal = document.getElementById('password').value.trim();
 
+            // Проверка главного админа
             if (nameVal === 'Иван' && userVal === 'admin' && passVal === '1234') {
                 loginScreen.classList.add('hidden');
-                
                 greetName.innerText = `👤 ${nameVal}`;
-                greetRole.innerText = roleVal;
-                greetRole.className = 'role-tag';
-                
-                // Навешиваем стили на префиксы ролей
-                if (roleVal === 'Создатель') greetRole.classList.add('role-creator');
-                else if (roleVal === 'Администратор') greetRole.classList.add('role-admin');
-                else if (roleVal === 'Директор') greetRole.classList.add('role-director');
-                else if (roleVal === 'Учитель') greetRole.classList.add('role-teacher');
-                else if (roleVal === 'Педагог') greetRole.classList.add('role-pedagogue');
-                else if (roleVal === 'Ученик') greetRole.classList.add('role-student');
+                applyRoleStyle(roleVal);
+                if (roleVal === 'Создатель' || roleVal === 'Администратор') btnAdmin.style.style.display = 'flex';
+                userDisplay.style.display = 'flex';
+                return;
+            }
 
-                // Если роль имеет админские права — показываем секретную вкладку
-                if (roleVal === 'Создатель' || roleVal === 'Администратор') {
-                    btnAdmin.style.display = 'flex';
-                } else {
-                    btnAdmin.style.display = 'none';
-                }
+            // Проверка динамически созданных пользователей
+            const foundUser = usersDatabase.find(u => u.login === userVal && u.password === passVal && u.name === nameVal && u.role === roleVal);
 
+            if (foundUser) {
+                loginScreen.classList.add('hidden');
+                greetName.innerText = `👤 ${foundUser.name}`;
+                applyRoleStyle(foundUser.role);
+                if (foundUser.role === 'Создатель' || foundUser.role === 'Администратор') btnAdmin.style.display = 'flex';
+                else btnAdmin.style.display = 'none';
                 userDisplay.style.display = 'flex';
             } else {
                 errorMsg.style.display = 'block';
             }
+        });
+
+        // ЛОГИКА ДОБАВЛЕНИЯ ПОЛЬЗОВАТЕЛЯ
+        document.getElementById('create-user-btn').addEventListener('click', () => {
+            const newName = document.getElementById('new-name').value.trim();
+            const newRole = document.getElementById('new-role').value;
+            const newLogin = document.getElementById('new-login').value.trim();
+            const newPassword = document.getElementById('new-password').value.trim();
+            const toast = document.getElementById('success-toast');
+
+            if (!newName || !newLogin || !newPassword) {
+                alert('Пожалуйста, заполните все поля!');
+                return;
+            }
+
+            // Добавляем объект в массив базы данных
+            usersDatabase.push({ name: newName, role: newRole, login: newLogin, password: newPassword });
+            // Сохраняем в localStorage, чтобы данные не стирались при перезагрузке
+            localStorage.setItem('registeredUsers', JSON.stringify(usersDatabase));
+
+            // Очищаем поля формы
+            document.getElementById('new-name').value = '';
+            document.getElementById('new-login').value = '';
+            document.getElementById('new-password').value = '';
+
+            // Показываем уведомление об успехе
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
         });
 
         // Генерация расписания
@@ -179,7 +270,7 @@
             grid.appendChild(dayCard);
         });
 
-        // Логика переключения между вкладками
+        // Логика переключения табов
         const tabs = [
             { btn: document.getElementById('btn-schedule'), section: document.getElementById('section-schedule') },
             { btn: document.getElementById('btn-grades'), section: document.getElementById('section-grades') },
