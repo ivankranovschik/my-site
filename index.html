@@ -28,11 +28,11 @@
         .input-group select:disabled { background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.4); border-color: rgba(255, 255, 255, 0.1); cursor: not-allowed; }
         
         .submit-btn {
-            padding: 12px; background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+            padding: 12px; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
             color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(244, 63, 94, 0.2); transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2); transition: all 0.2s;
         }
-        .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 15px rgba(244, 63, 94, 0.3); }
+        .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 15px rgba(59, 130, 246, 0.3); }
         .success-toast { color: #16a34a; font-weight: 600; font-size: 14px; text-align: center; display: none; margin-top: 10px; }
         .logout-btn { background: #fee2e2; color: #ef4444; border: none; padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; transition: all 0.2s; }
         .logout-btn:hover { background: #fca5a5; }
@@ -127,14 +127,23 @@
             <div class="admin-panel" style="max-width: 800px; display: grid; gap: 20px; grid-template-columns: 1fr;">
                 <h2>Панель управления системой</h2>
                 
-                <!-- БЛОК ПРОСМОТРА РАСПИСАНИЯ КЛАССА -->
-                <div class="admin-form" style="border: 2px solid #3b82f6; background: #ffffff;">
-                    <h3 style="color: #1d4ed8;">🔍 Быстрый просмотр расписания класса</h3>
+                <!-- ОБНОВЛЕННЫЙ БЛОК ПРОСМОТРА РАСПИСАНИЯ КЛАССА -->
+                <div class="admin-form" style="border: 2px solid #3b82f6; background: #ffffff; box-shadow: 0 8px 20px rgba(59,130,246,0.05);">
+                    <h3 style="color: #1d4ed8; display:flex; align-items:center; gap:8px;">🔍 Просмотр расписания класса</h3>
+                    
                     <div class="form-group">
-                        <label>Выберите класс для проверки</label>
-                        <select id="view-class-select"></select>
+                        <label>1. Выберите школу</label>
+                        <select id="view-school-select"></select>
                     </div>
-                    <button id="load-class-schedule-btn" class="submit-btn" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">Показать расписание</button>
+                    
+                    <div class="form-group">
+                        <label>2. Выберите класс</label>
+                        <select id="view-class-select">
+                            <option value="">-- Сначала выберите школу --</option>
+                        </select>
+                    </div>
+                    
+                    <button id="load-class-schedule-btn" class="submit-btn" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); margin-top:5px;">Показать расписание</button>
                     
                     <div id="schedule-viewer-output" class="viewer-box" style="display: none;"></div>
                 </div>
@@ -198,7 +207,7 @@
                         <select id="new-user-school"></select>
                     </div>
                     <div class="form-group">
-                        <label>Прикрепить к классу (Глобальный выбор)</label>
+                        <label>Прикрепить к классу</label>
                         <select id="new-user-class">
                             <option value="Без класса">Без класса (Для Администрации)</option>
                         </select>
@@ -225,7 +234,7 @@
                         <label>Пароль</label>
                         <input type="password" id="new-password" placeholder="Придумайте пароль">
                     </div>
-                    <button id="create-user-btn" class="submit-btn">Создать пользователя</button>
+                    <button id="create-user-btn" class="submit-btn" style="background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);">Создать пользователя</button>
                     <div id="success-toast" class="success-toast">Пользователь успешно создан! 🎉</div>
                 </div>
             </div>
@@ -252,6 +261,8 @@
         const loginSchoolSelect = document.getElementById('login-school');
         const newUserSchoolSelect = document.getElementById('new-user-school');
         const scheduleTargetSchool = document.getElementById('schedule-target-school');
+        const viewSchoolSelect = document.getElementById('view-school-select');
+        
         const newUserClassSelect = document.getElementById('new-user-class');
         const viewClassSelect = document.getElementById('view-class-select');
         const schoolLabel = document.getElementById('school-label');
@@ -265,39 +276,64 @@
         });
         if (userRoleSelect.value === 'Создатель') { loginSchoolSelect.disabled = true; schoolLabel.style.color = 'rgba(255, 255, 255, 0.4)'; }
 
+        // Генерация списков школ во всех блоках
         function renderSchools() {
-            loginSchoolSelect.innerHTML = ''; newUserSchoolSelect.innerHTML = ''; scheduleTargetSchool.innerHTML = '';
+            loginSchoolSelect.innerHTML = ''; newUserSchoolSelect.innerHTML = ''; 
+            scheduleTargetSchool.innerHTML = ''; viewSchoolSelect.innerHTML = '';
+            
             schoolsDatabase.forEach(school => {
                 const opt1 = document.createElement('option'); opt1.value = school; opt1.innerText = school; loginSchoolSelect.appendChild(opt1);
                 const opt2 = document.createElement('option'); opt2.value = school; opt2.innerText = school; newUserSchoolSelect.appendChild(opt2);
                 const opt3 = document.createElement('option'); opt3.value = school; opt3.innerText = school; scheduleTargetSchool.appendChild(opt3);
+                const opt4 = document.createElement('option'); opt4.value = school; opt4.innerText = school; viewSchoolSelect.appendChild(opt4);
             });
         }
 
-        // Обновленная функция рендеринга классов: теперь она выводит классы вне зависимости от выбранной школы, чтобы ничего не терялось!
-        function renderClasses() {
-            newUserClassSelect.innerHTML = '<option value="Без класса">Без класса (Для Администрации)</option>';
+        // УМНАЯ СВЯЗАННАЯ ФИЛЬТРАЦИЯ ДЛЯ ПРОСМОТРА РАСПИСАНИЯ
+        function filterViewerClasses() {
             viewClassSelect.innerHTML = '';
+            const selectedSchool = viewSchoolSelect.value;
+            let hasClasses = false;
 
             Object.keys(schedulesDatabase).forEach(key => {
                 const [schoolName, className] = key.split('::');
-                
-                // Для формы прикрепления юзера
-                const optUser = document.createElement('option');
-                optUser.value = className;
-                optUser.innerText = `${className} (${schoolName})`;
-                newUserClassSelect.appendChild(optUser);
+                if (schoolName === selectedSchool) {
+                    const opt = document.createElement('option');
+                    opt.value = key; // Полный ключ: Школа::Класс
+                    opt.innerText = className;
+                    viewClassSelect.appendChild(opt);
+                    hasClasses = true;
+                }
+            });
 
-                // Для нового блока просмотра
-                const optView = document.createElement('option');
-                optView.value = key; // Передаем полный ключ вида Школа::Класс
-                optView.innerText = `${className} [${schoolName}]`;
-                viewClassSelect.appendChild(optView);
+            if(!hasClasses) {
+                viewClassSelect.innerHTML = '<option value="">-- В этой школе нет классов --</option>';
+            }
+        }
+
+        // УМНАЯ СВЯЗАННАЯ ФИЛЬТРАЦИЯ ДЛЯ ФОРМЫ СОЗДАНИЯ ЮЗЕРА
+        function filterUserCreationClasses() {
+            newUserClassSelect.innerHTML = '<option value="Без класса">Без класса (Для Администрации)</option>';
+            const selectedSchool = newUserSchoolSelect.value;
+
+            Object.keys(schedulesDatabase).forEach(key => {
+                const [schoolName, className] = key.split('::');
+                if (schoolName === selectedSchool) {
+                    const opt = document.createElement('option');
+                    opt.value = className;
+                    opt.innerText = className;
+                    newUserClassSelect.appendChild(opt);
+                }
             });
         }
 
+        // Вешаем слушатели на изменение селекторов школ
+        viewSchoolSelect.addEventListener('change', filterViewerClasses);
+        newUserSchoolSelect.addEventListener('change', filterUserCreationClasses);
+
         renderSchools();
-        renderClasses();
+        filterViewerClasses();
+        filterUserCreationClasses();
 
         function applyRoleStyle(role) {
             greetRole.innerText = role; greetRole.className = 'role-tag';
@@ -346,19 +382,19 @@
             document.getElementById('password').value = ''; document.getElementById('btn-schedule').click();
         });
 
-        // ЛОГИКА БЛОКА БЫСТРОГО ПРОСМОТРА РАСПИСАНИЯ КЛАССА
+        // КНОПКА ЗАГРУЗКИ РАСПИСАНИЯ В ДИАГНОСТИЧЕСКОМ БЛОКЕ
         document.getElementById('load-class-schedule-btn').addEventListener('click', () => {
             const selectedKey = viewClassSelect.value;
             const viewerOutput = document.getElementById('schedule-viewer-output');
             
             if(!selectedKey || !schedulesDatabase[selectedKey]) {
                 viewerOutput.style.display = 'block';
-                viewerOutput.innerHTML = '<b style="color:#ef4444;">Расписание для этого класса пустое или не найдено.</b>';
+                viewerOutput.innerHTML = '<b style="color:#ef4444;">Расписание для выбранного класса отсутствует.</b>';
                 return;
             }
 
             const scheduleData = schedulesDatabase[selectedKey];
-            let htmlContent = `<h4 style="margin-top:0; color:#1e3a8a;">📅 Готовое расписание класса:</h4>`;
+            let htmlContent = `<h4 style="margin-top:0; color:#1e3a8a;">📅 Расписание выбранного класса:</h4>`;
             
             Object.keys(scheduleData).forEach(day => {
                 htmlContent += `<div class="viewer-day-title">${day}:</div>`;
@@ -383,7 +419,7 @@
             const inputs = document.querySelectorAll('.constructor-input');
             const toast = document.getElementById('schedule-success-toast');
 
-            if (!className) { alert('Введите имя класса!'); return; }
+            if (!className) { alert('Введите название класса!'); return; }
 
             const scheduleObj = {};
             inputs.forEach(input => {
@@ -395,7 +431,9 @@
             schedulesDatabase[`${targetSchool}::${className}`] = scheduleObj;
             localStorage.setItem('customSchedules', JSON.stringify(schedulesDatabase));
             
-            renderClasses();
+            // Перевызываем фильтрацию связанных списков классов
+            filterViewerClasses();
+            filterUserCreationClasses();
 
             document.getElementById('new-class-name').value = '';
             inputs.forEach(input => input.value = '');
@@ -409,7 +447,11 @@
             if (!schoolName) return;
             schoolsDatabase.push(schoolName);
             localStorage.setItem('registeredSchools', JSON.stringify(schoolsDatabase));
-            renderSchools(); renderClasses();
+            
+            renderSchools();
+            filterViewerClasses();
+            filterUserCreationClasses();
+            
             schoolNameInput.value = '';
             document.getElementById('school-success-toast').style.display = 'block';
             setTimeout(() => document.getElementById('school-success-toast').style.display = 'none', 3000);
@@ -424,7 +466,7 @@
             const newLogin = document.getElementById('new-login').value.trim();
             const newPassword = document.getElementById('new-password').value.trim();
 
-            if (!newName || !newLogin || !newPassword) { alert('Заполните поля!'); return; }
+            if (!newName || !newLogin || !newPassword) { alert('Заполните все поля формы!'); return; }
 
             usersDatabase.push({ name: newName, role: newRole, login: newLogin, password: newPassword, school: targetSchool, class: targetClass });
             localStorage.setItem('registeredUsers', JSON.stringify(usersDatabase));
