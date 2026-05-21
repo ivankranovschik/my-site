@@ -87,7 +87,7 @@
                 </select>
             </div>
 
-            <!-- Контейнер школы с id для управления из JS -->
+            <!-- Контейнер школы -->
             <div class="input-group" id="school-group">
                 <label id="school-label">Выберите школу</label>
                 <select id="login-school"></select>
@@ -108,7 +108,7 @@
                 <input type="password" id="password" placeholder="Введите пароль">
             </div>
             
-            <button id="login-btn" class="login-btn">Войти</button>
+            <button id="login-btn" class="login-btn">Войти в систему</button>
             <div id="error-msg" class="error-message">Неверные данные или школа выбрана неправильно!</div>
         </div>
     </div>
@@ -162,7 +162,7 @@
             </div>
         </main>
 
-    <!-- Логика скрытия поля школы для роли Создатель -->
+    <!-- Логика скрытия поля школы -->
     <script>
         const userRoleSelect = document.getElementById('user-role');
         const schoolGroup = document.getElementById('school-group');
