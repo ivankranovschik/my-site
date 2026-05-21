@@ -68,26 +68,26 @@ body {
 /* УЛЬТРА-СОВРЕМЕННАЯ ПАНЕЛЬ ВКЛАДОК */
 .diary-header {
     display: flex;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.5);
-    padding: 8px 16px;
+    padding: 10px 20px;
     border-radius: 20px;
     margin-bottom: 35px;
     align-items: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-    gap: 8px;
+    gap: 12px;
 }
 
-/* Кнопки-вкладки с "парящим" эффектом */
+/* Общий пассивный вид кнопок-вкладкок */
 .nav-btn {
     padding: 12px 24px;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     border: none;
     border-radius: 14px;
     cursor: pointer;
-    background: transparent;
+    background: rgba(0, 0, 0, 0.03);
     color: #64748b;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
@@ -97,15 +97,31 @@ body {
 
 .nav-btn:hover {
     color: #1e293b;
-    background: rgba(0, 0, 0, 0.03);
+    background: rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
 }
 
-/* Активная вкладка с сочным градиентом и тенью */
-.nav-btn.active {
-    background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+/* УНИКАЛЬНЫЙ СОЧНЫЙ ДИЗАЙН ДЛЯ КАЖДОЙ АКТИВНОЙ ВКЛАДКИ */
+
+/* 1. Расписание (Сине-фиолетовый градиент) */
+#btn-schedule.active {
+    background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);
     color: white;
-    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);
-    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
+}
+
+/* 2. Оценки (Изумрудно-зеленый градиент) */
+#btn-grades.active {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
+}
+
+/* 3. Модерирование (Огненно-красный/Оранжевый градиент) */
+#btn-admin.active {
+    background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+    color: white;
+    box-shadow: 0 8px 20px rgba(244, 63, 94, 0.35);
 }
 
 /* Приветствие пользователя справа */
@@ -124,11 +140,8 @@ body {
     border: 1px solid #e2e8f0;
 }
 
-/* Базовый стиль префиксов ролей */
-.role-tag {
-    padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 800;
-    text-transform: uppercase; letter-spacing: 0.6px; color: white; display: inline-flex;
-}
+/* Префиксы ролей */
+.role-tag { padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: white; display: inline-flex; }
 .role-creator { background: linear-gradient(135deg, #ff007f 0%, #7928ca 100%); }
 .role-admin { background: linear-gradient(135deg, #ff9900 0%, #ff5e62 100%); }
 .role-director { background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%); color: #2e2300; }
@@ -142,7 +155,7 @@ body {
 .content-section.active { display: block; animation: fadeIn 0.4s ease-in-out; }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
@@ -163,10 +176,10 @@ body {
 .col-homework { color: #475569; }
 .col-grade { text-align: center; font-weight: bold; }
 
-/* Дизайн админ-панели */
+/* Админ-панель */
 .admin-panel {
     background: #ffffff; padding: 30px; border-radius: 20px; border: 1px solid #e2e8f0;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02); max-width: 600px; margin: 0 auto;
 }
 .admin-panel h2 { margin-top: 0; color: #1e293b; font-size: 22px; margin-bottom: 15px; }
-.admin-card { background: #f8fafc; padding: 15px 20px; border-radius: 12px; border-left: 4px solid #4f46e5; margin-bottom: 15px; font-size: 15px; color: #475569; }
+.admin-card { background: #f8fafc; padding: 15px 20px; border-radius: 12px; border-left: 4px solid #f43f5e; margin-bottom: 15px; font-size: 15px; color: #475569; }
