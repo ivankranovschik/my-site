@@ -65,29 +65,11 @@
         }
         .viewer-day-title { font-weight: bold; color: #1e3a8a; margin: 10px 0 5px 0; font-size: 15px; }
         .viewer-lesson-item { background: #ffffff; padding: 6px 12px; border-radius: 6px; border: 1px solid #dbeafe; font-size: 14px; margin-bottom: 4px; display: inline-block; margin-right: 5px; }
-
-        /* Центрированные карточки заглушек */
-        .placeholder-card {
-            background: #ffffff;
-            border-radius: 18px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
-            border: 1px solid #e2e8f0;
-            max-width: 500px;
-            margin: 50px auto 0 auto;
-        }
-        .placeholder-card p {
-            margin: 0;
-            color: #64748b;
-            font-size: 18px;
-            font-weight: 600;
-        }
     </style>
 </head>
 <body>
 
-    <!-- ЭКРАН АВТОРИЗАЦИИ С ЯРКИМ ГРАДИЕНТОМ И СФЕРАМИ -->
+    <!-- ЭКРАН АВТОРИЗАЦИИ -->
     <div id="login-screen" class="login-screen">
         <div class="bg-sphere sphere-1"></div>
         <div class="bg-sphere sphere-2"></div>
@@ -153,48 +135,95 @@
 
     <!-- КОНТЕНТ -->
     <main class="content-container">
-        <!-- ВКЛАДКА: РАСПИСАНИЕ -->
+        <!-- Вкладка Расписание -->
         <section id="section-schedule" class="content-section active">
             <div id="schedule-grid" class="schedule-grid"></div>
         </section>
 
-        <!-- ВКЛАДКА: ОЦЕНКИ -->
+        <!-- Вкладка Оценки -->
         <section id="section-grades" class="content-section">
-            <div class="placeholder-card">
-                <p>📊 Раздел оценок находится в разработке...</p>
-            </div>
+            <p style="text-align:center; color:#64748b; margin-top:50px; font-size: 18px;">Раздел оценок находится в разработке...</p>
         </section>
 
-        <!-- ВКЛАДКА: МОДЕРИРОВАНИЕ -->
+        <!-- Вкладка Модерирование -->
         <section id="section-admin" class="content-section">
-            <div class="placeholder-card">
-                <p>🛡️ Раздел модерирования находится в разработке...</p>
+            <div class="admin-panel">
+                <h2>🛡️ Модерирование системы</h2>
+                <div class="admin-grid-layout">
+                    <!-- Форма создания школы -->
+                    <div class="admin-card-form">
+                        <h3>🏫 Добавить новую школу</h3>
+                        <div class="form-item">
+                            <label>Название школы</label>
+                            <input type="text" id="new-school-name" placeholder="Например: МБОУ СОШ №1">
+                        </div>
+                        <button id="add-school-btn" class="admin-action-btn">Создать школу</button>
+                    </div>
+
+                    <!-- Форма создания класса -->
+                    <div class="admin-card-form">
+                        <h3>👥 Добавить новый класс</h3>
+                        <div class="form-item">
+                            <label>Название класса</label>
+                            <input type="text" id="new-class-name" placeholder="Например: 10-А">
+                        </div>
+                        <button id="add-class-btn" class="admin-action-btn">Создать класс</button>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
 
+    <!-- СКРИПТЫ С ЛОГИКОЙ АВТОРИЗАЦИИ, НАВИГАЦИИ, ГЕНЕРАЦИИ И СКРЫТИЯ ПОЛЕЙ -->
     <script>
-        // Данные для авторизации
-        const VALID_NAME = "Админ";
-        const VALID_USER = "Admin";
-        const VALID_PASS = "1234";
+        // Данные расписания по умолчанию (пустые домашние задания и оценки)
+        const schoolDays = [
+            { day: "Понедельник", date: "18 мая", lessons: ["Английский язык", "География", "Английский язык", "Литература", "Физика", "Химия", "Русский язык"] },
+            { day: "Вторник", date: "19 мая", lessons: ["География", "Информатика", "Физика", "Английский язык", "Информатика", "Физика"] },
+            { day: "Среда", date: "20 мая", lessons: ["Математика", "История", "Русский язык", "Биология", "Физкультура", "Обществознание", "Геометрия"] },
+            { day: "Четверг", date: "21 мая", lessons: ["Литература", "Алгебра", "Химия", "Физика", "Английский язык", "История"] },
+            { day: "Пятница", date: "22 мая", lessons: ["Русский язык", "Геометрия", "Биология", "География", "Информатика", "Физкультура", "ОБЖ"] }
+        ];
 
-        // Элементы интерфейса
-        const loginScreen = document.getElementById('login-screen');
-        const loginBtn = document.getElementById('login-btn');
-        const errorMsg = document.getElementById('error-msg');
-        const userDisplay = document.getElementById('user-display');
-        const greetName = document.getElementById('greet-name');
-        const greetRole = document.getElementById('greet-role');
-        const logoutBtn = document.getElementById('logout-btn');
+        // Функция генерации таблиц расписания
+        function generateSchedule() {
+            const grid = document.getElementById('schedule-grid');
+            grid.innerHTML = '';
+            
+            schoolDays.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'day-card';
+                
+                let lessonsHtml = '';
+                item.lessons.forEach((lesson, index) => {
+                    lessonsHtml += `
+                        <div class="lesson-row">
+                            <div class="col-num">${index + 1}</div>
+                            <div class="col-subject">${lesson}</div>
+                            <div class="col-homework"></div>
+                            <div class="col-grade"></div>
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <h3>${item.day} <span class="date-badge">${item.date}</span></h3>
+                    <div class="table-header">
+                        <div class="col-num">№</div>
+                        <div>Предмет</div>
+                        <div>Домашнее задание</div>
+                        <div style="text-align: center;">Оценка</div>
+                    </div>
+                    ${lessonsHtml}
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Логика переключения роли (скрытие/показ поля школы)
         const userRoleSelect = document.getElementById('user-role');
         const schoolGroup = document.getElementById('school-group');
 
-        // Элементы вкладок
-        const navButtons = document.querySelectorAll('.nav-btn');
-        const contentSections = document.querySelectorAll('.content-section');
-
-        // Управление полем школы для роли Создатель
         function toggleSchoolField() {
             if (userRoleSelect.value === 'Создатель') {
                 schoolGroup.style.display = 'none';
@@ -203,107 +232,50 @@
             }
         }
         userRoleSelect.addEventListener('change', toggleSchoolField);
-        window.addEventListener('DOMContentLoaded', toggleSchoolField);
 
-        // Функция авторизации
+        // Логика авторизации
+        const loginBtn = document.getElementById('login-btn');
         loginBtn.addEventListener('click', () => {
-            const inputName = document.getElementById('display-name').value.trim();
-            const inputUser = document.getElementById('username').value.trim();
-            const inputPass = document.getElementById('password').value;
-            const selectedRole = userRoleSelect.value;
+            const name = document.getElementById('display-name').value;
+            const login = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-msg');
 
-            if (inputName === VALID_NAME && inputUser === VALID_USER && inputPass === VALID_PASS) {
+            if (name === 'Админ' && login === 'Admin' && pass === '1234') {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('user-display').style.display = 'flex';
+                document.getElementById('greet-name').innerText = `👤 ${name}`;
+                document.getElementById('greet-role').innerText = userRoleSelect.value;
+                document.getElementById('greet-role').className = `role-tag role-creator`;
                 errorMsg.style.display = 'none';
-                loginScreen.classList.add('hidden');
-                
-                // Отображаем профиль пользователя сверху
-                userDisplay.style.display = 'flex';
-                greetName.textContent = `👤 ${inputName}`;
-                greetRole.textContent = selectedRole;
-                
-                // Стилизуем бейдж роли
-                greetRole.className = 'role-tag';
-                if (selectedRole === 'Создатель') greetRole.classList.add('role-creator');
-                else if (selectedRole === 'Администратор') greetRole.classList.add('role-admin');
-                else if (selectedRole === 'Директор') greetRole.classList.add('role-director');
-                else if (selectedRole === 'Учитель') greetRole.classList.add('role-teacher');
-                else if (selectedRole === 'Педагог') greetRole.classList.add('role-pedagogue');
-                else if (selectedRole === 'Ученик') greetRole.classList.add('role-student');
-
-                // Перерисовываем чистое расписание
-                renderSchedule();
+                generateSchedule();
             } else {
                 errorMsg.style.display = 'block';
             }
         });
 
-        // Кнопка выхода
-        logoutBtn.addEventListener('click', () => {
-            loginScreen.classList.remove('hidden');
-            userDisplay.style.display = 'none';
-            document.getElementById('display-name').value = '';
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
+        // Кнопка Выйти
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            document.getElementById('login-screen').classList.remove('hidden');
         });
 
-        // Переключение вкладок
+        // Навигация по вкладкам
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const sections = document.querySelectorAll('.content-section');
+
         navButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 navButtons.forEach(b => b.classList.remove('active'));
-                contentSections.forEach(s => s.classList.remove('active'));
+                sections.forEach(s => s.classList.remove('active'));
 
                 btn.classList.add('active');
-                
-                const targetSectionId = btn.id.replace('btn-', 'section-');
-                document.getElementById(targetSectionId).classList.add('active');
+                const targetSection = btn.id.replace('btn-', 'section-');
+                document.getElementById(targetSection).classList.add('active');
             });
         });
 
-        // Функция генерации чистого расписания (без ДЗ и оценок)
-        function renderSchedule() {
-            const grid = document.getElementById('schedule-grid');
-            grid.innerHTML = '';
-
-            const daysData = [
-                { name: 'Понедельник', date: '18 мая', count: 7, lessons: ['Английский язык', 'География', 'Английский язык', 'Литература', 'Физика', 'Химия', 'Русский язык'] },
-                { name: 'Вторник', date: '19 мая', count: 6, lessons: ['География', 'Информатика', 'Физика', 'Английский язык', 'Информатика', 'Физика'] },
-                { name: 'Среда', date: '20 мая', count: 7, lessons: ['Математика', 'История', 'Биология', 'Обществознание', 'Русский язык', 'Физкультура', 'Геометрия'] },
-                { name: 'Четверг', date: '21 мая', count: 6, lessons: ['Информатика', 'Физика', 'Химия', 'Литература', 'История', 'Английский язык'] },
-                { name: 'Пятница', date: '22 мая', count: 6, lessons: ['Русский язык', 'Алгебра', 'Геометрия', 'Биология', 'Музыка', 'ИЗО'] }
-            ];
-
-            daysData.forEach(day => {
-                let card = document.createElement('div');
-                card.className = 'day-card';
-
-                let html = `
-                    <h3>
-                        <span>${day.name}</span>
-                        <span class="date-badge">${day.date}</span>
-                    </h3>
-                    <div class="table-header">
-                        <div class="col-num">№</div>
-                        <div>ПРЕДМЕТ</div>
-                        <div>ДОМАШНЕЕ ЗАДАНИЕ</div>
-                        <div class="col-grade">ОЦЕНКА</div>
-                    </div>
-                `;
-
-                for (let i = 0; i < day.count; i++) {
-                    html += `
-                        <div class="lesson-row">
-                            <div class="col-num">${i + 1}</div>
-                            <div class="col-subject">${day.lessons[i] || 'Урок'}</div>
-                            <div class="col-homework"></div>
-                            <div class="col-grade"></div>
-                        </div>
-                    `;
-                }
-
-                card.innerHTML = html;
-                grid.appendChild(card);
-            });
-        }
+        // Запуск проверки роли при загрузке
+        window.addEventListener('DOMContentLoaded', toggleSchoolField);
     </script>
 </body>
 </html>
