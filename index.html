@@ -65,6 +65,23 @@
         }
         .viewer-day-title { font-weight: bold; color: #1e3a8a; margin: 10px 0 5px 0; font-size: 15px; }
         .viewer-lesson-item { background: #ffffff; padding: 6px 12px; border-radius: 6px; border: 1px solid #dbeafe; font-size: 14px; margin-bottom: 4px; display: inline-block; margin-right: 5px; }
+        
+        /* Стили заглушки "В разработке" */
+        .dev-placeholder {
+            text-align: center; 
+            color: #64748b; 
+            margin-top: 80px; 
+            font-size: 22px; 
+            font-weight: 600;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            border: 1px solid #e2e8f0;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 </head>
 <body>
@@ -96,7 +113,9 @@
             <!-- Контейнер школы -->
             <div class="input-group" id="school-group">
                 <label id="school-label">Выберите школу</label>
-                <select id="login-school"></select>
+                <select id="login-school">
+                    <option value="Школа №1">Школа №1</option>
+                </select>
             </div>
 
             <div class="input-group">
@@ -115,7 +134,7 @@
             </div>
             
             <button id="login-btn" class="login-btn">Войти в систему</button>
-            <div id="error-msg" class="error-message">Неверные данные или школа выбрана неправильно!</div>
+            <div id="error-msg" class="error-message">Неверные имя, логин или пароль!</div>
         </div>
     </div>
 
@@ -123,7 +142,7 @@
     <header class="diary-header">
         <button id="btn-schedule" class="nav-btn active">📅 Расписание</button>
         <button id="btn-grades" class="nav-btn">📊 Оценки</button>
-        <button id="btn-admin" class="nav-btn" style="display: none;">🛡️ Модерирование</button>
+        <button id="btn-admin" class="nav-btn">🛡️ Модерирование</button>
         
         <div id="user-display" class="user-greeting" style="display: none;">
             <span id="greet-school" class="school-display" style="display: none;">Школа</span>
@@ -136,43 +155,52 @@
 
     <!-- КОНТЕНТ -->
     <main class="content-container">
+        <!-- Вкладка 1: Расписание -->
         <section id="section-schedule" class="content-section active">
-            <div id="schedule-grid" class="schedule-grid"></div>
+            <div class="dev-placeholder">📅 Раздел расписания находится в разработке...</div>
         </section>
 
+        <!-- Вкладка 2: Оценки -->
         <section id="section-grades" class="content-section">
-            <p style="text-align:center; color:#64748b; margin-top:50px; font-size: 18px;">Раздел оценок находится в разработке.</p>
+            <div class="dev-placeholder">📊 Раздел оценок находится в разработке...</div>
         </section>
 
-        <!-- БЛОК МОДЕРИРОВАНИЯ -->
+        <!-- Вкладка 3: Модерирование -->
         <section id="section-admin" class="content-section">
-            <div class="admin-panel" style="max-width: 800px; display: grid; gap: 20px; grid-template-columns: 1fr;">
-                <h2>Панель управления системой</h2>
-                
-                <!-- ПРОСМОТРА РАСПИСАНИЯ КЛАССА -->
-                <div class="admin-form" style="border: 2px solid #3b82f6; background: #ffffff;">
-                    <h3 style="color: #1d4ed8;">🔍 Просмотр расписания класса</h3>
-                    <div class="form-group">
-                        <label>1. Выберите школу</label>
-                        <select id="view-school-select"></select>
-                    </div>
-                    <div class="form-group">
-                        <label>2. Выберите класс</label>
-                        <select id="view-class-select">
-                            <option value="">-- Сначала выберите школу --</option>
-                        </select>
-                    </div>
-                    <button id="load-class-schedule-btn" class="submit-btn" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">Показать расписание</button>
-                    <div id="schedule-viewer-output" class="viewer-box" style="display: none;"></div>
-                </div>
-            </div>
-        </main>
+            <div class="dev-placeholder">🛡️ Раздел модерирования находится в разработке...</div>
+        </section>
+    </main>
 
-    <!-- Логика скрытия поля школы -->
+    <!-- ВСЯ ЛОГИКА SYSTEM (JS) -->
     <script>
+        // Элементы управления полями
         const userRoleSelect = document.getElementById('user-role');
         const schoolGroup = document.getElementById('school-group');
+        
+        // Элементы авторизации
+        const loginScreen = document.getElementById('login-screen');
+        const loginBtn = document.getElementById('login-btn');
+        const displayNameInput = document.getElementById('display-name');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const errorMsg = document.getElementById('error-msg');
+        
+        // Элементы шапки пользователя
+        const userDisplay = document.getElementById('user-display');
+        const greetName = document.getElementById('greet-name');
+        const greetRole = document.getElementById('greet-role');
+        const logoutBtn = document.getElementById('logout-btn');
 
+        // Элементы вкладок меню
+        const btnSchedule = document.getElementById('btn-schedule');
+        const btnGrades = document.getElementById('btn-grades');
+        const btnAdmin = document.getElementById('btn-admin');
+
+        const secSchedule = document.getElementById('section-schedule');
+        const secGrades = document.getElementById('section-grades');
+        const secAdmin = document.getElementById('section-admin');
+
+        // 1. Функция скрытия школы для Создателя
         function toggleSchoolField() {
             if (userRoleSelect.value === 'Создатель') {
                 schoolGroup.style.display = 'none';
@@ -180,9 +208,62 @@
                 schoolGroup.style.display = 'block';
             }
         }
-
         userRoleSelect.addEventListener('change', toggleSchoolField);
         window.addEventListener('DOMContentLoaded', toggleSchoolField);
+
+        // 2. Функция авторизации (Проверка: Админ / Admin / 1234)
+        loginBtn.addEventListener('click', () => {
+            const nameValue = displayNameInput.value.trim();
+            const loginValue = usernameInput.value.trim();
+            const passValue = passwordInput.value.trim();
+            const roleValue = userRoleSelect.value;
+
+            if (nameValue === 'Админ' && loginValue === 'Admin' && passValue === '1234') {
+                // Скрываем ошибку и форму входа
+                errorMsg.style.display = 'none';
+                loginScreen.classList.add('hidden');
+                
+                // Настраиваем шапку пользователя
+                userDisplay.style.display = 'flex';
+                greetName.textContent = `👤 ${nameValue}`;
+                greetRole.textContent = roleValue;
+                
+                // Применяем правильный цвет тегу роли
+                greetRole.className = 'role-tag'; 
+                if (roleValue === 'Создатель') greetRole.classList.add('role-creator');
+                else if (roleValue === 'Администратор') greetRole.classList.add('role-admin');
+                else if (roleValue === 'Директор') greetRole.classList.add('role-director');
+                else if (roleValue === 'Учитель') greetRole.classList.add('role-teacher');
+                else if (roleValue === 'Педагог') greetRole.classList.add('role-pedagogue');
+                else if (roleValue === 'Ученик') greetRole.classList.add('role-student');
+
+            } else {
+                // Показываем сообщение об ошибке
+                errorMsg.style.display = 'block';
+            }
+        });
+
+        // 3. Выход из аккаунта
+        logoutBtn.addEventListener('click', () => {
+            loginScreen.classList.remove('hidden');
+            userDisplay.style.display = 'none';
+            passwordInput.value = ''; // очищаем пароль
+        });
+
+        // 4. Логика переключения сочных вкладок
+        function switchTab(activeBtn, activeSection) {
+            // Убираем активность у всех кнопок и секций
+            [btnSchedule, btnGrades, btnAdmin].forEach(b => b.classList.remove('active'));
+            [secSchedule, secGrades, secAdmin].forEach(s => s.classList.remove('active'));
+            
+            // Добавляем активность выбранным
+            activeBtn.classList.add('active');
+            activeSection.classList.add('active');
+        }
+
+        btnSchedule.addEventListener('click', () => switchTab(btnSchedule, secSchedule));
+        btnGrades.addEventListener('click', () => switchTab(btnGrades, secGrades));
+        btnAdmin.addEventListener('click', () => switchTab(btnAdmin, secAdmin));
     </script>
 </body>
 </html>
