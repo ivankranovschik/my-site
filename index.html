@@ -134,7 +134,7 @@
                         <div id="school-success" class="success-toast">Школа успешно добавлена!</div>
                     </div>
 
-                    <!-- Форма 2: Добавить класс (Привязан к школе) -->
+                    <!-- Форма 2: Добавить класс -->
                     <div class="admin-form">
                         <h3>👥 Добавить новый класс для школы</h3>
                         <div class="form-group">
@@ -149,6 +149,29 @@
                         </div>
                         <button id="create-class-btn" class="submit-btn">Создать класс</button>
                         <div id="class-success" class="success-toast">Класс успешно привязан и создан!</div>
+                    </div>
+
+                    <!-- Форма 3: Добавить ученика -->
+                    <div class="admin-form">
+                        <h3>🎓 Добавить нового ученика</h3>
+                        <div class="form-group">
+                            <label>ФИО ученика</label>
+                            <input type="text" id="student-fio" placeholder="Иванов Иван Иванович">
+                        </div>
+                        <div class="form-group">
+                            <label>1. Выберите школу</label>
+                            <select id="student-school-select">
+                                <option value="">-- Сначала создайте школу --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>2. Выберите класс</label>
+                            <select id="student-class-select">
+                                <option value="">-- Сначала выберите школу --</option>
+                            </select>
+                        </div>
+                        <button id="create-student-btn" class="submit-btn">Добавить ученика</button>
+                        <div id="student-success" class="success-toast">Ученик успешно зачислен в класс!</div>
                     </div>
                 </div>
             </div>
@@ -187,11 +210,18 @@
         const createSchoolBtn = document.getElementById('create-school-btn');
         const targetSchoolSelect = document.getElementById('target-school-select');
         const loginSchoolSelect = document.getElementById('login-school');
+        const studentSchoolSelect = document.getElementById('student-school-select');
+        const studentClassSelect = document.getElementById('student-class-select');
+        
         const newClassInput = document.getElementById('new-class-name');
         const createClassBtn = document.getElementById('create-class-btn');
         
+        const studentFioInput = document.getElementById('student-fio');
+        const createStudentBtn = document.getElementById('create-student-btn');
+        
         const schoolSuccess = document.getElementById('school-success');
         const classSuccess = document.getElementById('class-success');
+        const studentSuccess = document.getElementById('student-success');
 
         // Скрытие/Отображение поля школы в зависимости от роли "Создатель"
         function toggleSchoolField() {
@@ -203,17 +233,19 @@
         }
         userRoleSelect.addEventListener('change', toggleSchoolField);
 
-        // Функция обновления списков школ в выпадающих меню
+        // Функция обновления списков школ во всех выпадающих меню
         function updateSchoolSelects() {
-            // Очищаем списки
             targetSchoolSelect.innerHTML = '';
             loginSchoolSelect.innerHTML = '';
+            studentSchoolSelect.innerHTML = '<option value="">-- Выберите школу --</option>';
 
             const schoolNames = Object.keys(database.schools);
 
             if (schoolNames.length === 0) {
                 targetSchoolSelect.innerHTML = '<option value="">-- Сначала создайте школу --</option>';
                 loginSchoolSelect.innerHTML = '<option value="">-- База школ пуста --</option>';
+                studentSchoolSelect.innerHTML = '<option value="">-- Сначала создайте школу --</option>';
+                studentClassSelect.innerHTML = '<option value="">-- Сначала выберите школу --</option>';
                 return;
             }
 
@@ -227,8 +259,39 @@
                 opt2.value = school;
                 opt2.textContent = school;
                 loginSchoolSelect.appendChild(opt2);
+
+                const opt3 = document.createElement('option');
+                opt3.value = school;
+                opt3.textContent = school;
+                studentSchoolSelect.appendChild(opt3);
             });
         }
+
+        // Динамическое обновление классов для формы студентов при выборе школы
+        function updateStudentClassSelect() {
+            const selectedSchool = studentSchoolSelect.value;
+            studentClassSelect.innerHTML = '';
+
+            if (!selectedSchool || !database.schools[selectedSchool]) {
+                studentClassSelect.innerHTML = '<option value="">-- Сначала выберите школу --</option>';
+                return;
+            }
+
+            const classes = database.schools[selectedSchool].classes;
+
+            if (classes.length === 0) {
+                studentClassSelect.innerHTML = '<option value="">-- В этой школе нет классов --</option>';
+                return;
+            }
+
+            classes.forEach(cls => {
+                const opt = document.createElement('option');
+                opt.value = cls;
+                opt.textContent = cls;
+                studentClassSelect.appendChild(opt);
+            });
+        }
+        studentSchoolSelect.addEventListener('change', updateStudentClassSelect);
 
         // Добавление новой школы
         createSchoolBtn.addEventListener('click', () => {
@@ -236,7 +299,7 @@
             if(!name) return;
 
             if(!database.schools[name]) {
-                database.schools[name] = { classes: [] };
+                database.schools[name] = { classes: [], students: [] };
                 localStorage.setItem('diary_db', JSON.stringify(database));
                 updateSchoolSelects();
                 newSchoolInput.value = '';
@@ -246,7 +309,7 @@
             }
         });
 
-        // Добавление нового класса в выбранную школу
+        // Добавление нового класса
         createClassBtn.addEventListener('click', () => {
             const selectedSchool = targetSchoolSelect.value;
             const className = newClassInput.value.trim();
@@ -257,10 +320,40 @@
                 database.schools[selectedSchool].classes.push(className);
                 localStorage.setItem('diary_db', JSON.stringify(database));
                 newClassInput.value = '';
+                
+                // Сразу обновляем доступные классы у студентов, если выбрана эта школа
+                if (studentSchoolSelect.value === selectedSchool) {
+                    updateStudentClassSelect();
+                }
 
                 classSuccess.style.display = 'block';
                 setTimeout(() => classSuccess.style.display = 'none', 3000);
             }
+        });
+
+        // Добавление нового ученика
+        createStudentBtn.addEventListener('click', () => {
+            const fio = studentFioInput.value.trim();
+            const school = studentSchoolSelect.value;
+            const cls = studentClassSelect.value;
+
+            if (!fio || !school || !cls || cls.startsWith('--')) return;
+
+            if (!database.schools[school].students) {
+                database.schools[school].students = [];
+            }
+
+            // Добавляем объект ученика в базу данных школы
+            database.schools[school].students.push({
+                fio: fio,
+                class: cls
+            });
+
+            localStorage.setItem('diary_db', JSON.stringify(database));
+            studentFioInput.value = '';
+            
+            studentSuccess.style.display = 'block';
+            setTimeout(() => studentSuccess.style.display = 'none', 3000);
         });
 
         // Логика авторизации
@@ -303,7 +396,7 @@
             navButtons[key].addEventListener('click', () => switchTab(key));
         });
 
-        // Генерация пустого шаблона расписания без домашних заданий и оценок
+        // Генерация пустого шаблона расписания
         function generateEmptySchedule() {
             const grid = document.getElementById('schedule-grid');
             grid.innerHTML = '';
