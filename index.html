@@ -5,40 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мой Дневник</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Дополнительные стили для новой вертикальной структуры внутри урока */
-        .lesson-block {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            width: 100%;
-        }
-        .lesson-row {
-            font-size: 14px;
-            line-height: 1.4;
-        }
-        .lesson-label {
-            font-weight: bold;
-            color: #64748b; /* Серый цвет для подписей */
-            margin-right: 5px;
-        }
-        .lesson-value {
-            color: #1e293b; /* Темный цвет для значений */
-        }
-        /* Делаем название предмета чуть выделяющимся */
-        .subject-highlight {
-            font-weight: 600;
-            color: #4f46e5; 
-        }
-        /* Подстраиваем высоту кружка с номером под новый размер карточки */
-        .day-card li {
-            align-items: flex-start;
-            padding: 16px;
-        }
-        .lesson-number {
-            margin-top: 2px;
-        }
-    </style>
 </head>
 <body>
 
@@ -59,7 +25,6 @@
 
     <script>
         const subjects = ["Математика", "Русский язык", "Литература", "История", "Физика", "Химия", "Биология", "География", "Английский язык", "Физкультура", "Информатика", "Обществознание"];
-        const times = ["08:00 - 08:45", "08:55 - 09:40", "09:50 - 10:35", "10:55 - 11:40", "11:55 - 12:40", "12:50 - 13:35", "13:45 - 14:30"];
         const days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"];
         
         const grid = document.getElementById("schedule-grid");
@@ -68,45 +33,40 @@
             const dayCard = document.createElement("div");
             dayCard.className = "day-card";
             
-            const lessonsCount = Math.floor(Math.random() * 2) + 6; 
+            const lessonsCount = Math.floor(Math.random() * 2) + 6; // 6-7 уроков
             
-            dayCard.innerHTML = `<h3>${day} <span>${lessonsCount} ур.</span></h3>`;
-            const list = document.createElement("ul");
+            // Шапка дня недели + строка заголовков таблицы
+            dayCard.innerHTML = `
+                <h3>${day} <span>${lessonsCount} ур.</span></h3>
+                <div class="table-header">
+                    <div style="text-align: center;">№</div>
+                    <div>УРОК</div>
+                    <div>ДОМАШНЕЕ ЗАДАНИЕ</div>
+                    <div style="text-align: center;">ОЦЕНКА</div>
+                </div>
+            `;
+            
+            const listContainer = document.createElement("div");
 
             for (let i = 0; i < lessonsCount; i++) {
-                const li = document.createElement("li");
                 const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
+                const row = document.createElement("div");
+                row.className = "lesson-row";
                 
-                // Создаем строго структурированный блок с подписями по строкам
-                li.innerHTML = `
-                    <div class="lesson-number">${i + 1}</div>
-                    <div class="lesson-block">
-                        <div class="lesson-time" style="margin-bottom: 5px;">⏰ ${times[i]}</div>
-                        
-                        <div class="lesson-row">
-                            <span class="lesson-label">Урок:</span>
-                            <span class="lesson-value subject-highlight">${randomSubject}</span>
-                        </div>
-                        
-                        <div class="lesson-row">
-                            <span class="lesson-label">Домашнее задание:</span>
-                            <span class="lesson-value">не задано</span>
-                        </div>
-                        
-                        <div class="lesson-row">
-                            <span class="lesson-label">Оценка:</span>
-                            <span class="lesson-value"></span>
-                        </div>
-                    </div>
+                row.innerHTML = `
+                    <div class="col-num">${i + 1}</div>
+                    <div class="col-subject">${randomSubject}</div>
+                    <div class="col-homework">не задано</div>
+                    <div class="col-grade"></div>
                 `;
-                list.appendChild(li);
+                listContainer.appendChild(row);
             }
 
-            dayCard.appendChild(list);
+            dayCard.appendChild(listContainer);
             grid.appendChild(dayCard);
         });
 
-        // Логика переключения вкладок
+        // Логика вкладок
         const btnSchedule = document.getElementById("btn-schedule");
         const btnGrades = document.getElementById("btn-grades");
         const secSchedule = document.getElementById("section-schedule");
