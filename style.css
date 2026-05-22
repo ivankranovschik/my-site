@@ -1,7 +1,7 @@
 :root {
-    --prm: #ff00cc; /* Ярко-розовый */
-    --sec: #3333ff; /* Ярко-синий */
-    --acc: #00ffff; /* Циан */
+    --prm: #ff00cc;
+    --sec: #3333ff;
+    --acc: #00ffff;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -16,7 +16,6 @@ body {
     overflow: hidden;
 }
 
-/* ЭФФЕКТНЫЙ ФОН */
 .bg-gradient {
     position: absolute; width: 100%; height: 100%;
     background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
@@ -37,7 +36,6 @@ body {
     100% { transform: translate(100px, 50px) scale(1.2); }
 }
 
-/* ГЛЯНЦЕВАЯ КАРТОЧКА */
 .glass-box {
     position: relative;
     width: 420px;
@@ -46,7 +44,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 30px;
     padding: 50px 40px;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.1);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
 }
 
 .glow-border {
@@ -60,12 +58,11 @@ body {
     pointer-events: none;
 }
 
-h1 { font-family: 'Orbitron'; color: #fff; font-size: 28px; text-align: center; letter-spacing: 5px; }
+h1 { font-family: 'Orbitron'; color: #fff; font-size: 26px; text-align: center; letter-spacing: 3px; }
 h1 span { background: linear-gradient(to right, var(--prm), var(--acc)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px var(--prm)); }
 
-.brand { text-align: center; color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 3px; margin: 10px 0 35px; font-weight: 900; }
+.brand { text-align: center; color: rgba(255,255,255,0.6); font-size: 9px; letter-spacing: 2px; margin: 10px 0 35px; font-weight: 900; }
 
-/* ПОЛЯ ВВОДА */
 .field { position: relative; margin-bottom: 20px; }
 
 .field input {
@@ -76,16 +73,15 @@ h1 span { background: linear-gradient(to right, var(--prm), var(--acc)); -webkit
 
 .field label {
     position: absolute; left: 18px; top: 15px; color: rgba(255,255,255,0.5);
-    transition: 0.3s; font-size: 11px; font-weight: 700; pointer-events: none;
+    transition: 0.3s; font-size: 10px; font-weight: 700; pointer-events: none;
 }
 
 .field input:focus ~ label, .field input:not(:placeholder-shown) ~ label {
-    top: -10px; left: 12px; font-size: 10px; color: var(--acc); text-shadow: 0 0 5px var(--acc);
+    top: -10px; left: 12px; font-size: 9px; color: var(--acc);
 }
 
-.field input:focus { border-color: var(--acc); background: rgba(0,0,0,0.5); box-shadow: 0 0 15px rgba(0,255,255,0.2); }
+.field input:focus { border-color: var(--acc); box-shadow: 0 0 15px rgba(0,255,255,0.2); }
 
-/* КНОПКА-ГРАДИЕНТ */
 .auth-btn {
     width: 100%; padding: 16px; border: none; border-radius: 15px;
     background: linear-gradient(45deg, var(--prm), var(--sec));
@@ -95,25 +91,22 @@ h1 span { background: linear-gradient(to right, var(--prm), var(--acc)); -webkit
 }
 
 .auth-btn:hover {
-    transform: translateY(-3px) scale(1.02);
+    transform: translateY(-3px);
     box-shadow: 0 15px 30px rgba(255,0,204,0.5);
-    filter: brightness(1.2);
 }
 
-/* КАРТОЧКА ПРОФИЛЯ */
-.profile-layout { text-align: center; animation: slideUp 0.6s ease; }
+.profile-layout { text-align: center; }
 .avatar-ring { 
-    width: 110px; height: 110px; margin: 0 auto 20px;
+    width: 100px; height: 100px; margin: 0 auto 20px;
     background: linear-gradient(45deg, var(--prm), var(--acc));
-    border-radius: 50%; padding: 3px; box-shadow: 0 0 30px var(--prm);
+    border-radius: 50%; padding: 3px;
 }
 .avatar-core { 
     background: #000; width: 100%; height: 100%; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 45px; color: #fff; font-family: 'Orbitron'; font-weight: 900;
+    font-size: 40px; color: #fff; font-family: 'Orbitron'; font-weight: 900;
 }
-.details h2 { color: #fff; font-size: 22px; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-.rank-label { color: var(--acc); font-size: 13px; font-weight: 900; margin-top: 5px; }
+.details h2 { color: #fff; font-size: 20px; }
+.rank-label { color: var(--acc); font-size: 12px; font-weight: 900; margin-top: 5px; }
 
 .hidden { display: none; }
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
