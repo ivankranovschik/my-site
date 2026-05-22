@@ -7,9 +7,10 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root {
-            --prm: #ff00cc; /* Ярко-розовый */
-            --sec: #3333ff; /* Ярко-синий */
-            --acc: #00ffff; /* Циан */
+            --prm: #ff00cc;
+            --sec: #3333ff;
+            --acc: #00ffff;
+            --glass: rgba(255, 255, 255, 0.07);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,104 +26,79 @@
             color: #fff;
         }
 
-        /* АНИМИРОВАННЫЙ ФОН */
         .bg-gradient {
             position: absolute; width: 100%; height: 100%;
-            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            background: radial-gradient(circle at top right, #1a1a2e, #050505);
             z-index: -2;
         }
 
         .orb {
-            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; z-index: -1;
-            animation: move 20s infinite alternate;
+            position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.4; z-index: -1;
+            animation: move 15s infinite alternate;
         }
+        .orb-1 { width: 500px; height: 500px; background: var(--prm); top: -10%; left: -10%; }
+        .orb-2 { width: 400px; height: 400px; background: var(--sec); bottom: -5%; right: -5%; }
 
-        .orb-1 { width: 400px; height: 400px; background: var(--prm); top: -10%; left: -10%; }
-        .orb-2 { width: 500px; height: 500px; background: var(--sec); bottom: -10%; right: -10%; animation-delay: -5s; }
+        @keyframes move { from { transform: translate(0,0); } to { transform: translate(50px, 50px); } }
 
-        @keyframes move {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(100px, 50px) scale(1.2); }
-        }
-
-        /* ГЛЯНЦЕВАЯ КАРТОЧКА ВХОДА */
+        /* ФОРМА ВХОДА */
         .glass-box {
-            position: relative;
-            width: 420px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
-            padding: 50px 40px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            position: relative; width: 400px; background: var(--glass);
+            backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px; padding: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             transition: 0.5s;
         }
-
-        h1 { font-family: 'Orbitron'; font-size: 26px; text-align: center; letter-spacing: 3px; margin-bottom: 10px; }
+        h1 { font-family: 'Orbitron'; font-size: 24px; text-align: center; margin-bottom: 30px; }
         h1 span { background: linear-gradient(to right, var(--prm), var(--acc)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .brand { text-align: center; color: rgba(255,255,255,0.6); font-size: 9px; letter-spacing: 2px; margin-bottom: 35px; font-weight: 900; }
-
-        .field { position: relative; margin-bottom: 20px; }
-
+        
+        .field { position: relative; margin-bottom: 15px; }
         .field input {
-            width: 100%; padding: 14px 18px; background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 15px;
-            color: #fff; outline: none; transition: 0.4s; font-size: 14px;
+            width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; outline: none;
         }
+        .field label { position: absolute; left: 15px; top: 13px; font-size: 10px; color: #666; transition: 0.3s; pointer-events: none; }
+        .field input:focus ~ label, .field input:not(:placeholder-shown) ~ label { top: -8px; left: 10px; color: var(--acc); font-size: 9px; background: #08080a; padding: 0 5px; }
+        
+        .auth-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; background: linear-gradient(45deg, var(--prm), var(--sec)); color: #fff; font-family: 'Orbitron'; cursor: pointer; font-weight: 700; margin-top: 10px; transition: 0.3s; }
+        .auth-btn:hover { box-shadow: 0 0 20px var(--prm); transform: translateY(-2px); }
 
-        .field label {
-            position: absolute; left: 18px; top: 15px; color: rgba(255,255,255,0.4);
-            transition: 0.3s; font-size: 10px; font-weight: 700; pointer-events: none;
-        }
-
-        .field input:focus ~ label, .field input:not(:placeholder-shown) ~ label {
-            top: -10px; left: 12px; font-size: 9px; color: var(--acc);
-        }
-
-        .auth-btn {
-            width: 100%; padding: 16px; border: none; border-radius: 15px;
-            background: linear-gradient(45deg, var(--prm), var(--sec));
-            color: #fff; font-family: 'Orbitron'; font-weight: 900;
-            cursor: pointer; transition: 0.4s; margin-top: 10px;
-        }
-
-        .auth-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,0,204,0.4); }
-
-        /* ГЛАВНОЕ МЕНЮ */
-        .menu-container {
-            width: 90%; max-width: 900px; z-index: 10;
-        }
-
-        .menu-header {
-            display: flex; justify-content: space-between; align-items: center;
+        /* ВЕРХНЯЯ ПАНЕЛЬ */
+        .top-nav {
+            position: fixed; top: 20px; right: 20px;
+            display: flex; align-items: center; gap: 15px;
             background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
-            padding: 20px 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 30px;
+            padding: 8px 15px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
         }
+        .user-trigger { display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.3s; }
+        .mini-avatar { width: 35px; height: 35px; background: linear-gradient(45deg, var(--prm), var(--sec)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-family: 'Orbitron'; font-size: 14px; }
+        .user-info-text h4 { font-size: 13px; font-family: 'Orbitron'; color: var(--acc); }
+        .user-info-text p { font-size: 9px; color: #aaa; text-transform: uppercase; }
 
-        .user-profile { display: flex; align-items: center; gap: 15px; }
-        .mini-avatar { 
-            width: 50px; height: 50px; background: var(--prm); 
-            border-radius: 50%; display: flex; align-items: center; 
-            justify-content: center; font-family: 'Orbitron'; font-weight: 900;
-        }
-
-        .menu-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;
-        }
-
+        /* МЕНЮ */
+        .menu-grid { display: grid; grid-template-columns: repeat(2, 220px); gap: 20px; z-index: 10; }
         .menu-item {
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px 20px;
-            border-radius: 25px; text-align: center; cursor: pointer; transition: 0.4s;
+            background: var(--glass); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px; border-radius: 24px; text-align: center; cursor: pointer; transition: 0.4s ease;
         }
+        .menu-item:hover { transform: translateY(-10px); border-color: var(--prm); box-shadow: 0 15px 30px rgba(255,0,204,0.2); }
+        .menu-item .icon { font-size: 40px; margin-bottom: 15px; display: block; }
+        .menu-item h3 { font-family: 'Orbitron'; font-size: 14px; letter-spacing: 2px; background: linear-gradient(to right, #fff, var(--acc)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .menu-item:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.08); border-color: var(--acc); }
-
-        .menu-item .icon { font-size: 40px; margin-bottom: 10px; display: block; }
-
-        .hidden { display: none; }
+        /* МОДАЛКА */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            display: flex; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .profile-card {
+            background: linear-gradient(135deg, #1a1a2e, #0a0a0a);
+            padding: 40px; border-radius: 30px; border: 1px solid var(--prm);
+            text-align: center; width: 320px; position: relative;
+        }
+        .big-avatar { width: 100px; height: 100px; background: linear-gradient(45deg, var(--prm), var(--sec)); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 40px; font-family: 'Orbitron'; box-shadow: 0 0 30px var(--prm); }
+        
+        .hidden { display: none !important; }
         .fade-out { opacity: 0; transform: scale(0.9); }
     </style>
 </head>
@@ -132,37 +108,41 @@
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
 
-    <!-- ФОРМА ВХОДА -->
     <div id="login-container" class="glass-box">
         <h1>ВХОД<span> НА САЙТ</span></h1>
-        <p class="brand">САЙТ ДЛЯ КОМАНДЫ МИРОПОЛИСА</p>
-
         <div class="field"><input type="text" id="reg-name" placeholder=" " required><label>ИМЯ ПОЛЬЗОВАТЕЛЯ</label></div>
         <div class="field"><input type="text" id="reg-login" placeholder=" " required><label>ЛОГИН</label></div>
         <div class="field"><input type="text" id="reg-rank" placeholder=" " required><label>ЗВАНИЕ</label></div>
         <div class="field"><input type="password" id="reg-pass" placeholder=" " required><label>ПАРОЛЬ</label></div>
-
-        <button type="button" class="auth-btn" onclick="validateUser()">ПОДТВЕРДИТЬ ЛИЧНОСТЬ</button>
+        <button type="button" class="auth-btn" onclick="validateUser()">ПОДТВЕРДИТЬ</button>
     </div>
 
-    <!-- ГЛАВНОЕ МЕНЮ -->
-    <div id="main-menu" class="menu-container hidden">
-        <header class="menu-header">
-            <div class="user-profile">
+    <div id="dashboard" class="hidden">
+        <nav class="top-nav">
+            <div class="user-trigger" onclick="toggleProfile()">
                 <div class="mini-avatar">K</div>
-                <div>
-                    <h2 id="user-display-name">Kranovschik</h2>
-                    <p id="user-display-rank">Создатель</p>
+                <div class="user-info-text">
+                    <h4 id="nav-name"></h4>
+                    <p id="nav-rank"></p>
                 </div>
             </div>
-            <button style="background:none; border:1px solid var(--prm); color:var(--prm); padding:5px 15px; border-radius:10px; cursor:pointer;" onclick="location.reload()">ВЫХОД</button>
-        </header>
+            <button onclick="location.reload()" style="background:none; border:none; color:var(--prm); cursor:pointer; font-family:'Orbitron'; font-size:9px;">ВЫХОД</button>
+        </nav>
 
         <div class="menu-grid">
-            <div class="menu-item"><span class="icon">🏗️</span><h3>ОБЪЕКТЫ</h3><p>Текущие стройки</p></div>
-            <div class="menu-item"><span class="icon">👥</span><h3>КОМАНДА</h3><p>Состав Мирополиса</p></div>
-            <div class="menu-item"><span class="icon">📁</span><h3>ЧЕРТЕЖИ</h3><p>Архив проектов</p></div>
-            <div class="menu-item"><span class="icon">⚙️</span><h3>НАСТРОЙКИ</h3><p>Система</p></div>
+            <div class="menu-item"><span class="icon">🏗️</span><h3>ОБЪЕКТЫ</h3></div>
+            <div class="menu-item"><span class="icon">👥</span><h3>КОМАНДА</h3></div>
+            <div class="menu-item"><span class="icon">📁</span><h3>ЧЕРТЕЖИ</h3></div>
+            <div class="menu-item"><span class="icon">⚙️</span><h3>СИСТЕМА</h3></div>
+        </div>
+    </div>
+
+    <div id="profile-modal" class="modal hidden">
+        <div class="profile-card">
+            <span onclick="toggleProfile()" style="position:absolute; top:20px; right:20px; cursor:pointer;">×</span>
+            <div class="big-avatar">K</div>
+            <h2 id="prof-name" style="font-family:'Orbitron'; margin-bottom:10px;"></h2>
+            <p id="prof-rank" style="color:var(--acc); font-weight:700;"></p>
         </div>
     </div>
 
@@ -177,11 +157,18 @@
                 document.getElementById('login-container').classList.add('fade-out');
                 setTimeout(() => {
                     document.getElementById('login-container').style.display = 'none';
-                    document.getElementById('main-menu').classList.remove('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    document.getElementById('dashboard').style.display = 'flex';
+                    document.getElementById('nav-name').innerText = name;
+                    document.getElementById('nav-rank').innerText = rank;
+                    document.getElementById('prof-name').innerText = name;
+                    document.getElementById('prof-rank').innerText = rank;
                 }, 500);
-            } else {
-                alert('ДОСТУП ЗАПРЕЩЕН');
-            }
+            } else { alert('ДОСТУП ЗАПРЕЩЕН'); }
+        }
+
+        function toggleProfile() {
+            document.getElementById('profile-modal').classList.toggle('hidden');
         }
     </script>
 </body>
