@@ -10,46 +10,37 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #050505; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: 'Montserrat', sans-serif; overflow: hidden; color: #fff; }
 
-        /* ФОН */
         .bg-layer { position: absolute; width: 100%; height: 100%; background: #08080a; z-index: -2; }
         .orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.6; z-index: -1; animation: move 20s infinite alternate; }
         .orb-1 { width: 500px; height: 500px; background: var(--prm); top: -10%; left: -10%; }
         .orb-2 { width: 600px; height: 600px; background: var(--sec); bottom: -10%; right: -10%; }
         @keyframes move { from { transform: translate(0,0); } to { transform: translate(100px, 50px); } }
 
-        /* ВХОД */
         .glass-box { position: relative; width: 420px; background: var(--glass); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; padding: 50px 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); text-align: center; }
         h1 { font-family: 'Orbitron'; font-size: 28px; letter-spacing: 5px; margin-bottom: 30px; }
-        h1 span { background: linear-gradient(to right, var(--prm), var(--acc)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px var(--prm)); }
+        h1 span { background: linear-gradient(to right, var(--prm), var(--acc)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         input { width: 100%; padding: 14px; margin-bottom: 15px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; outline: none; }
         .auth-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; background: linear-gradient(45deg, var(--prm), var(--sec)); color: #fff; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; transition: 0.3s; }
 
-        /* ИНТЕРФЕЙС */
         .top-nav { position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.05); backdrop-filter: blur(15px); padding: 10px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); z-index: 100; }
-        .mini-avatar { width: 35px; height: 35px; background: linear-gradient(45deg, var(--prm), var(--acc)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-family: 'Orbitron'; font-size: 14px; box-shadow: 0 0 10px var(--prm); }
+        .mini-avatar { width: 35px; height: 35px; background: linear-gradient(45deg, var(--prm), var(--acc)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-family: 'Orbitron'; font-size: 14px; }
         .menu-grid { display: grid; grid-template-columns: repeat(2, 220px); gap: 20px; z-index: 10; }
         .menu-item { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); padding: 40px 20px; border-radius: 25px; text-align: center; cursor: pointer; transition: 0.4s; }
-        .menu-item:hover { border-color: var(--acc); transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,255,255,0.2); }
-        .menu-item h3 { font-family: 'Orbitron'; font-size: 14px; margin-top: 15px; letter-spacing: 2px; }
+        .menu-item:hover { border-color: var(--acc); transform: translateY(-10px); }
 
-        /* ГОРОДА */
-        .objs-view { width: 95%; max-width: 1100px; height: 85vh; overflow-y: auto; scrollbar-width: none; text-align: center; padding-top: 50px; }
+        .objs-view { width: 95%; max-width: 1100px; height: 85vh; overflow-y: auto; text-align: center; padding-top: 50px; scrollbar-width: none; }
         .cities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 20px; }
         .city-card { background: rgba(255,255,255,0.03); border-radius: 20px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; cursor: pointer; }
         .city-card:hover:not(.locked) { border-color: var(--acc); transform: translateY(-5px); }
         .city-card.locked { cursor: default; border: 1px dashed #333; opacity: 0.6; }
-        .status { font-size: 10px; font-weight: 900; text-transform: uppercase; margin-top: 8px; display: block; }
 
-        /* БОЛЬШАЯ МОДАЛКА */
-        .full-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; z-index: 3000; display: none; flex-direction: column; padding: 60px; animation: slideIn 0.4s ease-out; }
-        @keyframes slideIn { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .full-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; z-index: 3000; display: none; flex-direction: column; padding: 60px; }
         .modal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid #222; padding-bottom: 20px; }
         .tab-group { display: flex; gap: 30px; }
-        .tab-link { background: none; border: none; color: #444; font-family: 'Orbitron'; font-size: 18px; cursor: pointer; transition: 0.3s; }
-        .tab-link.active { color: var(--acc); text-shadow: 0 0 15px var(--acc); }
+        .tab-link { background: none; border: none; color: #444; font-family: 'Orbitron'; font-size: 18px; cursor: pointer; }
+        .tab-link.active { color: var(--acc); }
         .content-area { flex-grow: 1; display: flex; justify-content: center; align-items: center; font-size: 32px; font-family: 'Orbitron'; color: #222; letter-spacing: 10px; }
-        .close-btn { background: none; border: 1px solid var(--prm); color: var(--prm); padding: 10px 25px; border-radius: 12px; cursor: pointer; font-family: 'Orbitron'; }
-
+        
         .hidden { display: none !important; }
     </style>
 </head>
@@ -59,11 +50,11 @@
 
     <div id="login-screen" class="glass-box">
         <h1>ВХОД<span> НА САЙТ</span></h1>
-        <input type="text" id="n" placeholder="Имя">
-        <input type="text" id="l" placeholder="Логин">
-        <input type="text" id="r" placeholder="Звание">
-        <input type="password" id="p" placeholder="Пароль">
-        <button class="auth-btn" onclick="doAuth()">ПОДТВЕРДИТЬ ЛИЧНОСТЬ</button>
+        <input type="text" id="n" placeholder="Имя (Kranovschik)">
+        <input type="text" id="l" placeholder="Логин (Creator)">
+        <input type="text" id="r" placeholder="Звание (Создатель)">
+        <input type="password" id="p" placeholder="Пароль (12345)">
+        <button class="auth-btn" onclick="startSystem()">ПОДТВЕРДИТЬ ЛИЧНОСТЬ</button>
     </div>
 
     <div id="dashboard" class="hidden" style="flex-direction: column; align-items: center; width: 100%;">
@@ -73,66 +64,67 @@
             <button onclick="location.reload()" style="background:none; border:1px solid var(--prm); color:#fff; padding:5px 10px; border-radius:10px; cursor:pointer; font-size:9px; margin-left:10px;">ВЫХОД</button>
         </nav>
 
-        <div id="menu" class="menu-grid">
-            <div class="menu-item" onclick="openPage('objs')"><span style="font-size:40px;">🏗️</span><h3>ОБЪЕКТЫ</h3></div>
+        <div id="menu-grid" class="menu-grid">
+            <div class="menu-item" onclick="toggleView('objs')"><h3>ОБЪЕКТЫ</h3></div>
             <div class="menu-item"><h3>КОМАНДА</h3></div>
             <div class="menu-item"><h3>ЧЕРТЕЖИ</h3></div>
             <div class="menu-item"><h3>СИСТЕМА</h3></div>
         </div>
 
-        <div id="objs-page" class="objs-view hidden">
-            <button onclick="openPage('menu')" style="background:none; border:1px solid var(--prm); color:#fff; padding:8px 20px; border-radius:12px; cursor:pointer; font-family:'Orbitron'; font-size:10px; margin-bottom:20px;">← НАЗАД В МЕНЮ</button>
+        <div id="objs-view" class="objs-view hidden">
+            <button onclick="toggleView('menu')" style="background:none; border:1px solid var(--prm); color:#fff; padding:8px 20px; border-radius:12px; cursor:pointer; font-family:'Orbitron'; font-size:10px; margin-bottom:20px;">← НАЗАД</button>
             <div class="cities-grid">
-                <div class="city-card" onclick="openCity('РУБАЙСК')"><h4>РУБАЙСК</h4><span class="status" style="color:#f1c40f;">● Строится</span></div>
-                <div class="city-card" onclick="openCity('МИНСК')"><h4>МИНСК</h4><span class="status" style="color:#e67e22;">● Ожидание</span></div>
-                <div class="city-card" onclick="openCity('СЕВЕРОМОРСК')"><h4>СЕВЕРОМОРСК</h4><span class="status" style="color:#e67e22;">● Ожидание</span></div>
-                <div class="city-card" onclick="openCity('ЕГОРОВСК')"><h4>ЕГОРОВСК</h4><span class="status" style="color:#9b59b6;">● Перенос</span></div>
-                <div class="city-card" onclick="openCity('ДУХОПОЛЬЕ')"><h4>ДУХОПОЛЬЕ</h4><span class="status" style="color:#9b59b6;">● Перенос</span></div>
-                <div class="city-card" onclick="openCity('МАГИСТРАЛЬСК')"><h4>МАГИСТРАЛЬСК</h4><span class="status" style="color:#f1c40f;">● Строится</span></div>
-                <div class="city-card locked"><h4>НОВОМОСКОВСК</h4><span class="status" style="color:#444;">⚠ ОБСУЖДАЕТСЯ</span></div>
+                <div class="city-card" onclick="showCity('РУБАЙСК')"><h4>РУБАЙСК</h4></div>
+                <div class="city-card" onclick="showCity('МИНСК')"><h4>МИНСК</h4></div>
+                <div class="city-card" onclick="showCity('СЕВЕРОМОРСК')"><h4>СЕВЕРОМОРСК</h4></div>
+                <div class="city-card" onclick="showCity('ЕГОРОВСК')"><h4>ЕГОРОВСК</h4></div>
+                <div class="city-card" onclick="showCity('ДУХОПОЛЬЕ')"><h4>ДУХОПОЛЬЕ</h4></div>
+                <div class="city-card" onclick="showCity('МАГИСТРАЛЬСК')"><h4>МАГИСТРАЛЬСК</h4></div>
+                <div class="city-card locked"><h4>НОВОМОСКОВСК</h4><span style="font-size:9px; color:#444;">⚠ ОБСУЖДАЕТСЯ</span></div>
             </div>
         </div>
     </div>
 
-    <!-- ПОЛНОЭКРАННОЕ ОКНО ГОРОДА -->
     <div id="city-modal" class="full-modal">
         <div class="modal-nav">
-            <h2 id="m-title" style="font-family:'Orbitron'; color:var(--acc); font-size: 32px;">ГОРOД</h2>
+            <h2 id="m-t" style="font-family:'Orbitron'; color:var(--acc);">ГОРOД</h2>
             <div class="tab-group">
-                <button id="t-plans" class="tab-link active" onclick="switchTab('plans')">ПЛАНЫ</button>
-                <button id="t-photos" class="tab-link" onclick="switchTab('photos')">ФОТО</button>
+                <button id="tp" class="tab-link active" onclick="tab('p')">ПЛАНЫ</button>
+                <button id="tf" class="tab-link" onclick="tab('f')">ФОТО</button>
             </div>
-            <button class="close-btn" onclick="closeCity()">ЗАКРЫТЬ</button>
+            <button onclick="closeCity()" style="background:none; border:1px solid var(--prm); color:var(--prm); padding:10px 20px; border-radius:10px; cursor:pointer;">ЗАКРЫТЬ</button>
         </div>
-        <div id="display-area" class="content-area">СКОРО...</div>
+        <div id="display" class="content-area">СКОРО...</div>
     </div>
 
     <script>
-        function doAuth() {
-            const n = document.getElementById('n').value;
-            const l = document.getElementById('l').value;
-            const r = document.getElementById('r').value;
-            const p = document.getElementById('p').value;
-            if(n==='Kranovschik' && l==='Creator' && r==='Создатель' && p==='12345') {
-                document.getElementById('login-screen').style.display='none';
+        function startSystem() {
+            const nv = document.getElementById('n').value;
+            const lv = document.getElementById('l').value;
+            const rv = document.getElementById('r').value;
+            const pv = document.getElementById('p').value;
+
+            if(nv === 'Kranovschik' && lv === 'Creator' && rv === 'Создатель' && pv === '12345') {
+                document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('dashboard').classList.remove('hidden');
-                document.getElementById('dashboard').style.display='flex';
-                document.getElementById('u-n').innerText = n;
-                document.getElementById('u-r').innerText = r;
+                document.getElementById('dashboard').style.display = 'flex';
+                document.getElementById('u-n').innerText = nv;
+                document.getElementById('u-r').innerText = rv;
             } else { alert('Ошибка доступа!'); }
         }
-        function openPage(p) {
-            document.getElementById('menu').classList.toggle('hidden', p==='objs');
-            document.getElementById('objs-page').classList.toggle('hidden', p==='menu');
+
+        function toggleView(v) {
+            document.getElementById('menu-grid').classList.toggle('hidden', v === 'objs');
+            document.getElementById('objs-view').classList.toggle('hidden', v === 'menu');
         }
-function openCity(name) {
-document.getElementById('m-title').innerText = name;
-document.getElementById('city-modal').style.display = 'flex';
-switchTab('plans');
-}
-function closeCity() { document.getElementById('city-modal').style.display = 'none'; }
-function switchTab(type) {
-document.getElementById('t-plans').classList.toggle('active', type==='plans');
-document.getElementById('t-photos').classList.toggle('active', type==='photos');
-document.getElementById('display-area').innerText = 'СКОРО...';
-}
+
+        function showCity(n) { document.getElementById('m-t').innerText = n; document.getElementById('city-modal').style.display = 'flex'; tab('p'); }
+        function closeCity() { document.getElementById('city-modal').style.display = 'none'; }
+        function tab(t) {
+            document.getElementById('tp').classList.toggle('active', t === 'p');
+            document.getElementById('tf').classList.toggle('active', t === 'f');
+            document.getElementById('display').innerText = 'СКОРО...';
+        }
+    </script>
+</body>
+</html>
