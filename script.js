@@ -1,23 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const button = document.getElementById('action-btn');
-    const title = document.getElementById('title');
-    const description = document.getElementById('description');
+    const actionBtn = document.getElementById('action-btn');
+    const backBtn = document.getElementById('back-btn');
+    const welcomeBlock = document.getElementById('welcome-block');
+    const loginBlock = document.getElementById('login-block');
+    const loginForm = document.getElementById('login-form');
 
-    let isChanged = false;
+    // Переход к форме входа
+    actionBtn.addEventListener('click', () => {
+        welcomeBlock.classList.add('hidden');
+        loginBlock.classList.remove('hidden');
+    });
 
-    button.addEventListener('click', () => {
-        if (!isChanged) {
-            title.textContent = "Всё работает!";
-            description.textContent = "Код успешно подключен и выполнился. Теперь вы можете изменить этот проект под свои нужды.";
-            button.textContent = "Вернуть обратно";
-            button.style.backgroundColor = #e53e3e;
-            isChanged = true;
-        } else {
-            title.textContent = "Добро пожаловать!";
-            description.textContent = "Это стартовая страница вашего нового проекта. Нажмите кнопку ниже, чтобы изменить текст.";
-            button.textContent = "Нажми меня";
-            button.style.backgroundColor = #667eea;
-            isChanged = false;
-        }
+    // Возврат назад на главную
+    backBtn.addEventListener('click', () => {
+        loginBlock.classList.add('hidden');
+        welcomeBlock.classList.remove('hidden');
+    });
+
+    // Обработка отправки формы
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        alert(`Привет, ${username}! Вход успешно выполнен.`);
     });
 });
