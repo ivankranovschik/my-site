@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    background: linear-gradient(135deg, #000738 0%, #004d99 50%, #00a9e0 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -22,80 +22,86 @@ body {
 
 .login-card {
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    padding: 40px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    border-radius: 25px;
+    padding: 50px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
     text-align: center;
+    animation: fadeIn 1s ease;
 }
 
 .login-title {
     color: #fff;
     margin-bottom: 30px;
-    font-size: 28px;
+    font-size: 36px;
     font-weight: 700;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
 }
 
 .server-name {
-    color: #4ecdc4;
-    text-shadow: 0 0 10px #4ecdc4;
+    color: linear-gradient(45deg, #00a9e0, #004d99);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 15px #00a9e0;
 }
 
 .form-group {
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     text-align: left;
 }
 
 .form-label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     color: #e0e0e0;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .form-input {
     width: 100%;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
+    padding: 18px;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.2));
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
     color: #fff;
-    font-size: 16px;
-    transition: all 0.3s ease;
+    font-size: 18px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     outline: none;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .form-input:focus {
-    border-color: #4ecdc4;
-    background: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
+    border-color: #00a9e0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.3));
+    box-shadow: 0 0 20px rgba(0, 169, 224, 0.5);
 }
 
 .form-input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .login-btn {
     width: 100%;
-    padding: 16px;
-    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    padding: 18px;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24, #ff9f1c);
     border: none;
-    border-radius: 12px;
+    border-radius: 20px;
     color: white;
     font-size: 18px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     text-transform: uppercase;
     letter-spacing: 1px;
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
 }
 
 .login-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 107, 107, 0.6);
 }
 
 .login-btn:active {
@@ -105,28 +111,23 @@ body {
 /* Главное меню */
 .main-menu {
     width: 100%;
-    max-width: 900px;
+    max-width: 600px;
     padding: 40px 20px;
-}
-
-.menu-header {
+    background: linear-gradient(135deg, #000738, #004d99, #00a9e0);
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     text-align: center;
-    margin-bottom: 40px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .menu-header h1 {
-    font-size: 32px;
-    margin-bottom: 10px;
-    color: #4ecdc4;
+    color: white;
+    font-size: 48px;
+    margin-bottom: 30px;
+    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
 }
 
-.menu-header p {
-    color: #e0e0e0;
-    font-size: 18px;
-}
-
-.logout-btn {
-    margin-top: 20px;
-    padding:
+/* Анимация появления */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform:
