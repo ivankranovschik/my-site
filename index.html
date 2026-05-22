@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S-TIER SYSTEM | LOGIN</title>
+    <title>PREMIUM SYSTEM | LOGIN</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://googleapis.com" rel="stylesheet">
 </head>
 <body>
 
-    <div class="glow-sphere"></div>
-    <div class="glow-sphere-2"></div>
+    <!-- Живой анимированный фон -->
+    <div class="bg-gradient"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
 
     <div class="glass-box">
-        <div class="status-bar">AUTHENTICATION REQUIRED</div>
-        
+        <div class="glow-border"></div>
         <div id="login-section">
             <h1>CONTROL<span>PANEL</span></h1>
             <p class="brand">IVANKRANOVSCHIK ENTERPRISE</p>
@@ -44,7 +46,6 @@
             </button>
         </div>
 
-        <!-- Карточка профиля -->
         <div id="creator-profile" class="profile-layout hidden">
             <div class="avatar-ring">
                 <div class="avatar-core">K</div>
@@ -53,7 +54,7 @@
                 <h2 id="res-user"></h2>
                 <p class="rank-label">СТАТУС: <span id="res-rank"></span></p>
                 <div class="energy-bar"><div class="energy-fill"></div></div>
-                <div class="access-text">ДОСТУП ПОЛУЧЕН</div>
+                <div class="access-text">СИСТЕМА РАЗБЛОКИРОВАНА</div>
             </div>
         </div>
     </div>
@@ -65,22 +66,13 @@
             const rank = document.getElementById('reg-rank').value;
             const pass = document.getElementById('reg-pass').value;
 
-            const loginSection = document.getElementById('login-section');
-            const profileSection = document.getElementById('creator-profile');
-
-            // Проверка данных
             if(name === 'Kranovschik' && login === 'Creator' && rank === 'Создатель' && pass === '12345') {
                 document.getElementById('res-user').innerText = name;
                 document.getElementById('res-rank').innerText = rank;
-                
-                loginSection.classList.add('fade-out');
-                setTimeout(() => {
-                    loginSection.style.display = 'none';
-                    profileSection.classList.remove('hidden');
-                    profileSection.classList.add('fade-in');
-                }, 500);
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('creator-profile').classList.remove('hidden');
             } else {
-                alert('КРИТИЧЕСКАЯ ОШИБКА: Данные не совпадают с базой Создателя');
+                alert('ДОСТУП ЗАПРЕЩЕН');
             }
         }
     </script>
