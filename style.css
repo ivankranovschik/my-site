@@ -1,126 +1,144 @@
+:root {
+    --accent: #ff0055; /* Розовый неон */
+    --cyan: #00f2ff;   /* Голубой неон */
+    --dark: #08080a;
+}
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    margin: 0; padding: 0; box-sizing: border-box;
 }
 
 body {
+    background: var(--dark);
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #0f172a; /* Глубокий темный цвет */
+    font-family: 'Montserrat', sans-serif;
     overflow: hidden;
 }
 
-/* Декоративное пятно на фоне */
-.background-decor {
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    filter: blur(150px);
-    border-radius: 50%;
-    z-index: -1;
-    animation: move 10s infinite alternate;
+/* ФОНОВЫЕ СФЕРЫ */
+.glow-sphere {
+    position: absolute; width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,0,85,0.2) 0%, transparent 70%);
+    top: -10%; left: -10%; animation: pulse 6s infinite;
 }
 
-@keyframes move {
-    from { transform: translate(-10%, -10%); }
-    to { transform: translate(10%, 10%); }
+.glow-sphere-2 {
+    position: absolute; width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,242,255,0.15) 0%, transparent 70%);
+    bottom: -15%; right: -10%; animation: pulse 8s infinite reverse;
 }
 
-.login-container {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px);
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 0.5; }
+}
+
+/* ГЛАВНЫЙ КОНТЕЙНЕР */
+.glass-box {
+    position: relative;
+    width: 400px;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(25px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 40px;
-    border-radius: 24px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-    text-align: center;
+    border-radius: 30px;
+    padding: 50px 30px;
+    box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+    z-index: 5;
+    overflow: hidden;
 }
 
-h2 {
-    color: #fff;
-    font-size: 2rem;
-    margin-bottom: 5px;
+.status-bar {
+    position: absolute; top: 15px; right: 25px;
+    font-size: 8px; color: var(--cyan); letter-spacing: 2px;
+    font-family: 'Orbitron';
 }
 
-.subtitle {
-    color: #94a3b8;
-    font-size: 0.9rem;
-    margin-bottom: 30px;
+h1 {
+    font-family: 'Orbitron'; color: #fff;
+    font-size: 24px; text-align: center; letter-spacing: 5px;
 }
 
-.input-group {
-    margin-bottom: 20px;
+h1 span { color: var(--accent); }
+
+.brand {
+    text-align: center; color: #444; font-size: 9px;
+    letter-spacing: 3px; margin-bottom: 40px; margin-top: 5px;
 }
 
-input {
-    width: 100%;
-    padding: 15px 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    color: #fff;
-    outline: none;
-    transition: 0.3s;
+/* ПОЛЯ ВВОДА */
+.field {
+    position: relative; margin-bottom: 25px;
 }
 
-input:focus {
-    border-color: #3b82f6;
-    background: rgba(255, 255, 255, 0.1);
+.field input {
+    width: 100%; padding: 15px; background: transparent;
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+    color: #fff; outline: none; transition: 0.3s;
 }
 
-.login-btn {
-    width: 100%;
-    padding: 15px;
-    background: #3b82f6;
-    border: none;
-    border-radius: 12px;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+.field label {
+    position: absolute; left: 15px; top: 15px;
+    color: #555; pointer-events: none; transition: 0.3s; font-size: 12px;
 }
 
-.login-btn:hover {
-    background: #2563eb;
-    transform: translateY(-2px);
+.field input:focus ~ label, .field input:not(:placeholder-shown) ~ label {
+    top: -10px; left: 10px; font-size: 10px; color: var(--cyan); background: var(--dark); padding: 0 5px;
 }
 
-.hidden {
-    display: none;
+.field input:focus { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0,242,255,0.2); }
+
+/* КНОПКА */
+.auth-btn {
+    width: 100%; padding: 16px; border: none; border-radius: 12px;
+    background: linear-gradient(90deg, var(--accent), var(--secondary));
+    background: var(--accent); color: #fff; font-family: 'Orbitron';
+    font-weight: bold; cursor: pointer; transition: 0.4s;
 }
 
-.user-card {
-    margin-top: 25px;
-    text-align: left;
-    color: #fff;
+.auth-btn:hover {
+    box-shadow: 0 0 30px var(--accent); transform: translateY(-2px);
 }
 
-.divider {
-    height: 1px;
-    background: rgba(255, 255, 255, 0.1);
-    margin-bottom: 20px;
+/* ПРОФИЛЬ */
+.profile-layout {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
 }
 
-.status-badge {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 5px 15px;
-    background: rgba(34, 197, 94, 0.2);
-    color: #4ade80;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    border: 1px solid rgba(34, 197, 94, 0.3);
+.avatar-ring {
+    width: 100px; height: 100px; border: 2px solid var(--accent);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; box-shadow: 0 0 20px var(--accent);
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.avatar-core {
+    width: 80px; height: 80px; background: #fff; border-radius: 50%;
+    color: var(--dark); font-size: 40px; font-family: 'Orbitron';
+    display: flex; align-items: center; justify-content: center; font-weight: bold;
+}
+
+.details h2 { color: #fff; font-family: 'Orbitron'; margin-bottom: 5px; }
+.rank-label { color: var(--cyan); font-size: 12px; font-weight: bold; }
+
+.energy-bar {
+    width: 150px; height: 4px; background: rgba(255,255,255,0.1);
+    margin: 20px auto 0; border-radius: 10px;
+}
+
+.energy-fill {
+    width: 100%; height: 100%; background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan); border-radius: 10px;
+}
+
+/* АНИМАЦИИ */
+.hidden { display: none; }
+.fade-out { opacity: 0; transform: scale(0.9); transition: 0.5s; }
+.fade-in { animation: scaleUp 0.6s forwards; }
+
+@keyframes scaleUp {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
 }
