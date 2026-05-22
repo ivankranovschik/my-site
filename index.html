@@ -8,56 +8,58 @@
 </head>
 <body>
     <div class="login-container" id="loginSection">
+        <h1>Мирополис</h1>
         <div class="login-card">
-            <h2 class="login-title">Вход в команду <span class="server-name">Мирополис</span></h2>
-            <form class="login-form" id="loginForm">
-                <div class="form-group">
-                    <label for="username" class="form-label">Имя пользователя</label>
-                    <input type="text" id="username" class="form-input" placeholder="Введите ваше имя" required>
-                </div>
-                <div class="form-group">
-                    <label for="login" class="form-label">Логин</label>
-                    <input type="text" id="login" class="form-input" placeholder="Ваш игровой логин" required>
-                </div>
-                <div class="form-group">
-                    <label for="position" class="form-label">Должность</label>
-                    <input type="text" id="position" class="form-input" placeholder="Укажите вашу должность" required>
-                </div>
-                <div class="form-group">
-                    <label for="password" class="form-label">Пароль</label>
-                    <input type="password" id="password" class="form-input" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="login-btn" onclick="handleLogin()">Войти в систему</button>
-            </form>
+            <div class="form-group">
+                <label for="username">Имя пользователя</label>
+                <input type="text" id="username" placeholder="Введите ваше имя" required>
+            </div>
+            <div class="form-group">
+                <label for="login">Ваш игровой логин</label>
+                <input type="text" id="login" placeholder="Ваш игровой логин" required>
+            </div>
+            <div class="form-group">
+                <label for="position">Должность</label>
+                <input type="text" id="position" placeholder="Укажите вашу должность" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="button" onclick="handleLogin()" class="login-btn">ВОЙТИ В СИСТЕМУ</button>
         </div>
     </div>
 
-    <!-- Блок главного меню (скрыт по умолчанию) -->
     <div class="main-menu" id="mainMenu" style="display: none;">
-        <div class="menu-header">
-            <h1>Добро пожаловать в Мирополис!</h1>
-            <p>Статус: В системе</p>
-            <button class="logout-btn" onclick="showLogin()">Выйти</button>
-        </div>
-        <div class="menu-content">
-            <div class="menu-grid">
-                <div class="menu-item">
-                    <h3>Управление игроками</h3>
-                    <p>Просмотр и редактирование аккаунтов</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Настройки сервера</h3>
-                    <p>Конфигурация и параметры сервера</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Логи действий</h3>
-                    <p>История действий на сервере</p>
-                </div>
-                <div class="menu-item">
-                    <h3>Чат модерации</h3>
-                    <p>Мониторинг игрового чата</p>
-                </div>
+        <h2>Добро пожаловать в Мирополис!</h2>
+        <nav>
+            <ul class="menu-nav">
+                <li><a href="#objects" onclick="showObjects()">Объекты</a></li>
+                <li><a href="#settings">Настройки</a></li>
+                <li><a href="#" onclick="showLogin()">Выйти</a></li>
+            </ul>
+        </nav>
+
+        <div id="objects" class="content-section" style="display: none;">
+            <h3>Объекты</h3>
+            <nav>
+                <ul class="submenu-nav">
+                    <li><a href="#cities" onclick="showCities()">Города</a></li>
+                    <li><a href="#buildings">Здания</a></li>
+                    <li><a href="#territories">Территории</a></li>
+                </ul>
+            </nav>
+
+            <div id="cities" class="subcontent-section" style="display: none;">
+                <h4>Города</h4>
+                <p>Здесь будет список городов и их параметры.</p>
+                <!-- Сюда можно добавить список городов -->
             </div>
+        </div>
+
+        <div id="settings" class="content-section" style="display: none;">
+            <h3>Настройки</h3>
+            <p>Здесь будут настройки аккаунта и сервера.</p>
         </div>
     </div>
 
