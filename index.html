@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="login-container">
+    <div class="login-container" id="loginSection">
         <div class="login-card">
             <h2 class="login-title">Вход в команду <span class="server-name">Мирополис</span></h2>
             <form class="login-form" id="loginForm">
@@ -27,15 +27,37 @@
                     <label for="password" class="form-label">Пароль</label>
                     <input type="password" id="password" class="form-input" placeholder="••••••••" required>
                 </div>
-                <button type="submit" class="login-btn">Войти в систему</button>
+                <button type="submit" class="login-btn" onclick="handleLogin()">Войти в систему</button>
             </form>
         </div>
     </div>
 
-    <!-- Главное меню (изначально скрыто) -->
+    <!-- Блок главного меню (скрыт по умолчанию) -->
     <div class="main-menu" id="mainMenu" style="display: none;">
         <div class="menu-header">
-            <h1>Скоро...</h1>
+            <h1>Добро пожаловать в Мирополис!</h1>
+            <p>Статус: В системе</p>
+            <button class="logout-btn" onclick="showLogin()">Выйти</button>
+        </div>
+        <div class="menu-content">
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <h3>Управление игроками</h3>
+                    <p>Просмотр и редактирование аккаунтов</p>
+                </div>
+                <div class="menu-item">
+                    <h3>Настройки сервера</h3>
+                    <p>Конфигурация и параметры сервера</p>
+                </div>
+                <div class="menu-item">
+                    <h3>Логи действий</h3>
+                    <p>История действий на сервере</p>
+                </div>
+                <div class="menu-item">
+                    <h3>Чат модерации</h3>
+                    <p>Мониторинг игрового чата</p>
+                </div>
+            </div>
         </div>
     </div>
 
