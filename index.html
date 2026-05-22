@@ -2,77 +2,40 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Мирополис | Premium</title>
-    <link href="https://googleapis.com" rel="stylesheet">
-    <style>
-        :root { --p: #f0c; --a: #0ff; --g: rgba(255,255,255,0.1); }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { background:#050505; color:#fff; font-family:'Montserrat'; overflow:hidden; height:100vh; display:flex; justify-content:center; align-items:center; }
-        .orb { position:absolute; border-radius:50%; filter:blur(100px); opacity:0.6; z-index:-1; animation: m 20s infinite alternate; width:500px; height:500px; }
-        .o1 { background:var(--p); top:-10%; left:-10%; } .o2 { background:#33f; bottom:-10%; right:-10%; }
-        @keyframes m { from { transform:translate(0,0); } to { transform:translate(100px,50px); } }
-        .box { position:relative; z-index:100; width:400px; background:var(--g); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.2); border-radius:30px; padding:40px; text-align:center; }
-        h1 span { color:var(--p); text-shadow:0 0 10px var(--p); font-family:'Orbitron'; }
-        input { width:100%; padding:12px; margin-bottom:10px; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); border-radius:10px; color:#fff; outline:none; }
-        .btn { width:100%; padding:15px; background:linear-gradient(45deg, var(--p), #33f); border:none; border-radius:12px; color:#fff; font-family:'Orbitron'; font-weight:900; cursor:pointer; }
-        #dash, #objs, #mdl { display:none; }
-        .nav { position:fixed; top:20px; right:20px; background:var(--g); padding:10px 20px; border-radius:50px; border:1px solid rgba(255,255,255,0.1); z-index:100; font-family:'Orbitron'; font-size:10px; }
-        .grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-        .item { background:var(--g); padding:40px 20px; border-radius:20px; text-align:center; cursor:pointer; border:1px solid transparent; transition:0.3s; }
-        .item:hover { border-color:var(--a); transform:translateY(-5px); }
-        .c-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:15px; width:90%; max-width:1000px; }
-        .card { background:rgba(255,255,255,0.05); padding:25px; border-radius:20px; border:1px solid rgba(255,255,255,0.1); cursor:pointer; text-align:center; }
-        .card:hover:not(.lock) { border-color:var(--a); }
-        .lock { border:1px dashed #f44; opacity:0.5; cursor:default; }
-        .mdl { position:fixed; top:0; left:0; width:100%; height:100%; background:#050505; z-index:1000; flex-direction:column; padding:60px; display:none; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход для строителей</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="orb o1"></div><div class="orb o2"></div>
-    <div id="login" class="box">
-        <h1 style="font-family:'Orbitron'">ВХОД <span>НА САЙТ</span></h1><br>
-        <input type="text" id="n" placeholder="Имя"><input type="text" id="l" placeholder="Логин">
-        <input type="text" id="r" placeholder="Звание"><input type="password" id="p" placeholder="Пароль">
-        <button class="btn" onclick="go()">ПОДТВЕРДИТЬ ЛИЧНОСТЬ</button>
-    </div>
-    <div id="dash" style="width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center;">
-        <div class="nav"><span id="un"></span> | <span id="ur" style="color:var(--a)"></span> <button onclick="location.reload()" style="margin-left:10px; background:none; border:none; color:var(--p); cursor:pointer;">ВЫХОД</button></div>
-        <div id="menu" class="grid">
-            <div class="item" onclick="v('o')">🏗️<br>ОБЪЕКТЫ</div><div class="item">👥<br>КОМАНДА</div><div class="item">📁<br>ЧЕРТЕЖИ</div><div class="item">⚙️<br>СИСТЕМА</div>
+    <div class="login-container">
+        <div class="login-form">
+            <h2>Добро пожаловать!</h2>
+            <p>Войдите в систему</p>
+
+            <form>
+                <div class="input-group">
+                    <label for="username">Имя пользователя:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="login">Логин:</label>
+                    <input type="text" id="login" name="login" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="rank">Звание:</label>
+                    <input type="text" id="rank" name="rank" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <button type="submit" class="login-btn">Войти</button>
+            </form>
         </div>
-        <div id="objs" style="flex-direction:column; align-items:center; width:100%;">
-            <button onclick="v('m')" style="margin-bottom:30px; background:none; border:1px solid var(--p); color:#fff; padding:10px 20px; border-radius:10px; cursor:pointer; font-family:'Orbitron'">← НАЗАД</button>
-            <div class="c-grid">
-                <div class="card" onclick="op('РУБАЙСК')">РУБАЙСК<br><small style="color:#f1c40f">СТРОИТСЯ</small></div>
-                <div class="card" onclick="op('МИНСК')">МИНСК<br><small style="color:#e67e22">ОЖИДАНИЕ</small></div>
-                <div class="card" onclick="op('СЕВЕРОМОРСК')">СЕВЕРОМОРСК<br><small style="color:#e67e22">ОЖИДАНИЕ</small></div>
-                <div class="card" onclick="op('ЕГОРОВСК')">ЕГОРОВСК<br><small style="color:#9b59b6">ПЕРЕНОС</small></div>
-                <div class="card lock">НОВОМОСКОВСК<br><small style="color:#f44">⚠ ОБСУЖДАЕТСЯ</small></div>
-            </div>
-        </div>
     </div>
-    <div id="mdl" class="mdl">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #222; padding-bottom:20px;">
-            <h2 id="mt" style="font-family:'Orbitron'; color:var(--a); font-size:30px;"></h2>
-            <button onclick="cl()" style="background:none; border:1px solid var(--p); color:var(--p); padding:10px 20px; border-radius:10px; cursor:pointer; font-family:'Orbitron'">ЗАКРЫТЬ</button>
-        </div>
-        <div style="flex-grow:1; display:flex; justify-content:center; align-items:center; font-size:50px; font-family:'Orbitron'; color:rgba(255,255,255,0.05); letter-spacing:15px;">СКОРО...</div>
-    </div>
-    <script>
-        function go(){
-            if(document.getElementById('n').value==='Kranovschik' && document.getElementById('p').value==='12345'){
-                document.getElementById('login').style.display='none';
-                document.getElementById('dash').style.display='flex';
-                document.getElementById('un').innerText=document.getElementById('n').value;
-                document.getElementById('ur').innerText=document.getElementById('r').value;
-            } else { alert('Ошибка!'); }
-        }
-        function v(x){
-            document.getElementById('menu').style.display=x==='m'?'grid':'none';
-            document.getElementById('objs').style.display=x==='o'?'flex':'none';
-        }
-        function op(n){ document.getElementById('mt').innerText=n; document.getElementById('mdl').style.display='flex'; }
-        function cl(){ document.getElementById('mdl').style.display='none'; }
-    </script>
 </body>
 </html>
