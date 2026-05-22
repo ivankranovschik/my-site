@@ -6,103 +6,48 @@
     <title>Мирополис | Premium System</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        :root {
-            --prm: #ff00cc;
-            --sec: #3333ff;
-            --acc: #00ffff;
-            --glass: rgba(255, 255, 255, 0.1);
-        }
-
+        :root { --prm: #ff00cc; --sec: #3333ff; --acc: #00ffff; --glass: rgba(255, 255, 255, 0.1); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background: #050505;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden;
-            color: #fff;
-        }
-
-        /* ЖИВОЙ ФОН */
+        body { background: #050505; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: 'Montserrat', sans-serif; overflow: hidden; color: #fff; }
         .bg-gradient { position: absolute; width: 100%; height: 100%; background: #08080a; z-index: -2; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; z-index: -1; animation: move 20s infinite alternate; }
         .orb-1 { width: 500px; height: 500px; background: var(--prm); top: -10%; left: -10%; }
         .orb-2 { width: 600px; height: 600px; background: var(--sec); bottom: -10%; right: -10%; animation-delay: -5s; }
-        .orb-3 { width: 300px; height: 300px; background: var(--acc); top: 40%; left: 50%; animation-delay: -10s; }
-
         @keyframes move { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(100px, 50px) scale(1.2); } }
 
-        /* ВХОД */
-        .glass-box {
-            position: relative; width: 420px; background: var(--glass);
-            backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 30px; padding: 50px 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
+        /* ОКНО ВХОДА */
+        .glass-box { position: relative; width: 420px; background: var(--glass); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 30px; padding: 50px 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
         h1 { font-family: 'Orbitron'; font-size: 28px; text-align: center; letter-spacing: 5px; }
         h1 span { background: linear-gradient(to right, var(--prm), var(--acc)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px var(--prm)); }
         .brand { text-align: center; color: rgba(255,255,255,0.4); font-size: 9px; letter-spacing: 3px; margin: 10px 0 35px; font-weight: 900; }
-
         .field { position: relative; margin-bottom: 20px; }
-        .field input { width: 100%; padding: 14px 18px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; color: #fff; outline: none; transition: 0.4s; }
-        .field label { position: absolute; left: 18px; top: 15px; color: rgba(255,255,255,0.5); transition: 0.3s; font-size: 11px; font-weight: 700; pointer-events: none; }
-        .field input:focus ~ label, .field input:not(:placeholder-shown) ~ label { top: -10px; left: 12px; font-size: 10px; color: var(--acc); text-shadow: 0 0 5px var(--acc); }
+        .field input { width: 100%; padding: 14px 18px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; color: #fff; outline: none; }
+        .field label { position: absolute; left: 18px; top: 15px; color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 700; pointer-events: none; }
+        .field input:focus ~ label, .field input:not(:placeholder-shown) ~ label { top: -10px; left: 12px; font-size: 10px; color: var(--acc); }
+        .auth-btn { width: 100%; padding: 16px; border: none; border-radius: 15px; background: linear-gradient(45deg, var(--prm), var(--sec)); color: #fff; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; }
 
-        .auth-btn { width: 100%; padding: 16px; border: none; border-radius: 15px; background: linear-gradient(45deg, var(--prm), var(--sec)); color: #fff; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; transition: 0.4s; box-shadow: 0 10px 20px rgba(255,0,204,0.3); }
+        /* ПАНЕЛЬ */
+        .top-nav { position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 15px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); padding: 10px 20px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1); z-index: 100; }
+        .mini-avatar { width: 35px; height: 35px; background: linear-gradient(45deg, var(--prm), var(--acc)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-family: 'Orbitron'; font-size: 14px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(2, 220px); gap: 20px; z-index: 10; }
+        .menu-item { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px 20px; border-radius: 25px; text-align: center; cursor: pointer; transition: 0.4s; }
+        .menu-item:hover { transform: translateY(-10px); border-color: var(--acc); }
+        .menu-item .icon { font-size: 45px; margin-bottom: 15px; display: block; }
 
-        /* ВЕРХНЯЯ ПАНЕЛЬ */
-        .top-nav {
-            position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 15px;
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
-            padding: 10px 20px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1); z-index: 100;
-        }
-        .mini-avatar { width: 35px; height: 35px; background: linear-gradient(45deg, var(--prm), var(--acc)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-family: 'Orbitron'; font-size: 14px; box-shadow: 0 0 15px var(--prm); }
-
-        /* ГЛАВНОЕ МЕНЮ */
-        .menu-grid { display: grid; grid-template-columns: repeat(2, 220px); gap: 20px; z-index: 10; animation: scaleUp 0.5s ease; }
-        .menu-item {
-            background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 40px 20px; border-radius: 25px; text-align: center; cursor: pointer; transition: 0.4s;
-        }
-        .menu-item:hover { transform: translateY(-10px); border-color: var(--acc); box-shadow: 0 15px 30px rgba(0,255,255,0.2); }
-        .menu-item .icon { font-size: 45px; margin-bottom: 15px; display: block; filter: drop-shadow(0 0 10px var(--acc)); }
-        .menu-item h3 { font-family: 'Orbitron'; font-size: 14px; letter-spacing: 2px; background: linear-gradient(to right, #fff, var(--acc)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* ОБЪЕКТЫ (ГОРОДА) */
-        .objects-view { width: 95%; max-width: 1100px; z-index: 10; animation: fadeIn 0.5s ease; height: 85vh; overflow-y: auto; padding-right: 10px; scrollbar-width: none; }
-        .objects-view::-webkit-scrollbar { display: none; }
-        .cities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; padding-bottom: 40px; }
-        .city-card {
-            background: rgba(255,255,255,0.03); border-radius: 20px; padding: 25px; border: 1px solid rgba(255,255,255,0.1);
-            transition: 0.3s; position: relative; backdrop-filter: blur(10px);
-        }
-        .city-card:hover { border-color: var(--prm); background: rgba(255,255,255,0.08); }
+        /* ГОРОДА */
+        .objects-view { width: 95%; max-width: 1100px; z-index: 10; height: 85vh; overflow-y: auto; scrollbar-width: none; }
+        .cities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
+        .city-card { background: rgba(255,255,255,0.03); border-radius: 20px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
         .city-card h4 { font-family: 'Orbitron'; color: #fff; margin-bottom: 10px; font-size: 18px; }
-        .city-card h4 span { color: var(--acc); font-size: 10px; margin-left: 5px; opacity: 0.6; }
-        .status { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-
-        .st-build { color: #f1c40f; text-shadow: 0 0 10px #f1c40f; }
-        .st-wait { color: #e67e22; text-shadow: 0 0 10px #e67e22; }
-        .st-move { color: #9b59b6; text-shadow: 0 0 10px #9b59b6; }
-        .st-soon { color: var(--acc); animation: blink 1.5s infinite; text-shadow: 0 0 10px var(--acc); }
-
-        .back-btn { background: none; border: 1px solid var(--prm); color: #fff; padding: 8px 20px; border-radius: 12px; cursor: pointer; font-family: 'Orbitron'; font-size: 10px; margin-bottom: 20px; transition: 0.3s; }
-        .back-btn:hover { background: var(--prm); box-shadow: 0 0 20px var(--prm); }
-
+        .status { font-size: 11px; font-weight: 900; text-transform: uppercase; }
+        .st-build { color: #f1c40f; } .st-wait { color: #e67e22; } .st-move { color: #9b59b6; } .st-soon { color: var(--acc); animation: blink 1.5s infinite; }
+        @keyframes blink { 50% { opacity: 0.3; } }
         .hidden { display: none !important; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes scaleUp { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
-
     <div class="bg-gradient"></div>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
+    <div class="orb orb-1"></div><div class="orb orb-2"></div>
 
     <div id="login-container" class="glass-box">
         <h1>ВХОД<span> НА САЙТ</span></h1>
@@ -111,7 +56,7 @@
         <div class="field"><input type="text" id="reg-login" placeholder=" " required><label>ЛОГИН</label></div>
         <div class="field"><input type="text" id="reg-rank" placeholder=" " required><label>ЗВАНИЕ</label></div>
         <div class="field"><input type="password" id="reg-pass" placeholder=" " required><label>ПАРОЛЬ</label></div>
-        <button type="button" class="auth-btn" id="submit-btn">ПОДТВЕРДИТЬ</button>
+        <button type="button" class="auth-btn" onclick="startAuth()">ПОДТВЕРДИТЬ</button>
     </div>
 
     <div id="dashboard" class="hidden" style="flex-direction: column; align-items: center; width: 100%;">
@@ -123,21 +68,44 @@
             </div>
             <button onclick="location.reload()" style="background:none; border:1px solid var(--prm); color:#fff; padding:5px 12px; border-radius:10px; cursor:pointer; font-family:'Orbitron'; font-size:9px; margin-left:15px;">ВЫХОД</button>
         </nav>
-
         <div id="main-grid" class="menu-grid">
-            <div class="menu-item" onclick="showObjects()"><span class="icon">🏗️</span><h3>ОБЪЕКТЫ</h3></div>
+            <div class="menu-item" onclick="showObj()"><span class="icon">🏗️</span><h3>ОБЪЕКТЫ</h3></div>
             <div class="menu-item"><span class="icon">👥</span><h3>КОМАНДА</h3></div>
             <div class="menu-item"><span class="icon">📁</span><h3>ЧЕРТЕЖИ</h3></div>
             <div class="menu-item"><span class="icon">⚙️</span><h3>СИСТЕМА</h3></div>
         </div>
-
         <div id="objects-view" class="objects-view hidden">
-            <button class="back-btn" onclick="hideObjects()">← НАЗАД В МЕНЮ</button>
-            <h2 style="font-family:'Orbitron'; font-size: 24px; margin-bottom: 30px; border-left: 5px solid var(--prm); padding-left: 15px;">ДЕЙСТВУЮЩИЕ <span>ГОРОДА</span></h2>
+            <button onclick="hideObj()" style="background:none; border:1px solid var(--prm); color:#fff; padding:8px 20px; border-radius:12px; cursor:pointer; font-family:'Orbitron'; font-size:10px; margin-bottom:20px;">← НАЗАД</button>
+            <h2 style="font-family:'Orbitron'; font-size: 24px;">ДЕЙСТВУЮЩИЕ <span>ГОРОДА</span></h2>
             <div class="cities-grid">
-                <div class="city-card"><h4>РУБАЙСК <span>СТОЛИЦА</span></h4><span class="status st-build">● Строится</span></div>
-                <div class="city-card"><h4>МИНСК</h4><span class="status st-wait">● Ожидается возобновление строительства</span></div>
-                <div class="city-card"><h4>СЕВЕРОМОРСК</h4><span class="status st-wait">● Ожидается возобновление строительства</span></div>
-                <div class="city-card"><h4>ЕГОРОВСК</h4><span class="status st-move">● Ожидается перенос построек</span></div>
-                <div class="city-card"><h4>ДУХОПОЛЬЕ</h4><span class="status st-move">● Ожидается перенос построек</span></div>
+                <div class="city-card"><h4>РУБАЙСК</h4><span class="status st-build">● Строится</span></div>
+                <div class="city-card"><h4>МИНСК</h4><span class="status st-wait">● Ожидание стройки</span></div>
+                <div class="city-card"><h4>СЕВЕРОМОРСК</h4><span class="status st-wait">● Ожидание стройки</span></div>
+                <div class="city-card"><h4>ЕГОРОВСК</h4><span class="status st-move">● Перенос построек</span></div>
+                <div class="city-card"><h4>ДУХОПОЛЬЕ</h4><span class="status st-move">● Перенос построек</span></div>
                 <div class="city-card"><h4>МАГИСТРАЛЬСК</h4><span class="status st-build">● Строится</span></div>
+                <div class="city-card"><h4>НОВОМОСКОВСК</h4><span class="status st-soon">● Проект решается</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startAuth() {
+            const n = document.getElementById('reg-name').value;
+            const l = document.getElementById('reg-login').value;
+            const r = document.getElementById('reg-rank').value;
+            const p = document.getElementById('reg-pass').value;
+
+            if(n === 'Kranovschik' && l === 'Creator' && r === 'Создатель' && p === '12345') {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('dashboard').classList.remove('hidden');
+                document.getElementById('dashboard').style.display = 'flex';
+                document.getElementById('nav-name').innerText = n;
+                document.getElementById('nav-rank').innerText = r;
+            } else { alert('Ошибка доступа!'); }
+        }
+        function showObj() { document.getElementById('main-grid').classList.add('hidden'); document.getElementById('objects-view').classList.remove('hidden'); }
+        function hideObj() { document.getElementById('objects-view').classList.add('hidden'); document.getElementById('main-grid').classList.remove('hidden'); }
+    </script>
+</body>
+</html>
