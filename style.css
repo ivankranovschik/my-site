@@ -40,11 +40,10 @@ body {
 }
 
 .server-name {
-    color: linear-gradient(45deg, #00a9e0, #004d99);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 15px #00a9e0;
+    color: #00a9e0;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-left: 5px;
 }
 
 .form-group {
@@ -113,21 +112,4 @@ body {
     width: 100%;
     max-width: 600px;
     padding: 40px 20px;
-    background: linear-gradient(135deg, #000738, #004d99, #00a9e0);
-    border-radius: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    text-align: center;
-}
-
-.menu-header h1 {
-    color: white;
-    font-size: 48px;
-    margin-bottom: 30px;
-    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
-}
-
-/* Анимация появления */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform:
+    background: linear-gradient(
