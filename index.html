@@ -6,82 +6,37 @@
     <title>Мирополис | Система управления</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        :root {
-            --prm: #ff00cc;
-            --sec: #3333ff;
-            --acc: #00ffff;
-            --glass: rgba(255, 255, 255, 0.08);
-        }
-
+        :root { --prm: #ff00cc; --sec: #3333ff; --acc: #00ffff; --glass: rgba(255, 255, 255, 0.08); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background: #050505;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden;
-            color: #fff;
-        }
-
-        .bg-gradient {
-            position: absolute; width: 100%; height: 100%;
-            background: radial-gradient(circle at top right, #1a1a2e, #050505);
-            z-index: -2;
-        }
-
-        .orb {
-            position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.4; z-index: -1;
-            animation: move 15s infinite alternate;
-        }
+        body { background: #050505; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: 'Montserrat', sans-serif; overflow: hidden; color: #fff; }
+        .bg-gradient { position: absolute; width: 100%; height: 100%; background: radial-gradient(circle at top right, #1a1a2e, #050505); z-index: -2; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.4; z-index: -1; animation: move 15s infinite alternate; }
         .orb-1 { width: 500px; height: 500px; background: var(--prm); top: -10%; left: -10%; }
         .orb-2 { width: 400px; height: 400px; background: var(--sec); bottom: -5%; right: -5%; }
-
         @keyframes move { from { transform: translate(0,0); } to { transform: translate(50px, 50px); } }
 
-        .glass-box {
-            position: relative; width: 400px; background: var(--glass);
-            backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 30px; padding: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-
+        /* ОКНО ВХОДА */
+        .glass-box { position: relative; width: 400px; background: var(--glass); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; padding: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
         h1 { font-family: 'Orbitron'; font-size: 24px; text-align: center; margin-bottom: 30px; }
         h1 span { background: linear-gradient(to right, var(--prm), var(--acc)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
         .field { position: relative; margin-bottom: 15px; }
-        .field input {
-            width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; outline: none;
-        }
+        .field input { width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; outline: none; }
         .field label { position: absolute; left: 15px; top: 13px; font-size: 10px; color: #666; transition: 0.3s; pointer-events: none; }
         .field input:focus ~ label, .field input:not(:placeholder-shown) ~ label { top: -8px; left: 10px; color: var(--acc); font-size: 9px; background: #08080a; padding: 0 5px; }
-
         .auth-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; background: linear-gradient(45deg, var(--prm), var(--sec)); color: #fff; font-family: 'Orbitron'; cursor: pointer; font-weight: 700; margin-top: 10px; }
 
-        .top-nav {
-            position: fixed; top: 20px; right: 20px;
-            display: flex; align-items: center; gap: 15px;
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
-            padding: 8px 20px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 100;
-        }
-        .user-trigger { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        /* ДАШБОРД */
+        .top-nav { position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 15px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); padding: 8px 20px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1); z-index: 100; }
         .mini-avatar { width: 35px; height: 35px; background: linear-gradient(45deg, var(--prm), var(--sec)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-family: 'Orbitron'; font-size: 14px; }
-
         .menu-grid { display: grid; grid-template-columns: repeat(2, 220px); gap: 20px; z-index: 10; }
-        .menu-item {
-            background: var(--glass); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 30px; border-radius: 24px; text-align: center; cursor: pointer; transition: 0.4s ease;
-        }
+        .menu-item { background: var(--glass); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 24px; text-align: center; cursor: pointer; transition: 0.4s ease; }
         .menu-item:hover { transform: translateY(-10px); border-color: var(--prm); box-shadow: 0 15px 30px rgba(255,0,204,0.2); }
         .menu-item .icon { font-size: 40px; margin-bottom: 15px; display: block; }
         .menu-item h3 { font-family: 'Orbitron'; font-size: 13px; letter-spacing: 2px; }
 
+        /* ОБЪЕКТЫ */
         .objects-container { width: 90%; max-width: 800px; z-index: 10; animation: fadeIn 0.5s ease; }
         .back-btn { background: none; border: 1px solid var(--acc); color: var(--acc); padding: 5px 15px; border-radius: 10px; cursor: pointer; font-family: 'Orbitron'; font-size: 9px; margin-bottom: 20px; }
-
         .cities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
         .city-card { background: rgba(255,255,255,0.03); border-radius: 20px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); }
         .city-card h4 { font-family: 'Orbitron'; color: var(--acc); margin-bottom: 10px; }
@@ -89,15 +44,11 @@
         .progress-mini { width: 100%; height: 4px; background: rgba(255,255,255,0.1); margin-top: 15px; border-radius: 10px; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--prm); }
 
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .profile-card { background: #111; padding: 40px; border-radius: 30px; border: 1px solid var(--prm); text-align: center; width: 300px; position: relative; }
-
         .hidden { display: none !important; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-
     <div class="bg-gradient"></div>
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
@@ -108,64 +59,60 @@
         <div class="field"><input type="text" id="reg-login" placeholder=" " required><label>ЛОГИН</label></div>
         <div class="field"><input type="text" id="reg-rank" placeholder=" " required><label>ЗВАНИЕ</label></div>
         <div class="field"><input type="password" id="reg-pass" placeholder=" " required><label>ПАРОЛЬ</label></div>
-        <button type="button" class="auth-btn" onclick="validateUser()">ПОДТВЕРДИТЬ</button>
+        <button type="button" class="auth-btn" id="submit-btn">ПОДТВЕРДИТЬ</button>
     </div>
 
     <div id="dashboard" class="hidden" style="flex-direction: column; align-items: center; width: 100%;">
         <nav class="top-nav">
-            <div class="user-trigger" onclick="toggleProfile()">
-                <div class="mini-avatar">K</div>
-                <div style="font-family: 'Orbitron'; font-size: 11px;">
-                    <span id="nav-name" style="color: var(--acc);"></span><br>
-                    <span id="nav-rank" style="font-size: 8px; color: #666;"></span>
-                </div>
+            <div class="mini-avatar">K</div>
+            <div style="font-family: 'Orbitron'; font-size: 11px;">
+                <span id="nav-name" style="color: var(--acc);"></span><br>
+                <span id="nav-rank" style="font-size: 8px; color: #666;"></span>
             </div>
-            <button onclick="location.reload()" style="background:none; border:none; color:var(--prm); cursor:pointer; font-family:'Orbitron'; font-size:8px;">ВЫХОД</button>
+            <button onclick="location.reload()" style="background:none; border:none; color:var(--prm); cursor:pointer; font-family:'Orbitron'; font-size:8px; margin-left:10px;">ВЫХОД</button>
         </nav>
-
         <div id="main-grid" class="menu-grid">
             <div class="menu-item" onclick="showObjects()"><span class="icon">🏗️</span><h3>ОБЪЕКТЫ</h3></div>
             <div class="menu-item"><span class="icon">👥</span><h3>КОМАНДА</h3></div>
             <div class="menu-item"><span class="icon">📁</span><h3>ЧЕРТЕЖИ</h3></div>
             <div class="menu-item"><span class="icon">⚙️</span><h3>СИСТЕМА</h3></div>
         </div>
-
         <div id="objects-view" class="objects-container hidden">
             <button class="back-btn" onclick="hideObjects()">← НАЗАД</button>
             <h2 style="font-family:'Orbitron'; margin-bottom: 25px;">ДЕЙСТВУЮЩИЕ <span>ГОРОДА</span></h2>
             <div class="cities-grid">
                 <div class="city-card"><h4>МИРОПОЛИС-1</h4><span class="status">Готов</span><div class="progress-mini"><div class="progress-fill" style="width: 100%;"></div></div></div>
                 <div class="city-card"><h4>НЕО-ТВЕРЬ</h4><span class="status" style="color:var(--prm)">Стройка</span><div class="progress-mini"><div class="progress-fill" style="width: 45%;"></div></div></div>
-                <div class="city-card"><h4>КРАНОВ-СИТИ</h4><span class="status" style="color:#666">Проект</span><div class="progress-mini"><div class="progress-fill" style="width: 10%;"></div></div></div>
             </div>
         </div>
     </div>
 
-    <div id="profile-modal" class="modal hidden">
-        <div class="profile-card">
-            <span onclick="toggleProfile()" style="position:absolute; top:20px; right:20px; cursor:pointer;">×</span>
-            <div class="mini-avatar" style="width:70px; height:70px; margin: 0 auto 20px; font-size:25px;">K</div>
-            <h2 id="prof-name" style="font-family:'Orbitron';"></h2>
-            <p id="prof-rank" style="color:var(--acc); font-weight:bold;"></p>
-        </div>
-    </div>
-
     <script>
-        function validateUser() {
+        document.getElementById('submit-btn').onclick = function() {
             const name = document.getElementById('reg-name').value;
             const login = document.getElementById('reg-login').value;
             const rank = document.getElementById('reg-rank').value;
             const pass = document.getElementById('reg-pass').value;
+
             if(name === 'Kranovschik' && login === 'Creator' && rank === 'Создатель' && pass === '12345') {
-                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('login-container').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
                 document.getElementById('dashboard').style.display = 'flex';
                 document.getElementById('nav-name').innerText = name;
                 document.getElementById('nav-rank').innerText = rank;
-                document.getElementById('prof-name').innerText = name;
-document.getElementById('prof-rank').innerText = rank;
-} else { alert('Ошибка доступа'); }
-}
-function showObjects() { document.getElementById('main-grid').classList.add('hidden'); document.getElementById('objects-view').classList.remove('hidden'); }
-function hideObjects() { document.getElementById('objects-view').classList.add('hidden'); document.getElementById('main-grid').classList.remove('hidden'); }
-function toggleProfile() { document.getElementById('profile-modal').classList.toggle('hidden'); }
+            } else {
+                alert('Ошибка: Данные неверны!');
+            }
+        };
+
+        function showObjects() {
+            document.getElementById('main-grid').classList.add('hidden');
+            document.getElementById('objects-view').classList.remove('hidden');
+        }
+        function hideObjects() {
+            document.getElementById('objects-view').classList.add('hidden');
+            document.getElementById('main-grid').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
