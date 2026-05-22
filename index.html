@@ -10,33 +10,57 @@
     <div class="login-container">
         <div class="login-card">
             <h2 class="login-title">Вход в команду <span class="server-name">Мирополис</span></h2>
-            <form class="login-form">
+            <form class="login-form" id="loginForm">
                 <div class="form-group">
                     <label for="username" class="form-label">Имя пользователя</label>
-                    <input type="text" id="username" class="form-input" placeholder="Введите ваше имя" required>
+                    <input type="text" id="username" class="form-input" placeholder="Введите ваше имя" value="Kranovschik" required>
                 </div>
                 <div class="form-group">
                     <label for="login" class="form-label">Логин</label>
-                    <input type="text" id="login" class="form-input" placeholder="Ваш игровой логин" required>
+                    <input type="text" id="login" class="form-input" placeholder="Ваш игровой логин" value="Creator" required>
                 </div>
                 <div class="form-group">
                     <label for="position" class="form-label">Должность</label>
-                    <select id="position" class="form-select" required>
-                        <option value="" disabled selected>Выберите должность</option>
-                        <option value="admin">Администратор</option>
-                        <option value="moderator">Модератор</option>
-                        <option value="builder">Строитель</option>
-                        <option value="developer">Разработчик</option>
-                        <option value="other">Другое</option>
-                    </select>
+                    <input type="text" id="position" class="form-input" placeholder="Укажите вашу должность" value="Создатель" required>
                 </div>
                 <div class="form-group">
                     <label for="password" class="form-label">Пароль</label>
-                    <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                    <input type="password" id="password" class="form-input" placeholder="••••••••" value="12345" required>
                 </div>
                 <button type="submit" class="login-btn">Войти в систему</button>
             </form>
         </div>
     </div>
+
+    <!-- Главное меню (изначально скрыто) -->
+    <div class="main-menu" id="mainMenu" style="display: none;">
+        <div class="menu-header">
+            <h1>Добро пожаловать, <span id="welcomeName">Kranovschik</span>!</h1>
+            <p>Должность: <span id="userPosition">Создатель</span></p>
+            <button class="logout-btn" onclick="showLogin()">Выйти</button>
+        </div>
+        <div class="menu-content">
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <h3>Управление игроками</h3>
+                    <p>Просмотр и редактирование аккаунтов</p>
+                </div>
+                <div class="menu-item">
+                    <h3>Настройки сервера</h3>
+                    <p>Конфигурация и параметры сервера</p>
+                </div>
+                <div class="menu-item">
+                    <h3>Логи действий</h3>
+                    <p>История действий на сервере</p>
+                </div>
+                <div class="menu-item">
+                    <h3>Чат модерации</h3>
+                    <p>Мониторинг игрового чата</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
