@@ -4,8 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мирополис | Система управления</title>
-    <link rel="stylesheet" href="style.css">
     <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root {
+            --prm: #ff00cc; /* Ярко-розовый */
+            --sec: #3333ff; /* Ярко-синий */
+            --acc: #00ffff; /* Циан */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #050505;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        /* АНИМИРОВАННЫЙ ФОН */
+        .bg-gradient {
+            position: absolute; width: 100%; height: 100%;
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            z-index: -2;
+        }
+
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; z-index: -1;
+            animation: move 20s infinite alternate;
+        }
+
+        .orb-1 { width: 400px; height: 400px; background: var(--prm); top: -10%; left: -10%; }
+        .orb-2 { width: 500px; height: 500px; background: var(--sec); bottom: -10%; right: -10%; animation-delay: -5s; }
+
+        @keyframes move {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 50px) scale(1.2); }
+        }
+
+        /* ГЛЯНЦЕВАЯ КАРТОЧКА ВХОДА */
+        .glass-box {
+            position: relative;
+            width: 420px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            transition: 0.5s;
+        }
+
+        h1 { font-family: 'Orbitron'; font-size: 26px; text-align: center; letter-spacing: 3px; margin-bottom: 10px; }
+        h1 span { background: linear-gradient(to right, var(--prm), var(--acc)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .brand { text-align: center; color: rgba(255,255,255,0.6); font-size: 9px; letter-spacing: 2px; margin-bottom: 35px; font-weight: 900; }
+
+        .field { position: relative; margin-bottom: 20px; }
+
+        .field input {
+            width: 100%; padding: 14px 18px; background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 15px;
+            color: #fff; outline: none; transition: 0.4s; font-size: 14px;
+        }
+
+        .field label {
+            position: absolute; left: 18px; top: 15px; color: rgba(255,255,255,0.4);
+            transition: 0.3s; font-size: 10px; font-weight: 700; pointer-events: none;
+        }
+
+        .field input:focus ~ label, .field input:not(:placeholder-shown) ~ label {
+            top: -10px; left: 12px; font-size: 9px; color: var(--acc);
+        }
+
+        .auth-btn {
+            width: 100%; padding: 16px; border: none; border-radius: 15px;
+            background: linear-gradient(45deg, var(--prm), var(--sec));
+            color: #fff; font-family: 'Orbitron'; font-weight: 900;
+            cursor: pointer; transition: 0.4s; margin-top: 10px;
+        }
+
+        .auth-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,0,204,0.4); }
+
+        /* ГЛАВНОЕ МЕНЮ */
+        .menu-container {
+            width: 90%; max-width: 900px; z-index: 10;
+        }
+
+        .menu-header {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
+            padding: 20px 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .user-profile { display: flex; align-items: center; gap: 15px; }
+        .mini-avatar { 
+            width: 50px; height: 50px; background: var(--prm); 
+            border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; font-family: 'Orbitron'; font-weight: 900;
+        }
+
+        .menu-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;
+        }
+
+        .menu-item {
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px 20px;
+            border-radius: 25px; text-align: center; cursor: pointer; transition: 0.4s;
+        }
+
+        .menu-item:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.08); border-color: var(--acc); }
+
+        .menu-item .icon { font-size: 40px; margin-bottom: 10px; display: block; }
+
+        .hidden { display: none; }
+        .fade-out { opacity: 0; transform: scale(0.9); }
+    </style>
 </head>
 <body>
 
@@ -13,35 +132,20 @@
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
 
-    <!-- БЛОК ВХОДА -->
+    <!-- ФОРМА ВХОДА -->
     <div id="login-container" class="glass-box">
-        <div class="glow-border"></div>
-        <div id="login-section">
-            <h1>ВХОД<span> НА САЙТ</span></h1>
-            <p class="brand">САЙТ ДЛЯ КОМАНДЫ МИРОПОЛИСА</p>
+        <h1>ВХОД<span> НА САЙТ</span></h1>
+        <p class="brand">САЙТ ДЛЯ КОМАНДЫ МИРОПОЛИСА</p>
 
-            <div class="field">
-                <input type="text" id="reg-name" placeholder=" " required>
-                <label>ИМЯ ПОЛЬЗОВАТЕЛЯ</label>
-            </div>
-            <div class="field">
-                <input type="text" id="reg-login" placeholder=" " required>
-                <label>ЛОГИН</label>
-            </div>
-            <div class="field">
-                <input type="text" id="reg-rank" placeholder=" " required>
-                <label>ЗВАНИЕ</label>
-            </div>
-            <div class="field">
-                <input type="password" id="reg-pass" placeholder=" " required>
-                <label>ПАРОЛЬ</label>
-            </div>
+        <div class="field"><input type="text" id="reg-name" placeholder=" " required><label>ИМЯ ПОЛЬЗОВАТЕЛЯ</label></div>
+        <div class="field"><input type="text" id="reg-login" placeholder=" " required><label>ЛОГИН</label></div>
+        <div class="field"><input type="text" id="reg-rank" placeholder=" " required><label>ЗВАНИЕ</label></div>
+        <div class="field"><input type="password" id="reg-pass" placeholder=" " required><label>ПАРОЛЬ</label></div>
 
-            <button type="button" class="auth-btn" onclick="validateUser()">ПОДТВЕРДИТЬ ЛИЧНОСТЬ</button>
-        </div>
+        <button type="button" class="auth-btn" onclick="validateUser()">ПОДТВЕРДИТЬ ЛИЧНОСТЬ</button>
     </div>
 
-    <!-- ГЛАВНОЕ МЕНЮ (скрыто по умолчанию) -->
+    <!-- ГЛАВНОЕ МЕНЮ -->
     <div id="main-menu" class="menu-container hidden">
         <header class="menu-header">
             <div class="user-profile">
@@ -51,30 +155,14 @@
                     <p id="user-display-rank">Создатель</p>
                 </div>
             </div>
-            <button class="logout-btn" onclick="location.reload()">ВЫХОД</button>
+            <button style="background:none; border:1px solid var(--prm); color:var(--prm); padding:5px 15px; border-radius:10px; cursor:pointer;" onclick="location.reload()">ВЫХОД</button>
         </header>
 
         <div class="menu-grid">
-            <div class="menu-item">
-                <div class="icon">🏗️</div>
-                <h3>ОБЪЕКТЫ</h3>
-                <p>Текущие стройки</p>
-            </div>
-            <div class="menu-item">
-                <div class="icon">👥</div>
-                <h3>КОМАНДА</h3>
-                <p>Состав Мирополиса</p>
-            </div>
-            <div class="menu-item">
-                <div class="icon">📁</div>
-                <h3>ЧЕРТЕЖИ</h3>
-                <p>Архив проектов</p>
-            </div>
-            <div class="menu-item">
-                <div class="icon">⚙️</div>
-                <h3>НАСТРОЙКИ</h3>
-                <p>Параметры системы</p>
-            </div>
+            <div class="menu-item"><span class="icon">🏗️</span><h3>ОБЪЕКТЫ</h3><p>Текущие стройки</p></div>
+            <div class="menu-item"><span class="icon">👥</span><h3>КОМАНДА</h3><p>Состав Мирополиса</p></div>
+            <div class="menu-item"><span class="icon">📁</span><h3>ЧЕРТЕЖИ</h3><p>Архив проектов</p></div>
+            <div class="menu-item"><span class="icon">⚙️</span><h3>НАСТРОЙКИ</h3><p>Система</p></div>
         </div>
     </div>
 
@@ -87,12 +175,9 @@
 
             if(name === 'Kranovschik' && login === 'Creator' && rank === 'Создатель' && pass === '12345') {
                 document.getElementById('login-container').classList.add('fade-out');
-                
                 setTimeout(() => {
                     document.getElementById('login-container').style.display = 'none';
-                    const menu = document.getElementById('main-menu');
-                    menu.classList.remove('hidden');
-                    menu.classList.add('fade-in');
+                    document.getElementById('main-menu').classList.remove('hidden');
                 }, 500);
             } else {
                 alert('ДОСТУП ЗАПРЕЩЕН');
