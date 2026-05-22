@@ -8,9 +8,23 @@
 </head>
 <body>
     <div class="card">
-        <h1 id="title">Добро пожаловать!</h1>
-        <p id="description">Это стартовая страница вашего нового проекта. Нажмите кнопку ниже, чтобы изменить текст.</p>
-        <button id="action-btn">Нажми меня</button>
+        <!-- Блок приветствия -->
+        <div id="welcome-block">
+            <h1 id="title">Добро пожаловать!</h1>
+            <p id="description">Это стартовая страница вашего нового проекта. Нажмите кнопку ниже, чтобы войти.</p>
+            <button id="action-btn">Перейти к входу</button>
+        </div>
+
+        <!-- Блок входа (меню входа) -->
+        <div id="login-block" class="hidden">
+            <h1>Авторизация</h1>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="Имя пользователя" required>
+                <input type="password" id="password" placeholder="Пароль" required>
+                <button type="submit" id="submit-btn">Войти</button>
+            </form>
+            <button id="back-btn" class="secondary-btn">Назад</button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
