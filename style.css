@@ -6,7 +6,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, #ff3b59, #ff1e9a, #8e24aa, #512888, #1e3c72);
+    background: linear-gradient(135deg, #ff3b59, #ff1e9a, #8e24aa, #512888, #1e3c72); /* Глубокий переливающийся градиент */
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -15,12 +15,13 @@ body {
 
 .auth-container {
     background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(30px); /* Сильное размытие — создает эффект "живого" фона внутри панели */
+    backdrop-filter: blur(30px); /* Эффект "живого" фона внутри панели */
     border-radius: 16px;
-    padding: 3rem;
-    width: 350px;
+    padding: 3rem; /* Увеличенные отступы для воздуха */
+    width: 450px; /* Увеличенная ширина, чтобы надпись влезала */
     box-shadow: 0 15px 30px rgba(255, 60, 100, 0.5);
     border: 2px solid rgba(255, 60, 100, 0.3);
+    overflow-wrap: break-word; /* Разрешаем перенос слов */
 }
 
 .logo {
@@ -98,7 +99,6 @@ input:focus {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(255, 60, 100, 0.7);
     border-color: rgba(255, 60, 100, 0.7);
-    background: linear-gradient(45deg, #ff3b59, #ff1e9a); /* Усиление градиента при наведении */
 }
 
 .login-btn:active {
