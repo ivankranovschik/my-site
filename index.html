@@ -10,89 +10,88 @@
     <header class="header">
         <div class="logo">Мирополис</div>
         <nav class="nav">
-            <a href="#portfolio">Портфолио</a>
-            <a href="#tasks">Задачи</a>
-            <a href="#rules">Правила</a>
-            <a href="#contact">Контакты</a>
+            <a href="#portfolio" class="tab-link">Портфолио</a>
+            <a href="#tasks" class="tab-link">Задачи</a>
+            <a href="#rules" class="tab-link">Правила</a>
+            <a href="#contact" class="tab-link">Контакты</a>
         </nav>
     </header>
 
-    <section class="hero">
-        <div class="hero-text">
-            <h1>Команда строителей Мирополиса</h1>
-            <p>Создаём величественные постройки и развиваем мир сервера.</p>
-            <a href="#tasks" class="btn">Взять задание</a>
-        </div>
-        <img src="https://via.placeholder.com/800x400?text=Minecraft+World" alt="Мирополис" class="hero-img">
-    </section>
-
-    <section id="portfolio" class="section">
-        <h2>Наши проекты</h2>
-        <div class="grid">
-            <div class="card">
-                <img src="https://via.placeholder.com/300x200/512888/ffffff?text=Дом" alt="Жилой дом">
-                <div class="card-body">
-                    <h3>Жилой квартал</h3>
-                    <p>Автор: @BuilderAlex</p>
+    <section class="tabs-container">
+        <!-- Портфолио -->
+        <div id="portfolio" class="tab-content active">
+            <h2>Наши проекты</h2>
+            <div class="grid">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300x200/512888/ffffff?text=Дом" alt="Жилой дом">
+                    <div class="card-body">
+                        <h3>Жилой квартал</h3>
+                        <p>Автор: @BuilderAlex</p>
+                    </div>
                 </div>
-            </div>
-            <div class="card">
-                <img src="https://via.placeholder.com/300x200/007a5a/ffffff?text=Площадь" alt="Центральная площадь">
-                <div class="card-body">
-                    <h3>Центральная площадь</h3>
-                    <p>Автор: @DesignerKate</p>
+                <div class="card">
+                    <img src="https://via.placeholder.com/300x200/007a5a/ffffff?text=Площадь" alt="Центральная площадь">
+                    <div class="card-body">
+                        <h3>Центральная площадь</h3>
+                        <p>Автор: @DesignerKate</p>
+                    </div>
                 </div>
-            </div>
-            <div class="card">
-                <img src="https://via.placeholder.com/300x200/ff6b35/ffffff?text=Портал" alt="Портал">
-                <div class="card-body">
-                    <h3>Портал в Нижний мир</h3>
-                    <p>Автор: @RedstonePro</p>
+                <div class="card">
+                    <img src="https://via.placeholder.com/300x200/ff6b35/ffffff?text=Портал" alt="Портал">
+                    <div class="card-body">
+                        <h3>Портал в Нижний мир</h3>
+                        <p>Автор: @RedstonePro</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <section id="tasks" class="section">
-        <h2>Текущие задачи</h2>
-        <ul class="task-list">
-            <li class="task">
-                <h3>Рынок у площади</h3>
-                <p>Статус: В работе</p>
-                <p>Ответственный: @BuilderAlex</p>
-            </li>
-            <li class="task">
-                <h3>Набережная</h3>
-                <p>Статус: Открыто</p>
-                <p>Награда: 500 монет</p>
-            </li>
-            <li class="task">
-                <h3>Доработать освещение</h3>
-                <p>Статус: Открыто</p>
-                <p>Награда: 300 монет</p>
-            </li>
-        </ul>
-    </section>
+        <!-- Задачи -->
+        <div id="tasks" class="tab-content">
+            <h2>Текущие задачи</h2>
+            <ul class="task-list">
+                <li class="task">
+                    <h3>Рынок у площади</h3>
+                    <p>Статус: В работе</p>
+                    <p>Ответственный: @BuilderAlex</p>
+                </li>
+                <li class="task">
+                    <h3>Набережная</h3>
+                    <p>Статус: Открыто</p>
+                    <p>Награда: 500 монет</p>
+                </li>
+                <li class="task">
+                    <h3>Доработать освещение</h3>
+                    <p>Статус: Открыто</p>
+                    <p>Награда: 300 монет</p>
+                </li>
+            </ul>
+        </div>
 
-    <section id="rules" class="section">
-        <h2>Правила для строителей</h2>
-        <ul>
-            <li>Соблюдать общую стилистику сервера.</li>
-            <li>Использовать палитру блоков, утверждённую администрацией.</li>
-            <li>Перед началом постройки создать чертёж в Litematica.</li>
-            <li>Не строить вне разрешённых зон.</li>
-            <li>Сдавать проект на проверку администрации.</li>
-        </ul>
-    </section>
+        <!-- Правила -->
+        <div id="rules" class="tab-content">
+            <h2>Правила для строителей</h2>
+            <ul>
+                <li>Соблюдать общую стилистику сервера.</li>
+                <li>Использовать палитру блоков, утверждённую администрацией.</li>
+                <li>Перед началом постройки создать чертёж в Litematica.</li>
+                <li>Не строить вне разрешённых зон.</li>
+                <li>Сдавать проект на проверку администрации.</li>
+            </ul>
+        </div>
 
-    <section id="contact" class="section">
-        <h2>Контакты</h2>
-        <p>Discord: <a href="https://discord.gg/example" target="_blank">Присоединиться</a></p>
-        <p>Telegram: @WorldBuilders</p>
+        <!-- Контакты -->
+        <div id="contact" class="tab-content">
+            <h2>Контакты</h2>
+            <p>Discord: <a href="https://discord.gg/example" target="_blank">Присоединиться</a></p>
+            <p>Telegram: @WorldBuilders</p>
+        </div>
     </section>
 
     <footer class="footer">
         <p>&copy; 2024 Мирополис. Все права защищены.</p>
     </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
