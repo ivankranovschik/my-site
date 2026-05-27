@@ -44,7 +44,13 @@ body {
     font-weight: 500;
     transition: all 0.3s ease;
     position: relative;
-    padding-bottom: 3px;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .tab-link::after {
@@ -59,62 +65,4 @@ body {
 }
 
 .tab-link:hover, .tab-link.active {
-    color: #ff9e3f;
-}
-
-.tab-link.active::after {
-    width: 100%;
-}
-
-.tabs-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 3rem 2rem;
-}
-
-.tab-content {
-    display: none;
-    padding: 2rem 0;
-    background: rgba(0, 0, 0, 0.8);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-.tab-content.active {
-    display: block;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-.card {
-    background-color: #161b22;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.card-body {
-    padding: 1rem;
-}
-
-.task-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-}
-
-.task {
-    background: #161b22;
-    border-radius: 8px;
-    padding: 1rem;
-    width: 300px
+    color: #ff9e
