@@ -3,29 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой Проект на GitHub</title>
+    <title>Строители Мирополиса — Minecraft</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="card">
-        <!-- Блок приветствия -->
-        <div id="welcome-block">
-            <h1 id="title">Добро пожаловать!</h1>
-            <p id="description">Это стартовая страница вашего нового проекта. Нажмите кнопку ниже, чтобы войти.</p>
-            <button id="action-btn">Перейти к входу</button>
-        </div>
+    <header class="header">
+        <div class="logo">Мирополис</div>
+        <nav class="nav">
+            <a href="#portfolio">Портфолио</a>
+            <a href="#tasks">Задачи</a>
+            <a href="#rules">Правила</a>
+            <a href="#contact">Контакты</a>
+        </nav>
+    </header>
 
-        <!-- Блок входа (меню входа) -->
-        <div id="login-block" class="hidden">
-            <h1>Авторизация</h1>
-            <form id="login-form">
-                <input type="text" id="username" placeholder="Имя пользователя" required>
-                <input type="password" id="password" placeholder="Пароль" required>
-                <button type="submit" id="submit-btn">Войти</button>
-            </form>
-            <button id="back-btn" class="secondary-btn">Назад</button>
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Команда строителей Мирополиса</h1>
+            <p>Создаём величественные постройки и развиваем мир сервера.</p>
+            <a href="#tasks" class="btn">Взять задание</a>
         </div>
-    </div>
-    <script src="script.js"></script>
+        <img src="https://via.placeholder.com/800x400?text=Minecraft+World" alt="Мирополис" class="hero-img">
+    </section>
+
+    <section id="portfolio" class="section">
+        <h2>Наши проекты</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="https://via.placeholder.com/300x200?text=Дом" alt="Жилой дом">
+                <div class="card-body">
+                    <h3>Жилой квартал</h3>
+                    <p>Автор: @BuilderAlex</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/300x200?text=Площадь" alt="Центральная площадь">
+                <div class="card-body">
+                    <h3>Центральная площадь</h3>
+                    <p>Автор: @DesignerKate</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tasks" class="section">
+        <h2>Текущие задачи</h2>
+        <ul class="task-list">
+            <li class="task">
+                <h3>Рынок у площади</h3>
+                <p>Статус: В работе</p>
+                <p>Ответственный: @BuilderAlex</p>
+            </li>
+            <li class="task">
+                <h3>Набережная</h3>
+                <p>Статус: Открыто</p>
+                <p>Награда: 500 монет</p>
+            </li>
+        </ul>
+    </section>
+
+    <section id="rules" class="section">
+        <h2>Правила для строителей</h2>
+        <ul>
+            <li>Соблюдать общую стилистику сервера.</li>
+            <li>Использовать палитру блоков, утверждённую администрацией.</li>
+            <li>Перед началом постройки создать чертёж в Litematica.</li>
+        </ul>
+    </section>
+
+    <section id="contact" class="section">
+        <h2>Контакты</h2>
+        <p>Discord: <a href="https://discord.gg/example" target="_blank">Присоединиться</a></p>
+        <p>Telegram: @WorldBuilders</p>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 Мирополис. Все права защищены.</p>
+    </footer>
 </body>
 </html>
