@@ -20,27 +20,27 @@
     <section class="tabs-container">
         <!-- Портфолио -->
         <div id="portfolio" class="tab-content active">
-            <h2>Наши проекты</h2>
+            <h2 class="section-title">Наши проекты</h2>
             <div class="grid">
                 <div class="card">
-                    <img src="https://via.placeholder.com/300x200/512888/ffffff?text=Дом" alt="Жилой дом">
+                    <img src="https://via.placeholder.com/300x200/512888/ffffff?text=Жилой квартал" alt="Жилой квартал" class="card-img">
                     <div class="card-body">
-                        <h3>Жилой квартал</h3>
-                        <p>Автор: @BuilderAlex</p>
+                        <h3 class="card-title">Жилой квартал</h3>
+                        <p class="card-author">Автор: @BuilderAlex</p>
                     </div>
                 </div>
                 <div class="card">
-                    <img src="https://via.placeholder.com/300x200/007a5a/ffffff?text=Площадь" alt="Центральная площадь">
+                    <img src="https://via.placeholder.com/300x200/007a5a/ffffff?text=Центральная площадь" alt="Центральная площадь" class="card-img">
                     <div class="card-body">
-                        <h3>Центральная площадь</h3>
-                        <p>Автор: @DesignerKate</p>
+                        <h3 class="card-title">Центральная площадь</h3>
+                        <p class="card-author">Автор: @DesignerKate</p>
                     </div>
                 </div>
                 <div class="card">
-                    <img src="https://via.placeholder.com/300x200/ff6b35/ffffff?text=Портал" alt="Портал">
+                    <img src="https://via.placeholder.com/300x200/ff6b35/ffffff?text=Портал в Нижний мир" alt="Портал в Нижний мир" class="card-img">
                     <div class="card-body">
-                        <h3>Портал в Нижний мир</h3>
-                        <p>Автор: @RedstonePro</p>
+                        <h3 class="card-title">Портал в Нижний мир</h3>
+                        <p class="card-author">Автор: @RedstonePro</p>
                     </div>
                 </div>
             </div>
@@ -48,43 +48,64 @@
 
         <!-- Задачи -->
         <div id="tasks" class="tab-content">
-            <h2>Текущие задачи</h2>
-            <ul class="task-list">
-                <li class="task">
-                    <h3>Рынок у площади</h3>
-                    <p>Статус: В работе</p>
-                    <p>Ответственный: @BuilderAlex</p>
-                </li>
-                <li class="task">
-                    <h3>Набережная</h3>
-                    <p>Статус: Открыто</p>
-                    <p>Награда: 500 монет</p>
-                </li>
-                <li class="task">
-                    <h3>Доработать освещение</h3>
-                    <p>Статус: Открыто</p>
-                    <p>Награда: 300 монет</p>
-                </li>
-            </ul>
+            <h2 class="section-title">Текущие задачи</h2>
+            <div class="task-grid">
+                <div class="task-card">
+                    <h3 class="task-title">Рынок у площади</h3>
+                    <p class="task-status">Статус: В работе</p>
+                    <p class="task-status">Ответственный: @BuilderAlex</p>
+                </div>
+                <div class="task-card">
+                    <h3 class="task-title">Набережная</h3>
+                    <p class="task-status">Статус: Открыто</p>
+                    <p class="task-status">Награда: 500 монет</p>
+                </div>
+                <div class="task-card">
+                    <h3 class="task-title">Доработать освещение</h3>
+                    <p class="task-status">Статус: Открыто</p>
+                    <p class="task-status">Награда: 300 монет</p>
+                </div>
+            </div>
         </div>
 
         <!-- Правила -->
         <div id="rules" class="tab-content">
-            <h2>Правила для строителей</h2>
-            <ul>
-                <li>Соблюдать общую стилистику сервера.</li>
-                <li>Использовать палитру блоков, утверждённую администрацией.</li>
-                <li>Перед началом постройки создать чертёж в Litematica.</li>
-                <li>Не строить вне разрешённых зон.</li>
-                <li>Сдавать проект на проверку администрации.</li>
-            </ul>
+            <h2 class="section-title">Правила для строителей</h2>
+            <div class="rules-list">
+                <div class="rule-item">
+                    <span class="rule-icon">•</span>
+                    Соблюдать общую стилистику сервера.
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">•</span>
+                    Использовать палитру блоков, утверждённую администрацией.
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">•</span>
+                    Перед началом постройки создать чертёж в Litematica.
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">•</span>
+                    Не строить вне разрешённых зон.
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">•</span>
+                    Сдавать проект на проверку администрации.
+                </div>
+            </div>
         </div>
 
         <!-- Контакты -->
         <div id="contact" class="tab-content">
-            <h2>Контакты</h2>
-            <p>Discord: <a href="https://discord.gg/example" target="_blank">Присоединиться</a></p>
-            <p>Telegram: @WorldBuilders</p>
+            <h2 class="section-title">Контакты</h2>
+            <div class="contact-item">
+                <span class="contact-icon">💬</span>
+                Discord: <a href="https://discord.gg/example" target="_blank">Присоединиться</a>
+            </div>
+            <div class="contact-item">
+                <span class="contact-icon">📱</span>
+                Telegram: @WorldBuilders
+            </div>
         </div>
     </section>
 
