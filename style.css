@@ -7,7 +7,7 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #fff;
-    background: linear-gradient(135deg, #1e3c72, #2a5298, #512888);
+    background: linear-gradient(135deg, #1e3c72, #2a5298, #512888, #8e24aa);
     line-height: 1.6;
     min-height: 100vh;
 }
@@ -53,16 +53,4 @@ body {
     justify-content: center;
 }
 
-.tab-link::after {
-    content: '';
-    position: absolute;
-    bottom: -3px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #ff6b35, #ff9e3f);
-    transition: width 0.3s ease;
-}
-
-.tab-link:hover, .tab-link.active {
-    color: #ff9e
+.
