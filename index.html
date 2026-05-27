@@ -3,76 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мирополис — Minecraft</title>
+    <title>Мирополис — Сервер строителей</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- БЛОК АВТОРИЗАЦИИ (скрывается после входа) -->
-    <div id="login-container" class="auth-container">
+
+    <!-- ГЛАВНОЕ МЕНЮ -->
+    <div class="main-menu">
+        <h2>Мирополис</h2>
+        <a href="#" class="menu-btn">Модерация</a>
+    </div>
+
+    <!-- ФОРМА ВХОДА -->
+    <div class="auth-container">
         <div class="logo">
             <h1>Мирополис</h1>
             <p>Сервер строителей</p>
         </div>
 
-        <form id="login-form" class="login-form">
+        <form action="#">
             <div class="form-group">
-                <label for="username">Имя пользователя</label>
-                <input type="text" id="username" placeholder="Введите имя..." required>
+                <label for="username">ИМЯ ПОЛЬЗОВАТЕЛЯ</label>
+                <input type="text" id="username" placeholder="Введите имя...">
             </div>
 
             <div class="form-group">
-                <label for="password">Пароль</label>
-                <input type="password" id="password" placeholder="Введите пароль..." required>
+                <label for="password">ПАРОЛЬ</label>
+                <input type="password" id="password" placeholder="Введите пароль...">
             </div>
 
             <button type="submit" class="login-btn">Войти</button>
         </form>
     </div>
 
-    <!-- БЛОК ГЛАВНОГО МЕНЮ (скрыт до входа) -->
-    <div id="main-content" class="main-container" style="display: none;">
-        <header class="header">
-            <div class="logo">Мирополис</div>
-            <nav class="nav">
-                <a href="#portfolio" class="tab-link">Портфолио</a>
-                <a href="#tasks" class="tab-link">Задачи</a>
-                <a href="#rules" class="tab-link">Правила</a>
-                <a href="#contact" class="tab-link">Контакты</a>
-            </nav>
-        </header>
-
-        <section class="tabs-container">
-            <!-- Портфолио -->
-            <div id="portfolio" class="tab-content active">
-                <h2>Наши проекты</h2>
-                <!-- ... остальной контент ... -->
-            </div>
-            <!-- Остальные вкладки ... -->
-        </section>
-    </div>
-
-    <script>
-        // Получаем элементы
-        const loginForm = document.getElementById('login-form');
-        const authContainer = document.getElementById('login-container');
-        const mainContent = document.getElementById('main-content');
-
-        // Обработчик отправки формы
-        loginForm.addEventListener('submit', function(e) {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            if (username === 'Kranovschik' && password === '12345') {
-                // Скрываем форму входа
-                authContainer.style.display = 'none';
-                // Показываем главное меню
-                mainContent.style.display = 'block';
-                alert('Добро пожаловать, Kranovschik!');
-            } else {
-                alert('Неверный логин или пароль.');
-                e.preventDefault();
-            }
-        });
-    </script>
 </body>
 </html>
