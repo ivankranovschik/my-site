@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход в Мирополис — Minecraft</title>
+    <title>Мирополис — Minecraft</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="login-container">
+    <!-- БЛОК АВТОРИЗАЦИИ (скрывается после входа) -->
+    <div id="login-container" class="auth-container">
         <div class="logo">
             <h1>Мирополис</h1>
             <p>Сервер строителей</p>
         </div>
 
-        <form class="login-form">
+        <form id="login-form" class="login-form">
             <div class="form-group">
                 <label for="username">Имя пользователя</label>
                 <input type="text" id="username" placeholder="Введите имя..." required>
@@ -28,15 +29,45 @@
         </form>
     </div>
 
+    <!-- БЛОК ГЛАВНОГО МЕНЮ (скрыт до входа) -->
+    <div id="main-content" class="main-container" style="display: none;">
+        <header class="header">
+            <div class="logo">Мирополис</div>
+            <nav class="nav">
+                <a href="#portfolio" class="tab-link">Портфолио</a>
+                <a href="#tasks" class="tab-link">Задачи</a>
+                <a href="#rules" class="tab-link">Правила</a>
+                <a href="#contact" class="tab-link">Контакты</a>
+            </nav>
+        </header>
+
+        <section class="tabs-container">
+            <!-- Портфолио -->
+            <div id="portfolio" class="tab-content active">
+                <h2>Наши проекты</h2>
+                <!-- ... остальной контент ... -->
+            </div>
+            <!-- Остальные вкладки ... -->
+        </section>
+    </div>
+
     <script>
-        // Простая проверка (только для вас)
-        document.querySelector('form').addEventListener('submit', function(e) {
+        // Получаем элементы
+        const loginForm = document.getElementById('login-form');
+        const authContainer = document.getElementById('login-container');
+        const mainContent = document.getElementById('main-content');
+
+        // Обработчик отправки формы
+        loginForm.addEventListener('submit', function(e) {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
             if (username === 'Kranovschik' && password === '12345') {
+                // Скрываем форму входа
+                authContainer.style.display = 'none';
+                // Показываем главное меню
+                mainContent.style.display = 'block';
                 alert('Добро пожаловать, Kranovschik!');
-                // Здесь можно перенаправить на главную страницу
             } else {
                 alert('Неверный логин или пароль.');
                 e.preventDefault();
