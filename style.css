@@ -6,22 +6,69 @@
 }
 
 body {
-    background: linear-gradient(135deg, #ff3b59, #ff1e9a, #8e24aa, #512888, #1e3c72); /* Глубокий переливающийся градиент */
+    background: linear-gradient(135deg, #ff3b59, #ff1e9a, #8e24aa, #512888, #1e3c72);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+/* СТИЛИ ДЛЯ ГЛАВНОГО МЕНЮ */
+.main-menu {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 10;
+}
+
+.main-menu h2 {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    margin-bottom: 1rem;
+}
+
+.menu-btn {
+    display: inline-block;
+    padding: 1.2rem 3rem;
+    border-radius: 12px;
+    background: linear-gradient(45deg, #ff3b59, #ff1e9a);
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.menu-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 60, 100, 0.7);
+    background: linear-gradient(45deg, #ff1e9a, #ff3b59);
+}
+
+.menu-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* СТИЛИ ДЛЯ ФОРМЫ ВХОДА */
 .auth-container {
     background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(30px); /* Эффект "живого" фона внутри панели */
+    backdrop-filter: blur(30px);
     border-radius: 16px;
-    padding: 3rem; /* Увеличенные отступы для воздуха */
-    width: 450px; /* Увеличенная ширина, чтобы надпись влезала */
+    padding: 3rem;
+    width: 450px;
     box-shadow: 0 15px 30px rgba(255, 60, 100, 0.5);
     border: 2px solid rgba(255, 60, 100, 0.3);
-    overflow-wrap: break-word; /* Разрешаем перенос слов */
+    overflow-wrap: break-word;
 }
 
 .logo {
@@ -37,7 +84,6 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 0.5rem;
-    /* УБРАЛИ text-shadow — теперь буквы четкие и не "вылезают" */
 }
 
 .logo p {
