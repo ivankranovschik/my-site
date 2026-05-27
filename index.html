@@ -3,116 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Строители Мирополиса — Minecraft</title>
+    <title>Вход в Мирополис — Minecraft</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="header">
-        <div class="logo">Мирополис</div>
-        <nav class="nav">
-            <a href="#portfolio" class="tab-link">Портфолио</a>
-            <a href="#tasks" class="tab-link">Задачи</a>
-            <a href="#rules" class="tab-link">Правила</a>
-            <a href="#contact" class="tab-link">Контакты</a>
-        </nav>
-    </header>
-
-    <section class="tabs-container">
-        <!-- Портфолио -->
-        <div id="portfolio" class="tab-content active">
-            <h2 class="section-title">Наши проекты</h2>
-            <div class="grid">
-                <div class="card">
-                    <img src="https://via.placeholder.com/300x200/512888/ffffff?text=Жилой квартал" alt="Жилой квартал" class="card-img">
-                    <div class="card-body">
-                        <h3 class="card-title">Жилой квартал</h3>
-                        <p class="card-author">Автор: @BuilderAlex</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="https://via.placeholder.com/300x200/007a5a/ffffff?text=Центральная площадь" alt="Центральная площадь" class="card-img">
-                    <div class="card-body">
-                        <h3 class="card-title">Центральная площадь</h3>
-                        <p class="card-author">Автор: @DesignerKate</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="https://via.placeholder.com/300x200/ff6b35/ffffff?text=Портал в Нижний мир" alt="Портал в Нижний мир" class="card-img">
-                    <div class="card-body">
-                        <h3 class="card-title">Портал в Нижний мир</h3>
-                        <p class="card-author">Автор: @RedstonePro</p>
-                    </div>
-                </div>
-            </div>
+    <div class="login-container">
+        <div class="logo">
+            <h1>Мирополис</h1>
+            <p>Сервер строителей</p>
         </div>
 
-        <!-- Задачи -->
-        <div id="tasks" class="tab-content">
-            <h2 class="section-title">Текущие задачи</h2>
-            <div class="task-grid">
-                <div class="task-card">
-                    <h3 class="task-title">Рынок у площади</h3>
-                    <p class="task-status">Статус: В работе</p>
-                    <p class="task-status">Ответственный: @BuilderAlex</p>
-                </div>
-                <div class="task-card">
-                    <h3 class="task-title">Набережная</h3>
-                    <p class="task-status">Статус: Открыто</p>
-                    <p class="task-status">Награда: 500 монет</p>
-                </div>
-                <div class="task-card">
-                    <h3 class="task-title">Доработать освещение</h3>
-                    <p class="task-status">Статус: Открыто</p>
-                    <p class="task-status">Награда: 300 монет</p>
-                </div>
+        <form class="login-form">
+            <div class="form-group">
+                <label for="username">Имя пользователя</label>
+                <input type="text" id="username" placeholder="Введите имя..." required>
             </div>
-        </div>
 
-        <!-- Правила -->
-        <div id="rules" class="tab-content">
-            <h2 class="section-title">Правила для строителей</h2>
-            <div class="rules-list">
-                <div class="rule-item">
-                    <span class="rule-icon">•</span>
-                    Соблюдать общую стилистику сервера.
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">•</span>
-                    Использовать палитру блоков, утверждённую администрацией.
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">•</span>
-                    Перед началом постройки создать чертёж в Litematica.
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">•</span>
-                    Не строить вне разрешённых зон.
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">•</span>
-                    Сдавать проект на проверку администрации.
-                </div>
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" placeholder="Введите пароль..." required>
             </div>
-        </div>
 
-        <!-- Контакты -->
-        <div id="contact" class="tab-content">
-            <h2 class="section-title">Контакты</h2>
-            <div class="contact-item">
-                <span class="contact-icon">💬</span>
-                Discord: <a href="https://discord.gg/example" target="_blank">Присоединиться</a>
-            </div>
-            <div class="contact-item">
-                <span class="contact-icon">📱</span>
-                Telegram: @WorldBuilders
-            </div>
-        </div>
-    </section>
+            <button type="submit" class="login-btn">Войти</button>
+        </form>
+    </div>
 
-    <footer class="footer">
-        <p>&copy; 2024 Мирополис. Все права защищены.</p>
-    </footer>
-
-    <script src="script.js"></script>
+    <script>
+        // Простая проверка (только для вас)
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === 'Kranovschik' && password === '12345') {
+                alert('Добро пожаловать, Kranovschik!');
+                // Здесь можно перенаправить на главную страницу
+            } else {
+                alert('Неверный логин или пароль.');
+                e.preventDefault();
+            }
+        });
+    </script>
 </body>
 </html>
