@@ -1,33 +1,66 @@
-// Функция глобального выхода из аккаунта
+// Глобальная функция выхода из аккаунта
 window.logoutUser = function() {
     localStorage.removeItem('currentUser');
     window.location.href = 'index.html';
 };
 
-// Функция синхронизации профиля (отображение имени и аватарки в шапке)
+// Функция переключения видимости меню профиля (открытие/закрытие по клику)
+window.toggleProfileMenu = function(event) {
+    if (event) event.stopPropagation(); // Блокируем клик, чтобы меню сразу не закрылось
+    const menu = document.getElementById('profileDropdownMenu');
+    if (menu) {
+        menu.classList.toggle('active');
+    }
+};
+
+// Закрытие меню профиля при клике в любую пустую область экрана
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById('profileDropdownMenu');
+    const profileBlock = document.querySelector('.user-profile-block');
+    
+    // Если меню открыто и клик произошел вне блока профиля и вне самого меню — закрываем его
+    if (menu && menu.classList.contains('active')) {
+        if (!profileBlock.contains(event.target) && !menu.contains(event.target)) {
+            menu.classList.remove('active');
+        }
+    }
+});
+
+// Функция синхронизации профиля (отображение имени и аватарки на всех страницах)
 function syncUserProfile() {
     const navUsername = document.getElementById('navUsername');
+    const menuUsername = document.getElementById('menuUsername');
     const navAvatar = document.getElementById('navAvatar');
+    const menuAvatar = document.getElementById('menuAvatar');
     
-    // Получаем текущего пользователя (по умолчанию Kranovschik)
+    // Получаем текущего авторизованного пользователя
     let currentUser = localStorage.getItem('currentUser') || 'Kranovschik';
     
+    // Выводим никнеймы в шапку и в меню
     if (navUsername) navUsername.textContent = currentUser;
+    if (menuUsername) menuUsername.textContent = currentUser;
     
-    // Подгружаем сохранённую аватарку
+    // Подгружаем аватарку из памяти
     let savedAvatar = localStorage.getItem('avatar_' + currentUser);
+    
+    // Обновляем мини-аватарку в шапке
     if (navAvatar) {
         if (savedAvatar) {
             navAvatar.innerHTML = `<img src="${savedAvatar}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
         } else {
             navAvatar.textContent = currentUser.charAt(0).toUpperCase();
+            navAvatar.innerHTML = currentUser.charAt(0).toUpperCase();
         }
     }
-
-    // Заполняем плейсхолдеры на странице профиля
-    const newProfileName = document.getElementById('newProfileName');
-    if (newProfileName && !newProfileName.value) {
-        newProfileName.placeholder = currentUser;
+    
+    // Обновляем большую аватарку внутри выпадающего меню
+    if (menuAvatar) {
+        if (savedAvatar) {
+            menuAvatar.innerHTML = `<img src="${savedAvatar}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+        } else {
+            menuAvatar.textContent = currentUser.charAt(0).toUpperCase();
+            menuAvatar.innerHTML = currentUser.charAt(0).toUpperCase();
+        }
     }
 }
 
@@ -40,7 +73,6 @@ if (loginForm) {
         const passwordInput = document.getElementById('password').value;
         const errorMessage = document.getElementById('errorMessage');
 
-        // Проверяем кастомный пароль для Kranovschik, если его меняли
         let kranovschikPass = localStorage.getItem('pass_Kranovschik') || '12345';
         let customKranovschikName = localStorage.getItem('name_Kranovschik') || 'Kranovschik';
 
@@ -52,7 +84,6 @@ if (loginForm) {
             return;
         }
 
-        // Проверка остальных добавленных строителей
         let customWorkers = JSON.parse(localStorage.getItem('constructionWorkers')) || [];
         const foundWorker = customWorkers.find(w => w.username === usernameInput && w.password === passwordInput);
 
@@ -68,7 +99,7 @@ if (loginForm) {
     });
 }
 
-// --- ЛОГИКА ОТДЕЛЬНОЙ СТРАНИЦЫ ПРОФИЛЯ (profile.html) ---
+// --- ОБРАБОТКА ФОРМЫ НАСТРОЕК ПРОФИЛЯ (внутри выпадающего меню) ---
 const profileSettingsForm = document.getElementById('profileSettingsForm');
 if (profileSettingsForm) {
     profileSettingsForm.addEventListener('submit', function(e) {
@@ -77,25 +108,19 @@ if (profileSettingsForm) {
         let currentUser = localStorage.getItem('currentUser') || 'Kranovschik';
         const newName = document.getElementById('newProfileName').value.trim();
         const newPass = document.getElementById('newProfilePass').value;
-        const avatarInput = document.getElementById('avatarInput');
+        const avatarLinkInput = document.getElementById('avatarLinkInput').value.trim();
         const systemMsg = document.getElementById('profileSystemMessage');
 
-        // 1. Сохранение аватарки (если файл выбран)
-        if (avatarInput.files && avatarInput.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                localStorage.setItem('avatar_' + currentUser, event.target.result);
-                syncUserProfile();
-            };
-            reader.readAsDataURL(avatarInput.files[0]);
+        // 1. Сохранение аватарки по ссылке URL
+        if (avatarLinkInput) {
+            localStorage.setItem('avatar_' + currentUser, avatarLinkInput);
         }
 
-        // 2. Изменение имени/пароля для Kranovschik
+        // 2. Изменение имени/пароля
         if (currentUser === 'Kranovschik') {
             if (newName) localStorage.setItem('name_Kranovschik', newName);
             if (newPass) localStorage.setItem('pass_Kranovschik', newPass);
         } else {
-            // Изменение имени/пароля для обычного строителя
             let customWorkers = JSON.parse(localStorage.getItem('constructionWorkers')) || [];
             let workerIndex = customWorkers.findIndex(w => w.username === currentUser);
             if (workerIndex !== -1) {
@@ -106,13 +131,21 @@ if (profileSettingsForm) {
             }
         }
 
-        systemMsg.style.color = '#2f9e44';
-        systemMsg.textContent = 'Изменения успешно сохранены!';
-        setTimeout(() => { syncUserProfile(); }, 500);
+        if (systemMsg) {
+            systemMsg.style.color = '#2f9e44';
+            systemMsg.textContent = 'Изменения успешно сохранены!';
+        }
+        
+        // Сбрасываем текстовые поля и обновляем внешний вид
+        profileSettingsForm.reset();
+        setTimeout(() => { 
+            syncUserProfile(); 
+            if(systemMsg) systemMsg.textContent = '';
+        }, 1500);
     });
 }
 
-// --- ЛОГИКА СТРАНИЦЫ МОДЕРАЦИИ ---
+// --- ЛОГИКА СТРАНИЦЫ МОДЕРАЦИИ (moderation.html) ---
 const addWorkerForm = document.getElementById('addWorkerForm');
 const dynamicWorkersList = document.getElementById('dynamicWorkersList');
 
@@ -169,7 +202,7 @@ window.deleteWorker = function(index) {
     renderWorkers(); 
 };
 
-// Запуск синхронизации при загрузке любой страницы
+// Автоматический запуск синхронизации при загрузке любой страницы
 document.addEventListener('DOMContentLoaded', () => {
     syncUserProfile();
     renderWorkers();
