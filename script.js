@@ -36,7 +36,7 @@ const dynamicWorkersList = document.getElementById('dynamicWorkersList');
 // Функция отображения списка строителей на экране
 function renderWorkers() {
     if (!dynamicWorkersList) return;
-    dynamicWorkersList.innerHTML = ''; // Очищаем список перед обновлением
+    dynamicWorkersList.innerHTML = ''; 
 
     let customWorkers = JSON.parse(localStorage.getItem('constructionWorkers')) || [];
 
@@ -54,15 +54,15 @@ function renderWorkers() {
     });
 }
 
-// Функция удаления строителя (вызывается по кнопке)
+// Функция удаления строителя
 window.deleteWorker = function(index) {
     let customWorkers = JSON.parse(localStorage.getItem('constructionWorkers')) || [];
-    customWorkers.splice(index, 1); // Удаляем элемент из массива
-    localStorage.setItem('constructionWorkers', JSON.stringify(customWorkers)); // Сохраняем данные
-    renderWorkers(); // Перерисовываем список
+    customWorkers.splice(index, 1); 
+    localStorage.setItem('constructionWorkers', JSON.stringify(customWorkers)); 
+    renderWorkers(); 
 };
 
-// Регистрация нового участника на форме
+// Регистрация нового участника
 if (addWorkerForm) {
     addWorkerForm.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -89,7 +89,7 @@ if (addWorkerForm) {
             modSystemMessage.textContent = `Участник ${newUsername} успешно добавлен!`;
             
             addWorkerForm.reset();
-            renderWorkers(); // Сразу обновляем список на экране
+            renderWorkers(); 
         }
     });
 }
