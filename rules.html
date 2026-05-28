@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правила Сервера | Мирополис</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">Мирополис <span class="logo-badge">RULES</span></div>
+        <nav class="nav-links">
+            <a href="main.html" class="back-link">← В меню</a>
+        </nav>
+        
+        <!-- Профиль -->
+        <div class="profile-menu-container">
+            <button class="profile-btn" id="profileToggleBtn">
+                <div class="profile-avatar" id="headerAvatar">K</div>
+                <span class="profile-name" id="headerUsername">Kranovschik</span>
+            </button>
+            <div class="profile-dropdown" id="profileDropdown">
+                <div class="dropdown-header">
+                    <p class="dropdown-user-name" id="dropdownUsername">Kranovschik</p>
+                    <p class="dropdown-user-role">Строитель сервера</p>
+                </div>
+                <hr class="dropdown-divider">
+                <div class="dropdown-body">
+                    <div class="dropdown-input-group">
+                        <label>Сменить имя</label>
+                        <input type="text" id="editUsername" placeholder="Новое имя">
+                    </div>
+                    <div class="dropdown-input-group">
+                        <label>Сменить пароль</label>
+                        <input type="password" id="editPassword" placeholder="Новый пароль">
+                    </div>
+                    <div class="dropdown-input-group">
+                        <label>Аватарка (ссылка)</label>
+                        <input type="text" id="editAvatarUrl" placeholder="Ссылка на фото">
+                    </div>
+                    <button class="save-profile-btn" id="saveProfileBtn">Сохранить</button>
+                </div>
+                <hr class="dropdown-divider">
+                <button class="dropdown-logout-btn" onclick="logoutUser()">Выйти</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="dashboard-wrapper" style="max-width: 800px;">
+            <section class="mod-section">
+                <h2>Свод правил для строителей Мирополиса</h2>
+                <p class="section-desc" style="margin-bottom: 20px;">Обязательные регламенты при возведении любых объектов на сервере.</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 20px; color: #4a5568; line-height: 1.6;">
+                    <p><strong>1. Архитектурный регламент:</strong> Запрещено строить коробки из булыжника и земли. Каждая постройка должна соответствовать стилю своего города.</p>
+                    <p><strong>2. Координация:</strong> Любые масштабные работы, изменение ландшафта или прокладка дорог должны быть утверждены с Главным Админом (Kranovschik).</p>
+                    <p><strong>3. Приваты и разметка:</strong> Перед началом строительства обязательно разметьте территорию забором или блоками шерсти, чтобы избежать накладок зон застройки.</p>
+                    <p><strong>4. Ресурсы:</strong> Строительные материалы со склада распределяются только на активные городские проекты. Использование ресурсов склада в личных целях карается баном.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
