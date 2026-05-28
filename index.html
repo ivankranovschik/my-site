@@ -3,32 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мирополис — Сервер строителей</title>
+    <title>Вход в систему | Сервер Строителей</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <!-- ФОРМА ВХОДА -->
-    <div class="auth-container">
-        <div class="logo">
-            <h1>Мирополис</h1>
-            <p>Сервер строителей</p>
-        </div>
-
-        <form action="main.html">
-            <div class="form-group">
-                <label for="username">ИМЯ ПОЛЬЗОВАТЕЛЯ</label>
-                <input type="text" id="username" placeholder="Введите имя...">
+    <div class="login-card">
+        <h2>Авторизация</h2>
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="username">Имя пользователя</label>
+                <input type="text" id="username" required placeholder="Введите логин">
             </div>
-
-            <div class="form-group">
-                <label for="password">ПАРОЛЬ</label>
-                <input type="password" id="password" placeholder="Введите пароль...">
+            <div class="input-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" required placeholder="Введите пароль">
             </div>
-
-            <button type="submit" class="login-btn">Войти</button>
+            <button type="submit">Войти</button>
+            <p id="errorMessage" class="error-msg"></p>
         </form>
     </div>
 
+    <script src="script.js"></script>
 </body>
 </html>
