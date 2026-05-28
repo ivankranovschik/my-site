@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки профиля | Мирополис</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Шапка страницы профиля -->
+    <header class="main-header">
+        <div class="logo">Мирополис <span class="logo-badge">PROFILE</span></div>
+        <nav class="nav-links">
+            <a href="main.html" class="back-link">← Вернуться в меню</a>
+        </nav>
+        <div class="user-profile-block">
+            <span class="username-display" id="navUsername">Kranovschik</span>
+            <div class="avatar-circle" id="navAvatar">K</div>
+        </div>
+    </header>
+
+    <!-- Основной блок настроек -->
+    <main class="main-container">
+        <div class="login-card" style="max-width: 450px; text-align: left;">
+            <h2 style="text-align: center; margin-bottom: 10px;">Настройки профиля</h2>
+            <p style="text-align: center; color: #718096; font-size: 14px; margin-bottom: 25px;">Измените личные данные вашего строителя</p>
+            
+            <form id="profileSettingsForm">
+                <!-- Загрузка фото -->
+                <div class="input-group">
+                    <label>Сменить аватарку</label>
+                    <input type="file" id="avatarInput" accept="image/*" style="padding: 8px 5px; border: none; background: transparent;">
+                </div>
+
+                <!-- Новое имя -->
+                <div class="input-group">
+                    <label for="newProfileName">Новое имя пользователя</label>
+                    <input type="text" id="newProfileName" placeholder="Введите новый никнейм">
+                </div>
+
+                <!-- Новый пароль -->
+                <div class="input-group">
+                    <label for="newProfilePass">Новый пароль</label>
+                    <input type="password" id="newProfilePass" placeholder="Введите новый пароль">
+                </div>
+
+                <!-- Кнопка сохранения -->
+                <button type="submit" style="margin-top: 10px;">Сохранить изменения</button>
+                <p id="profileSystemMessage" style="text-align: center; margin-top: 10px; font-weight: 600; font-size: 14px; min-height: 20px;"></p>
+            </form>
+
+            <hr style="border: 0; height: 1px; background: #e2e8f0; margin: 25px 0;">
+
+            <!-- Кнопка выхода -->
+            <button class="logout-btn" onclick="logoutUser()" style="width: 100%; padding: 12px; background: #e53e3e; color: white; border-radius: 10px; font-size: 16px;">Выйти из аккаунта</button>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
