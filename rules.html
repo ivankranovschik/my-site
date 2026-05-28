@@ -7,61 +7,41 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Верхняя панель навигации -->
     <header class="main-header">
         <div class="logo">Мирополис <span class="logo-badge">RULES</span></div>
         <nav class="nav-links">
-            <a href="main.html" class="back-link">← В меню</a>
+            <a href="main.html" class="back-link">← Вернуться в меню</a>
         </nav>
-        
-        <!-- Профиль -->
-        <div class="profile-menu-container">
-            <button class="profile-btn" id="profileToggleBtn">
-                <div class="profile-avatar" id="headerAvatar">K</div>
-                <span class="profile-name" id="headerUsername">Kranovschik</span>
-            </button>
-            <div class="profile-dropdown" id="profileDropdown">
-                <div class="dropdown-header">
-                    <p class="dropdown-user-name" id="dropdownUsername">Kranovschik</p>
-                    <p class="dropdown-user-role">Строитель сервера</p>
-                </div>
-                <hr class="dropdown-divider">
-                <div class="dropdown-body">
-                    <div class="dropdown-input-group">
-                        <label>Сменить имя</label>
-                        <input type="text" id="editUsername" placeholder="Новое имя">
-                    </div>
-                    <div class="dropdown-input-group">
-                        <label>Сменить пароль</label>
-                        <input type="password" id="editPassword" placeholder="Новый пароль">
-                    </div>
-                    <div class="dropdown-input-group">
-                        <label>Аватарка (ссылка)</label>
-                        <input type="text" id="editAvatarUrl" placeholder="Ссылка на фото">
-                    </div>
-                    <button class="save-profile-btn" id="saveProfileBtn">Сохранить</button>
-                </div>
-                <hr class="dropdown-divider">
-                <button class="dropdown-logout-btn" onclick="logoutUser()">Выйти</button>
-            </div>
+        <div class="profile-container" style="cursor: default; pointer-events: none;">
+            <div class="profile-avatar">🛠️</div>
+            <span class="profile-name">Инфо-Центр</span>
         </div>
     </header>
 
+    <!-- Блок с правилами -->
     <main class="main-container">
-        <div class="dashboard-wrapper" style="max-width: 800px;">
-            <section class="mod-section">
-                <h2>Свод правил для строителей Мирополиса</h2>
-                <p class="section-desc" style="margin-bottom: 20px;">Обязательные регламенты при возведении любых объектов на сервере.</p>
-                
-                <div style="display: flex; flex-direction: column; gap: 20px; color: #4a5568; line-height: 1.6;">
-                    <p><strong>1. Архитектурный регламент:</strong> Запрещено строить коробки из булыжника и земли. Каждая постройка должна соответствовать стилю своего города.</p>
-                    <p><strong>2. Координация:</strong> Любые масштабные работы, изменение ландшафта или прокладка дорог должны быть утверждены с Главным Админом (Kranovschik).</p>
-                    <p><strong>3. Приваты и разметка:</strong> Перед началом строительства обязательно разметьте территорию забором или блоками шерсти, чтобы избежать накладок зон застройки.</p>
-                    <p><strong>4. Ресурсы:</strong> Строительные материалы со склада распределяются только на активные городские проекты. Использование ресурсов склада в личных целях карается баном.</p>
-                </div>
+        <div class="dashboard-wrapper" style="max-width: 700px;">
+            <section class="welcome-banner">
+                <h1>Устав строителей Мирополиса</h1>
+                <p>Соблюдение данных правил обязательно для всех участников инженерных команд.</p>
             </section>
+
+            <div class="mod-section" style="text-align: left;">
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #1a202c; font-size: 18px; margin-bottom: 5px;">1. Строительный регламент</h3>
+                    <p style="color: #4a5568; font-size: 15px; line-height: 1.5;">Все постройки должны строго соответствовать архитектурному стилю своего города. Запрещено возведение коробок и недостроев.</p>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #1a202c; font-size: 18px; margin-bottom: 5px;">2. Ресурсы и склады</h3>
+                    <p style="color: #4a5568; font-size: 15px; line-height: 1.5;">Запрещено брать строительные блоки со складов чужих городов без согласования с их администрацией.</p>
+                </div>
+                <div>
+                    <h3 style="color: #1a202c; font-size: 18px; margin-bottom: 5px;">3. Территории и разметка</h3>
+                    <p style="color: #4a5568; font-size: 15px; line-height: 1.5;">Перед началом любых масштабных работ строитель обязан согласовать границы участка и получить одобрение в панели модерации.</p>
+                </div>
+            </div>
         </div>
     </main>
-
-    <script src="script.js"></script>
 </body>
 </html>
