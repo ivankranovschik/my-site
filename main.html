@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель Управления | Сервер Строителей</title>
+    <title>Панель Управления | Города Мирополиса</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,7 +11,6 @@
     <header class="main-header">
         <div class="logo">Мирополис <span class="logo-badge">PRO</span></div>
         <nav class="nav-links">
-            <!-- Исправленная ссылка: ведет строго на moderation.html без блокировок -->
             <a href="moderation.html" class="moderation-link">Модерация</a>
         </nav>
         <button class="logout-btn" onclick="window.location.href='index.html'">
@@ -24,30 +23,46 @@
     <main class="main-container">
         <div class="dashboard-wrapper">
             <section class="welcome-banner">
-                <h1>Добро пожаловать в Мирополис</h1>
-                <p>Главная рабочая среда инженеров, архитекторов и строителей сервера.</p>
+                <h1>Города Мирополиса</h1>
+                <p>Выберите интересующий город проекта для просмотра строительных планов и прогресса объектов.</p>
             </section>
 
+            <!-- Сетка городов проекта -->
             <div class="features-grid">
-                <div class="feature-card">
-                    <div class="card-icon">🏗️</div>
-                    <h3>Текущие Проекты</h3>
-                    <p>Просмотр active-строек, планов кварталов и масштабных чертежей.</p>
-                    <button class="card-btn">Открыть списки</button>
+                <!-- Город 1 -->
+                <div class="feature-card city-card">
+                    <div class="card-icon">🏙️</div>
+                    <h3>Центральный Сити</h3>
+                    <div class="city-info">
+                        <span>Статус: <strong class="status-active">Строится</strong></span>
+                        <span>Строителей: <strong>14 игроков</strong></span>
+                    </div>
+                    <p>Столица и главный мегаполис сервера с небоскрёбами, развитой инфраструктурой и метрополитеном.</p>
+                    <button class="card-btn">Войти в город</button>
                 </div>
 
-                <div class="feature-card">
-                    <div class="card-icon">📝</div>
-                    <h3>Тех. Задания</h3>
-                    <p>Инструкции по строительству, нормативы материалов и регламенты.</p>
-                    <button class="card-btn">Проверить ТЗ</button>
+                <!-- Город 2 -->
+                <div class="feature-card city-card">
+                    <div class="card-icon">🌲</div>
+                    <h3>Хвойный Бор</h3>
+                    <div class="city-info">
+                        <span>Статус: <strong class="status-active">Строится</strong></span>
+                        <span>Строителей: <strong>6 игроков</strong></span>
+                    </div>
+                    <p>Уютный пригородный городок в таёжном биоме. Основной упор сделан на деревянную и средневековую архитектуру.</p>
+                    <button class="card-btn">Войти в город</button>
                 </div>
 
-                <div class="feature-card">
-                    <div class="card-icon">📊</div>
-                    <h3>Склад ресурсов</h3>
-                    <p>Мониторинг строительных блоков, учёт ресурсов и логистика поставок.</p>
-                    <button class="card-btn">На склад</button>
+                <!-- Город 3 -->
+                <div class="feature-card city-card">
+                    <div class="card-icon">🏜️</div>
+                    <h3>Песчаный Оазис</h3>
+                    <div class="city-info">
+                        <span>Статус: <strong class="status-planned">В планах</strong></span>
+                        <span>Строителей: <strong>2 игрока</strong></span>
+                    </div>
+                    <p>Фантастический восточный город посреди пустыни. Ожидает завоза основных стройматериалов и расширения команды.</p>
+                    <button class="card-btn">Войти в город</button>
                 </div>
             </div>
         </div>
