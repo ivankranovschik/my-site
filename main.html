@@ -21,44 +21,19 @@
 
     <!-- Главный блок с контентом -->
     <main class="main-container">
-        <div class="dashboard-wrapper">
+        <div class="dashboard-wrapper" style="max-width: 450px;">
             <section class="welcome-banner">
                 <h1>Добро пожаловать в Мирополис</h1>
                 <p>Главная рабочая среда инженеров, архитекторов и строителей сервера.</p>
             </section>
 
-            <!-- Сетка из 4 интерактивных карточек -->
-            <div class="features-grid">
-                <!-- Карточка 1: Проекты -->
-                <div class="feature-card">
-                    <div class="card-icon">🏗️</div>
-                    <h3>Текущие Проекты</h3>
-                    <p>Просмотр активных строек, планов кварталов и масштабных чертежей.</p>
-                    <button class="card-btn">Открыть списки</button>
-                </div>
-
-                <!-- Карточка 2: ТЗ -->
-                <div class="feature-card">
-                    <div class="card-icon">📝</div>
-                    <h3>Тех. Задания</h3>
-                    <p>Инструкции по строительству, нормативы материалов и регламенты.</p>
-                    <button class="card-btn">Проверить ТЗ</button>
-                </div>
-
-                <!-- Карточка 3: Склад -->
-                <div class="feature-card">
-                    <div class="card-icon">📊</div>
-                    <h3>Склад ресурсов</h3>
-                    <p>Мониторинг строительных блоков, учёт ресурсов и логистика поставок.</p>
-                    <button class="card-btn">На склад</button>
-                </div>
-
-                <!-- Карточка 4: НОВАЯ КАРТОЧКА ГОРОДА -->
+            <!-- Оставлена только одна карточка Городов -->
+            <div class="features-grid" style="grid-template-columns: 1fr;">
                 <div class="feature-card">
                     <div class="card-icon">🗺️</div>
                     <h3>Города проекта</h3>
                     <p>Список всех построенных и планируемых городов на сервере Мирополис.</p>
-                    <button class="card-btn">Смотреть города</button>
+                    <button class="card-btn" onclick="window.location.href='cities.html'">Смотреть города</button>
                 </div>
             </div>
         </div>
