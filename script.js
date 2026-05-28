@@ -1,4 +1,37 @@
-// --- ЛОГИКА ВХОДА (index.html) ---
+// Функция глобального выхода из аккаунта
+window.logoutUser = function() {
+    localStorage.removeItem('currentUser');
+    window.location.href = 'index.html';
+};
+
+// Функция синхронизации профиля (отображение имени и аватарки в шапке)
+function syncUserProfile() {
+    const navUsername = document.getElementById('navUsername');
+    const navAvatar = document.getElementById('navAvatar');
+    
+    // Получаем текущего пользователя (по умолчанию Kranovschik)
+    let currentUser = localStorage.getItem('currentUser') || 'Kranovschik';
+    
+    if (navUsername) navUsername.textContent = currentUser;
+    
+    // Подгружаем сохранённую аватарку
+    let savedAvatar = localStorage.getItem('avatar_' + currentUser);
+    if (navAvatar) {
+        if (savedAvatar) {
+            navAvatar.innerHTML = `<img src="${savedAvatar}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+        } else {
+            navAvatar.textContent = currentUser.charAt(0).toUpperCase();
+        }
+    }
+
+    // Заполняем плейсхолдеры на странице профиля
+    const newProfileName = document.getElementById('newProfileName');
+    if (newProfileName && !newProfileName.value) {
+        newProfileName.placeholder = currentUser;
+    }
+}
+
+// --- ЛОГИКА СТРАНИЦЫ АВТОРИЗАЦИИ (index.html) ---
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
     loginForm.addEventListener('submit', function(event) {
@@ -7,21 +40,24 @@ if (loginForm) {
         const passwordInput = document.getElementById('password').value;
         const errorMessage = document.getElementById('errorMessage');
 
-        // Берем измененные данные Kranovschik, если они есть
-        const savedName = localStorage.getItem('admin_name') || 'Kranovschik';
-        const savedPass = localStorage.getItem('admin_pass') || '12345';
+        // Проверяем кастомный пароль для Kranovschik, если его меняли
+        let kranovschikPass = localStorage.getItem('pass_Kranovschik') || '12345';
+        let customKranovschikName = localStorage.getItem('name_Kranovschik') || 'Kranovschik';
 
-        if (usernameInput === savedName && passwordInput === savedPass) {
+        if ((usernameInput === 'Kranovschik' || usernameInput === customKranovschikName) && passwordInput === kranovschikPass) {
+            localStorage.setItem('currentUser', 'Kranovschik');
             errorMessage.style.color = '#2ecc71';
             errorMessage.textContent = 'Успешный вход! Перенаправление...';
             setTimeout(() => { window.location.href = 'main.html'; }, 1000);
             return;
         }
 
+        // Проверка остальных добавленных строителей
         let customWorkers = JSON.parse(localStorage.getItem('constructionWorkers')) || [];
         const foundWorker = customWorkers.find(w => w.username === usernameInput && w.password === passwordInput);
 
         if (foundWorker) {
+            localStorage.setItem('currentUser', usernameInput);
             errorMessage.style.color = '#2ecc71';
             errorMessage.textContent = `Добро пожаловать, ${usernameInput}!`;
             setTimeout(() => { window.location.href = 'main.html'; }, 1000);
@@ -32,95 +68,52 @@ if (loginForm) {
     });
 }
 
-// --- ЛОГИКА ПРОФИЛЯ И ВЫПАДАЮЩЕГО МЕНЮ (main.html / cities.html / moderation.html) ---
-document.addEventListener('DOMContentLoaded', function() {
-    const profileTrigger = document.getElementById('profileTrigger');
-    const profileDropdown = document.getElementById('profileDropdown');
-    const logoutBtn = document.getElementById('logoutBtn');
-    
-    const headerAvatar = document.getElementById('headerAvatar');
-    const headerUsername = document.getElementById('headerUsername');
-    
-    const avatarInput = document.getElementById('avatarInput');
-    const changeNameInput = document.getElementById('changeNameInput');
-    const changePassInput = document.getElementById('changePassInput');
-    const saveProfileBtn = document.getElementById('saveProfileBtn');
+// --- ЛОГИКА ОТДЕЛЬНОЙ СТРАНИЦЫ ПРОФИЛЯ (profile.html) ---
+const profileSettingsForm = document.getElementById('profileSettingsForm');
+if (profileSettingsForm) {
+    profileSettingsForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        let currentUser = localStorage.getItem('currentUser') || 'Kranovschik';
+        const newName = document.getElementById('newProfileName').value.trim();
+        const newPass = document.getElementById('newProfilePass').value;
+        const avatarInput = document.getElementById('avatarInput');
+        const systemMsg = document.getElementById('profileSystemMessage');
 
-    // 1. Загрузка сохраненных данных профиля при старте страницы
-    if (headerUsername) {
-        headerUsername.textContent = localStorage.getItem('admin_name') || 'Kranovschik';
-    }
-    if (headerAvatar) {
-        const savedAvatar = localStorage.getItem('admin_avatar');
-        if (savedAvatar) {
-            headerAvatar.innerHTML = `<img src="${savedAvatar}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
-        } else {
-            const currentName = localStorage.getItem('admin_name') || 'Kranovschik';
-            headerAvatar.textContent = currentName.charAt(0).toUpperCase();
+        // 1. Сохранение аватарки (если файл выбран)
+        if (avatarInput.files && avatarInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                localStorage.setItem('avatar_' + currentUser, event.target.result);
+                syncUserProfile();
+            };
+            reader.readAsDataURL(avatarInput.files[0]);
         }
-    }
 
-    // 2. Открытие / Закрытие менюшки по клику на профиль
-    if (profileTrigger && profileDropdown) {
-        profileTrigger.addEventListener('click', function(e) {
-            e.stopPropagation();
-            profileDropdown.classList.toggle('active');
-        });
-
-        // Закрывать меню, если кликнули в любое другое место экрана
-        document.addEventListener('click', function() {
-            profileDropdown.classList.remove('active');
-        });
-
-        profileDropdown.addEventListener('click', function(e) {
-            e.stopPropagation(); // Чтобы меню не закрывалось при кликах внутри него
-        });
-    }
-
-    // 3. Сохранение новых настроек профиля
-    if (saveProfileBtn) {
-        saveProfileBtn.addEventListener('click', function() {
-            // Смена имени
-            if (changeNameInput.value.trim() !== '') {
-                localStorage.setItem('admin_name', changeNameInput.value.trim());
-                if (headerUsername) headerUsername.textContent = changeNameInput.value.trim();
+        // 2. Изменение имени/пароля для Kranovschik
+        if (currentUser === 'Kranovschik') {
+            if (newName) localStorage.setItem('name_Kranovschik', newName);
+            if (newPass) localStorage.setItem('pass_Kranovschik', newPass);
+        } else {
+            // Изменение имени/пароля для обычного строителя
+            let customWorkers = JSON.parse(localStorage.getItem('constructionWorkers')) || [];
+            let workerIndex = customWorkers.findIndex(w => w.username === currentUser);
+            if (workerIndex !== -1) {
+                if (newName) customWorkers[workerIndex].username = newName;
+                if (newPass) customWorkers[workerIndex].password = newPass;
+                localStorage.setItem('constructionWorkers', JSON.stringify(customWorkers));
+                if (newName) localStorage.setItem('currentUser', newName);
             }
-            
-            // Смена пароля
-            if (changePassInput.value !== '') {
-                localStorage.setItem('admin_pass', changePassInput.value);
-            }
+        }
 
-            // Обработка и сохранение загруженной картинки аватара
-            if (avatarInput && avatarInput.files && avatarInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    localStorage.setItem('admin_avatar', e.target.result);
-                    if (headerAvatar) {
-                        headerAvatar.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
-                    }
-                };
-                reader.readAsDataURL(avatarInput.files[0]);
-            }
+        systemMsg.style.color = '#2f9e44';
+        systemMsg.textContent = 'Изменения успешно сохранены!';
+        setTimeout(() => { syncUserProfile(); }, 500);
+    });
+}
 
-            alert('Настройки профиля успешно сохранены!');
-            changeNameInput.value = '';
-            changePassInput.value = '';
-            profileDropdown.classList.remove('active');
-        });
-    }
-
-    // 4. Кнопка выхода из аккаунта
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function() {
-            window.location.href = 'index.html';
-        });
-    }
-});
-
-// --- СТРАНИЦА МОДЕРАЦИИ (moderation.html) ---
+// --- ЛОГИКА СТРАНИЦЫ МОДЕРАЦИИ ---
 const addWorkerForm = document.getElementById('addWorkerForm');
-const modSystemMessage = document.getElementById('modSystemMessage');
 const dynamicWorkersList = document.getElementById('dynamicWorkersList');
 
 function renderWorkers() {
@@ -146,25 +139,23 @@ if (addWorkerForm) {
         event.preventDefault();
         const newUsername = document.getElementById('newUsername').value.trim();
         const newPassword = document.getElementById('newPassword').value;
-        const currentAdminName = localStorage.getItem('admin_name') || 'Kranovschik';
+        const modSystemMessage = document.getElementById('modSystemMessage');
 
-        if (newUsername.toLowerCase() === currentAdminName.toLowerCase() || newUsername.toLowerCase() === 'kranovschik') {
+        if (newUsername.toLowerCase() === 'kranovschik') {
             modSystemMessage.style.color = '#e53e3e';
-            modSystemMessage.textContent = 'Ошибка: Этот логин занят создателем сайта!';
+            modSystemMessage.textContent = 'Ошибка: Логин Kranovschik зарезервирован!';
             return;
         }
 
         let customWorkers = JSON.parse(localStorage.getItem('constructionWorkers')) || [];
-        const isExist = customWorkers.some(w => w.username.toLowerCase() === newUsername.toLowerCase());
-
-        if (isExist) {
+        if (customWorkers.some(w => w.username.toLowerCase() === newUsername.toLowerCase())) {
             modSystemMessage.style.color = '#e53e3e';
-            modSystemMessage.textContent = 'Пользователь с таким именем уже добавлен!';
+            modSystemMessage.textContent = 'Пользователь уже существует!';
         } else {
             customWorkers.push({ username: newUsername, password: newPassword });
             localStorage.setItem('constructionWorkers', JSON.stringify(customWorkers));
             modSystemMessage.style.color = '#2f9e44';
-            modSystemMessage.textContent = `Участник ${newUsername} успешно добавлен!`;
+            modSystemMessage.textContent = `Строитель успешно добавлен!`;
             addWorkerForm.reset();
             renderWorkers(); 
         }
@@ -178,6 +169,8 @@ window.deleteWorker = function(index) {
     renderWorkers(); 
 };
 
-if (dynamicWorkersList) {
-    document.addEventListener('DOMContentLoaded', renderWorkers);
-}
+// Запуск синхронизации при загрузке любой страницы
+document.addEventListener('DOMContentLoaded', () => {
+    syncUserProfile();
+    renderWorkers();
+});
