@@ -13,10 +13,18 @@
         <nav class="nav-links">
             <a href="moderation.html" class="moderation-link">Модерация</a>
         </nav>
-        <button class="logout-btn" onclick="window.location.href='index.html'">
-            <span>Выйти</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-        </button>
+        
+        <!-- Новый блок профиля в шапке -->
+        <div class="profile-container" id="profileMenuBtn">
+            <div class="profile-avatar" id="headerAvatar">K</div>
+            <span class="profile-name" id="headerUsername">Kranovschik</span>
+            
+            <!-- Выпадающее меню -->
+            <div class="profile-dropdown" id="profileDropdown">
+                <button id="openSettingsBtn">⚙️ Настройки</button>
+                <button class="dropdown-logout" onclick="window.location.href='index.html'">🚪 Выйти</button>
+            </div>
+        </div>
     </header>
 
     <!-- Главный блок с контентом -->
@@ -27,7 +35,6 @@
                 <p>Главная рабочая среда инженеров, архитекторов и строителей сервера.</p>
             </section>
 
-            <!-- Оставлена только одна карточка Городов -->
             <div class="features-grid" style="grid-template-columns: 1fr;">
                 <div class="feature-card">
                     <div class="card-icon">🗺️</div>
@@ -38,5 +45,37 @@
             </div>
         </div>
     </main>
+
+    <!-- Модальное окно настроек профиля -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-card">
+            <div class="modal-header-box">
+                <h2>Настройки профиля</h2>
+                <button class="close-modal-btn" id="closeSettingsBtn">&times;</button>
+            </div>
+            
+            <form id="profileSettingsForm" class="modal-form">
+                <!-- Загрузка фото -->
+                <div class="avatar-upload-box">
+                    <div class="preview-avatar-large" id="modalAvatarPreview">K</div>
+                    <label for="avatarInput" class="upload-label">Выбрать фото</label>
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                </div>
+
+                <div class="modal-input-group">
+                    <label for="editUsername">Имя пользователя</label>
+                    <input type="text" id="editUsername" required>
+                </div>
+                <div class="modal-input-group">
+                    <label for="editPassword">Новый пароль</label>
+                    <input type="password" id="editPassword" required>
+                </div>
+                <button type="submit" class="add-worker-btn">Сохранить изменения</button>
+                <p id="settingsStatusMsg" class="mod-status-msg"></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
