@@ -1,26 +1,21 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const actionBtn = document.getElementById('action-btn');
-    const backBtn = document.getElementById('back-btn');
-    const welcomeBlock = document.getElementById('welcome-block');
-    const loginBlock = document.getElementById('login-block');
-    const loginForm = document.getElementById('login-form');
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Запрещаем перезагрузку страницы при отправке формы
 
-    // Переход к форме входа
-    actionBtn.addEventListener('click', () => {
-        welcomeBlock.classList.add('hidden');
-        loginBlock.classList.remove('hidden');
-    });
+    const usernameInput = document.getElementById('username').value.trim();
+    const passwordInput = document.getElementById('password').value;
+    const errorMessage = document.getElementById('errorMessage');
 
-    // Возврат назад на главную
-    backBtn.addEventListener('click', () => {
-        loginBlock.classList.add('hidden');
-        welcomeBlock.classList.remove('hidden');
-    });
-
-    // Обработка отправки формы
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const username = document.getElementById('username').value;
-        alert(`Привет, ${username}! Вход успешно выполнен.`);
-    });
+    // Проверка учетных данных
+    if (usernameInput === 'Kranovschik' && passwordInput === '12345') {
+        errorMessage.style.color = '#2ecc71';
+        errorMessage.textContent = 'Успешный вход! Перенаправление...';
+        
+        // Перенаправляем на главную страницу через 1.5 секунды
+        setTimeout(function() {
+            window.location.href = 'main.html';
+        }, 1500);
+    } else {
+        errorMessage.style.color = '#e74c3c';
+        errorMessage.textContent = 'Неверное имя пользователя или пароль!';
+    }
 });
