@@ -11,7 +11,8 @@
     <header class="main-header">
         <div class="logo">Мирополис <span class="logo-badge">PRO</span></div>
         <nav class="nav-links">
-            <a href="#" class="moderation-link">Модерация</a>
+            <!-- Кнопка модерации теперь открывает окно по клику -->
+            <a href="#" class="moderation-link" id="openModBtn">Модерация</a>
         </nav>
         <button class="logout-btn" onclick="window.location.href='index.html'">
             <span>Выйти</span>
@@ -22,13 +23,11 @@
     <!-- Главный блок с контентом -->
     <main class="main-container">
         <div class="dashboard-wrapper">
-            <!-- Приветственный баннер -->
             <section class="welcome-banner">
                 <h1>Добро пожаловать в Мирополис</h1>
                 <p>Главная рабочая среда инженеров, архитекторов и строителей сервера.</p>
             </section>
 
-            <!-- Сетка интерактивных карточек -->
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="card-icon">🏗️</div>
@@ -53,5 +52,31 @@
             </div>
         </div>
     </main>
+
+    <!-- ВСплывающее окно модерации -->
+    <div class="modal-overlay" id="modModal">
+        <div class="modal-card">
+            <div class="modal-header-box">
+                <h2>Управление участниками</h2>
+                <button class="close-modal-btn" id="closeModBtn">&times;</button>
+            </div>
+            
+            <form id="addWorkerForm" class="modal-form">
+                <div class="modal-input-group">
+                    <label for="newUsername">Имя пользователя строителя</label>
+                    <input type="text" id="newUsername" placeholder="Например: Builder_Alex" required>
+                </div>
+                <div class="modal-input-group">
+                    <label for="newPassword">Пароль строителя</label>
+                    <input type="password" id="newPassword" placeholder="Придумайте пароль" required>
+                </div>
+                <button type="submit" class="add-worker-btn">Добавить участника</button>
+                <p id="modSystemMessage" class="mod-status-msg"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Подключаем скрипт, чтобы окно и логика работали -->
+    <script src="script.js"></script>
 </body>
 </html>
