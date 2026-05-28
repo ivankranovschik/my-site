@@ -3,45 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Правила Сервера | Мирополис</title>
+    <title>Регламент строителей | Мирополис</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Верхняя панель навигации -->
+    <!-- Верхняя панель навигации (шапка) -->
     <header class="main-header">
         <div class="logo">Мирополис <span class="logo-badge">RULES</span></div>
         <nav class="nav-links">
             <a href="main.html" class="back-link">← Вернуться в меню</a>
         </nav>
-        <div class="profile-container" style="cursor: default; pointer-events: none;">
-            <div class="profile-avatar">🛠️</div>
-            <span class="profile-name">Инфо-Центр</span>
-        </div>
+        <button class="logout-btn" onclick="window.location.href='index.html'">Выйти</button>
     </header>
 
-    <!-- Блок с правилами -->
+    <!-- Основной контент страницы правил -->
     <main class="main-container">
-        <div class="dashboard-wrapper" style="max-width: 700px;">
+        <div class="rules-page-wrapper">
             <section class="welcome-banner">
-                <h1>Устав строителей Мирополиса</h1>
-                <p>Соблюдение данных правил обязательно для всех участников инженерных команд.</p>
+                <h1>Регламент сервера Мирополис</h1>
+                <p>Обязательные правила для инженеров, архитекторов и строителей проекта. Незнание не освобождает от ответственности.</p>
             </section>
 
-            <div class="mod-section" style="text-align: left;">
-                <div style="margin-bottom: 20px;">
-                    <h3 style="color: #1a202c; font-size: 18px; margin-bottom: 5px;">1. Строительный регламент</h3>
-                    <p style="color: #4a5568; font-size: 15px; line-height: 1.5;">Все постройки должны строго соответствовать архитектурному стилю своего города. Запрещено возведение коробок и недостроев.</p>
+            <!-- Список правил -->
+            <div class="rules-grid">
+                
+                <!-- Правило 1 -->
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-number">01</span>
+                        <h3>Bits and Chisels (Микроблоки)</h3>
+                    </div>
+                    <div class="rule-body">
+                        <p>Необходимо оптимизировать блоки из Bits and Chisels. Оставляйте <strong>только ту часть блока, которая видна игроку</strong>.</p>
+                        <div class="punishment-badge high">Наказание: Понижение (на 1 - 2 ранга) / Увольнение</div>
+                    </div>
                 </div>
-                <div style="margin-bottom: 20px;">
-                    <h3 style="color: #1a202c; font-size: 18px; margin-bottom: 5px;">2. Ресурсы и склады</h3>
-                    <p style="color: #4a5568; font-size: 15px; line-height: 1.5;">Запрещено брать строительные блоки со складов чужих городов без согласования с их администрацией.</p>
+
+                <!-- Правило 2 -->
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-number">02</span>
+                        <h3>Путевое Развитие</h3>
+                    </div>
+                    <div class="rule-body">
+                        <p>Необходимо запросить у владельца проекта разрешение на строительство путевого развития в канале <strong>билдер-форум</strong>. После одобрения вам будет выдана роль.</p>
+                        <p class="rule-note">ℹ️ Панелью МТР могут управлять все строители без исключения.</p>
+                        <div class="punishment-badge low">Наказание: Понижение на 1 ранг / Предупреждение</div>
+                    </div>
                 </div>
-                <div>
-                    <h3 style="color: #1a202c; font-size: 18px; margin-bottom: 5px;">3. Территории и разметка</h3>
-                    <p style="color: #4a5568; font-size: 15px; line-height: 1.5;">Перед началом любых масштабных работ строитель обязан согласовать границы участка и получить одобрение в панели модерации.</p>
+
+                <!-- Правило 3 -->
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-number">03</span>
+                        <h3>Строительство Станций</h3>
+                    </div>
+                    <div class="rule-body">
+                        <p>Необходимо полностью <strong>построить вестибюль для станции</strong> сразу же после ее постройки, строго до начала застройки следующего объекта.</p>
+                        <div class="punishment-badge low">Наказание: Предупреждение</div>
+                    </div>
                 </div>
+
+                <!-- Правило 4 -->
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-number">04</span>
+                        <h3>Длина Железнодорожных Станций</h3>
+                    </div>
+                    <div class="rule-body">
+                        <ul class="train-lengths">
+                            <li><strong>5 вагонов</strong> — 118 блоков</li>
+                            <li><strong>6 вагонов</strong> — 140 блоков</li>
+                            <li><strong>7 вагонов</strong> — 156 blocks</li>
+                            <li><strong>8 вагонов</strong> — 178 блоков</li>
+                        </ul>
+                        <p>Всё это нужно обязательно согласовывать с создателем, так как не во всех городах предусмотрено движение поездов в 8 вагонов!</p>
+                        <div class="punishment-badge low">Наказание: Понижение на 1 ранг / Предупреждение</div>
+                    </div>
+                </div>
+
+                <!-- Правило 5 -->
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-number">05</span>
+                        <h3>Общее Строительство и Помощь</h3>
+                    </div>
+                    <div class="rule-body">
+                        <p>Строитель имеет право строить только на том проекте, на который подал заявку. По личному желанию он может помочь другим, если его попросили. <strong>Заставлять или утверждать, что проект общий — строго запрещено.</strong></p>
+                        <div class="punishment-badge high">Наказание: Понижение (на 1 - 2 ранга) / Увольнение / Предупреждение</div>
+                    </div>
+                </div>
+
+                <!-- Правило 6 -->
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-number">06</span>
+                        <h3>Застройка Городов, Дорог и Парковок</h3>
+                    </div>
+                    <div class="rule-body">
+                        <div class="rule-sub-block">
+                            <h4>🛣️ Дорожная сеть:</h4>
+                            <p>Минимум <strong>2 полосы</strong> на одну сторону. Одна полоса = 3 блока, на 4-й ставится разметка. В столице (Рубайске) — максимум до 7 полос, в других городах — до 4 полос. Стандарты разметки соответствуют <a href="https://avtocod.ru/dorozhnaya-razmetka-pdd-2022" target="_blank" class="rule-link">официальным ПДД</a>.</p>
+                        </div>
+                        <div class="rule-sub-block">
+                            <h4>🚗 Коэффициент парковок (Формула: Квартиры + 50%):</h4>
+                            <p>Строить жилые дома без вместительных парковок запрещено. Расчет мест ведется строго по формуле округления в большую сторону:</p>
+                            <p class="formula-example">Пример: 100 кв. = 150 парковочных мест.<br>Пример: 327 кв. (327 : 2 = 163.5 -> 164) = 491 парковочное место.</p>
+                        </div>
+                        <div class="punishment-badge medium">Наказание: Понижение на 1 - 3 ранга / Предупреждение</div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
