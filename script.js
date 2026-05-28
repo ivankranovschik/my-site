@@ -1,90 +1,4 @@
-// --- СИСТЕМА ПРОФИЛЯ (РАБОТАЕТ НА ВСЕХ СТРАНИЦАХ) ---
-document.addEventListener('DOMContentLoaded', function() {
-    // Получаем текущие данные авторизованного юзера
-    let activeUser = JSON.parse(sessionStorage.getItem('activeUser')) || {
-        username: 'Kranovschik',
-        avatarUrl: ''
-    };
-
-    // Обновляем шапку на странице данными пользователя
-    const headerUsername = document.getElementById('headerUsername');
-    const dropdownUsername = document.getElementById('dropdownUsername');
-    const headerAvatar = document.getElementById('headerAvatar');
-
-    if (headerUsername) headerUsername.textContent = activeUser.username;
-    if (dropdownUsername) dropdownUsername.textContent = activeUser.username;
-    if (headerAvatar) {
-        if (activeUser.avatarUrl) {
-            headerAvatar.style.backgroundImage = `url('${activeUser.avatarUrl}')`;
-            headerAvatar.style.backgroundSize = 'cover';
-            headerAvatar.style.backgroundPosition = 'center';
-            headerAvatar.textContent = '';
-        } else {
-            headerAvatar.style.backgroundImage = 'none';
-            headerAvatar.textContent = activeUser.username.charAt(0).toUpperCase();
-        }
-    }
-
-    // Открытие/закрытие меню профиля
-    const profileToggleBtn = document.getElementById('profileToggleBtn');
-    const profileDropdown = document.getElementById('profileDropdown');
-
-    if (profileToggleBtn && profileDropdown) {
-        profileToggleBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            profileDropdown.classList.toggle('active');
-        });
-
-        document.addEventListener('click', function() {
-            profileDropdown.classList.remove('active');
-        });
-
-        profileDropdown.addEventListener('click', function(e) {
-            e.stopPropagation(); // Чтобы клики внутри меню не закрывали его
-        });
-    }
-
-    // Сохранение настроек профиля
-    const saveProfileBtn = document.getElementById('saveProfileBtn');
-    if (saveProfileBtn) {
-        saveProfileBtn.addEventListener('click', function() {
-            const editUsername = document.getElementById('editUsername').value.trim();
-            const editPassword = document.getElementById('editPassword').value;
-            const editAvatarUrl = document.getElementById('editAvatarUrl').value.trim();
-
-            if (editUsername) {
-                activeUser.username = editUsername;
-            }
-            if (editAvatarUrl) {
-                activeUser.avatarUrl = editAvatarUrl;
-            }
-
-            // Имитация смены пароля в основной системе аккаунтов
-            if (editPassword) {
-                alert('Пароль успешно обновлен!');
-            }
-
-            // Сохраняем измененные данные сессии
-            sessionStorage.setItem('activeUser', JSON.stringify(activeUser));
-            alert('Изменения сохранены!');
-            window.location.reload(); // Перезагружаем для применения стилей
-        });
-    }
-
-    // Загрузка списка строителей на странице модерации
-    if (typeof renderWorkers === 'function') {
-        renderWorkers();
-    }
-});
-
-// Глобальная функция выхода из системы
-window.logoutUser = function() {
-    sessionStorage.removeItem('activeUser');
-    window.location.href = 'index.html';
-};
-
-
-// --- ОБРАБОТКА СТРАНИЦЫ ВХОДА (index.html) ---
+// --- ЛОГИКА ВХОДА (index.html) ---
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
     loginForm.addEventListener('submit', function(event) {
@@ -93,21 +7,23 @@ if (loginForm) {
         const passwordInput = document.getElementById('password').value;
         const errorMessage = document.getElementById('errorMessage');
 
-        let isSuccess = false;
-        let loggedUser = { username: usernameInput, avatarUrl: '' };
+        // Берем измененные данные Kranovschik, если они есть
+        const savedName = localStorage.getItem('admin_name') || 'Kranovschik';
+        const savedPass = localStorage.getItem('admin_pass') || '12345';
 
-        if (usernameInput === 'Kranovschik' && passwordInput === '12345') {
-            isSuccess = true;
-        } else {
-            let customWorkers = JSON.parse(localStorage.getItem('constructionWorkers')) || [];
-            const foundWorker = customWorkers.find(w => w.username === usernameInput && w.password === passwordInput);
-            if (foundWorker) isSuccess = true;
-        }
-
-        if (isSuccess) {
+        if (usernameInput === savedName && passwordInput === savedPass) {
             errorMessage.style.color = '#2ecc71';
             errorMessage.textContent = 'Успешный вход! Перенаправление...';
-            sessionStorage.setItem('activeUser', JSON.stringify(loggedUser));
+            setTimeout(() => { window.location.href = 'main.html'; }, 1000);
+            return;
+        }
+
+        let customWorkers = JSON.parse(localStorage.getItem('constructionWorkers')) || [];
+        const foundWorker = customWorkers.find(w => w.username === usernameInput && w.password === passwordInput);
+
+        if (foundWorker) {
+            errorMessage.style.color = '#2ecc71';
+            errorMessage.textContent = `Добро пожаловать, ${usernameInput}!`;
             setTimeout(() => { window.location.href = 'main.html'; }, 1000);
         } else {
             errorMessage.style.color = '#e74c3c';
@@ -116,7 +32,93 @@ if (loginForm) {
     });
 }
 
-// --- ОБРАБОТКА СТРАНИЦЫ МОДЕРАЦИИ (СПИСОК РАБОЧИХ) ---
+// --- ЛОГИКА ПРОФИЛЯ И ВЫПАДАЮЩЕГО МЕНЮ (main.html / cities.html / moderation.html) ---
+document.addEventListener('DOMContentLoaded', function() {
+    const profileTrigger = document.getElementById('profileTrigger');
+    const profileDropdown = document.getElementById('profileDropdown');
+    const logoutBtn = document.getElementById('logoutBtn');
+    
+    const headerAvatar = document.getElementById('headerAvatar');
+    const headerUsername = document.getElementById('headerUsername');
+    
+    const avatarInput = document.getElementById('avatarInput');
+    const changeNameInput = document.getElementById('changeNameInput');
+    const changePassInput = document.getElementById('changePassInput');
+    const saveProfileBtn = document.getElementById('saveProfileBtn');
+
+    // 1. Загрузка сохраненных данных профиля при старте страницы
+    if (headerUsername) {
+        headerUsername.textContent = localStorage.getItem('admin_name') || 'Kranovschik';
+    }
+    if (headerAvatar) {
+        const savedAvatar = localStorage.getItem('admin_avatar');
+        if (savedAvatar) {
+            headerAvatar.innerHTML = `<img src="${savedAvatar}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+        } else {
+            const currentName = localStorage.getItem('admin_name') || 'Kranovschik';
+            headerAvatar.textContent = currentName.charAt(0).toUpperCase();
+        }
+    }
+
+    // 2. Открытие / Закрытие менюшки по клику на профиль
+    if (profileTrigger && profileDropdown) {
+        profileTrigger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('active');
+        });
+
+        // Закрывать меню, если кликнули в любое другое место экрана
+        document.addEventListener('click', function() {
+            profileDropdown.classList.remove('active');
+        });
+
+        profileDropdown.addEventListener('click', function(e) {
+            e.stopPropagation(); // Чтобы меню не закрывалось при кликах внутри него
+        });
+    }
+
+    // 3. Сохранение новых настроек профиля
+    if (saveProfileBtn) {
+        saveProfileBtn.addEventListener('click', function() {
+            // Смена имени
+            if (changeNameInput.value.trim() !== '') {
+                localStorage.setItem('admin_name', changeNameInput.value.trim());
+                if (headerUsername) headerUsername.textContent = changeNameInput.value.trim();
+            }
+            
+            // Смена пароля
+            if (changePassInput.value !== '') {
+                localStorage.setItem('admin_pass', changePassInput.value);
+            }
+
+            // Обработка и сохранение загруженной картинки аватара
+            if (avatarInput && avatarInput.files && avatarInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    localStorage.setItem('admin_avatar', e.target.result);
+                    if (headerAvatar) {
+                        headerAvatar.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+                    }
+                };
+                reader.readAsDataURL(avatarInput.files[0]);
+            }
+
+            alert('Настройки профиля успешно сохранены!');
+            changeNameInput.value = '';
+            changePassInput.value = '';
+            profileDropdown.classList.remove('active');
+        });
+    }
+
+    // 4. Кнопка выхода из аккаунта
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    }
+});
+
+// --- СТРАНИЦА МОДЕРАЦИИ (moderation.html) ---
 const addWorkerForm = document.getElementById('addWorkerForm');
 const modSystemMessage = document.getElementById('modSystemMessage');
 const dynamicWorkersList = document.getElementById('dynamicWorkersList');
@@ -124,9 +126,7 @@ const dynamicWorkersList = document.getElementById('dynamicWorkersList');
 function renderWorkers() {
     if (!dynamicWorkersList) return;
     dynamicWorkersList.innerHTML = ''; 
-
     let customWorkers = JSON.parse(localStorage.getItem('constructionWorkers')) || [];
-
     customWorkers.forEach((worker, index) => {
         const item = document.createElement('div');
         item.className = 'worker-item';
@@ -141,22 +141,16 @@ function renderWorkers() {
     });
 }
 
-window.deleteWorker = function(index) {
-    let customWorkers = JSON.parse(localStorage.getItem('constructionWorkers')) || [];
-    customWorkers.splice(index, 1); 
-    localStorage.setItem('constructionWorkers', JSON.stringify(customWorkers)); 
-    renderWorkers(); 
-};
-
 if (addWorkerForm) {
     addWorkerForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const newUsername = document.getElementById('newUsername').value.trim();
         const newPassword = document.getElementById('newPassword').value;
+        const currentAdminName = localStorage.getItem('admin_name') || 'Kranovschik';
 
-        if (newUsername.toLowerCase() === 'kranovschik') {
+        if (newUsername.toLowerCase() === currentAdminName.toLowerCase() || newUsername.toLowerCase() === 'kranovschik') {
             modSystemMessage.style.color = '#e53e3e';
-            modSystemMessage.textContent = 'Ошибка: Логин зарезервирован!';
+            modSystemMessage.textContent = 'Ошибка: Этот логин занят создателем сайта!';
             return;
         }
 
@@ -165,14 +159,25 @@ if (addWorkerForm) {
 
         if (isExist) {
             modSystemMessage.style.color = '#e53e3e';
-            modSystemMessage.textContent = 'Пользователь уже существует!';
+            modSystemMessage.textContent = 'Пользователь с таким именем уже добавлен!';
         } else {
             customWorkers.push({ username: newUsername, password: newPassword });
             localStorage.setItem('constructionWorkers', JSON.stringify(customWorkers));
             modSystemMessage.style.color = '#2f9e44';
-            modSystemMessage.textContent = `Участник успешно добавлен!`;
+            modSystemMessage.textContent = `Участник ${newUsername} успешно добавлен!`;
             addWorkerForm.reset();
             renderWorkers(); 
         }
     });
+}
+
+window.deleteWorker = function(index) {
+    let customWorkers = JSON.parse(localStorage.getItem('constructionWorkers')) || [];
+    customWorkers.splice(index, 1); 
+    localStorage.setItem('constructionWorkers', JSON.stringify(customWorkers)); 
+    renderWorkers(); 
+};
+
+if (dynamicWorkersList) {
+    document.addEventListener('DOMContentLoaded', renderWorkers);
 }
