@@ -440,4 +440,58 @@ body {
 .status-waiting { color: #e65100; background: rgba(230, 81, 0, 0.12); padding: 4px 10px; border-radius: 8px; }
 
 .card-btn {
-    width: 100%;
+    width: 100%;padding: 12px;
+background: #1a202c;
+color: white;
+border: none;
+border-radius: 12px;
+font-size: 15px;
+font-weight: 700;
+cursor: pointer;
+transition: all 0.3s ease;
+margin-top: auto;
+}
+.feature-card:hover .card-btn { background: linear-gradient(135deg, #e73c7e, #23a6d5); }
+/* --- СТИЛИ СТРАНИЦЫ ПРАВИЛ --- */
+.rules-page-wrapper { width: 100%; max-width: 900px; margin: 0 auto; }
+.rules-grid { display: flex; flex-direction: column; gap: 20px; }
+.rule-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); transition: transform 0.2s ease; }
+.rule-card:hover { transform: translateX(5px); }
+.rule-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; border-bottom: 1px solid #edf2f7; padding-bottom: 10px; }
+.rule-number { font-size: 24px; font-weight: 900; color: #7415ff; background: rgba(116, 21, 255, 0.1); width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; border-radius: 12px; }
+.rule-header h3 { font-size: 20px; color: #1a202c; font-weight: 800; }
+.rule-body { font-size: 15px; color: #4a5568; line-height: 1.6; }
+.rule-body p { margin-bottom: 12px; }
+.rule-note { background: #f7fafc; padding: 8px 12px; border-left: 4px solid #4a5568; border-radius: 4px; font-size: 14px; }
+.train-lengths { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
+.train-lengths li { font-size: 14px; background: white; padding: 6px 12px; border-radius: 8px; border: 1px solid #edf2f7; }
+.rule-sub-block { background: rgba(255, 255, 255, 0.5); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(0,0,0,0.03); }
+.rule-sub-block h4 { font-size: 16px; color: #2d3748; margin-bottom: 6px; font-weight: 700; }
+.formula-example { font-family: monospace; background: #1a202c; color: #a3e635; padding: 10px 14px; border-radius: 8px; font-size: 13px; line-height: 1.5; margin-top: 5px; }
+.rule-link { color: #7415ff; text-decoration: none; font-weight: 700; }
+.rule-link:hover { text-decoration: underline; }
+.punishment-badge { display: inline-block; padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; margin-top: 5px; }
+.punishment-badge.low { background: rgba(252, 196, 25, 0.15); color: #b57a00; }
+.punishment-badge.medium { background: rgba(247, 103, 7, 0.15); color: #d9480f; }
+.punishment-badge.high { background: rgba(229, 62, 62, 0.15); color: #c53030; }
+/* --- СТИЛИ СТРАНИЦЫ МОДЕРАЦИИ --- */
+.mod-page-wrapper { width: 100%; max-width: 1000px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+.mod-section { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.4); padding: 40px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); }
+.mod-section h2 { font-size: 26px; color: #1a202c; font-weight: 800; margin-bottom: 8px; }
+.section-desc { font-size: 14px; color: #718096; margin-bottom: 30px; }
+.mod-page-form { display: flex; flex-direction: column; gap: 20px; }
+.modal-input-group label { display: block; margin-bottom: 8px; color: #4a5568; font-size: 14px; font-weight: 600; }
+.modal-input-group input { width: 100%; padding: 14px 18px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; outline: none; background: rgba(255, 255, 255, 0.5); transition: all 0.3s ease; }
+.modal-input-group input:focus { border-color: #7415ff; background: #fff; }
+.add-worker-btn { padding: 14px; background: linear-gradient(135deg, #7415ff, #23a6d5); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 10px; }
+.add-worker-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(116, 21, 255, 0.3); }
+.mod-status-msg { text-align: center; font-size: 14px; font-weight: 600; min-height: 20px; }
+.workers-list-wrapper { display: flex; flex-direction: column; gap: 12px; max-height: 380px; overflow-y: auto; padding-right: 5px; }
+.worker-item { background: rgba(255, 255, 255, 0.9); border: 1px solid #edf2f7; padding: 15px 20px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
+.worker-name { font-weight: 700; color: #1a202c; font-size: 16px; }
+.worker-pass, .worker-role { font-size: 13px; color: #718096; }
+.system-badge { background: #ebf8ff; color: #2b6cb0; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+.delete-worker-btn { background: rgba(229, 62, 62, 0.1); color: #e53e3e; border: none; padding: 6px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; }
+.delete-worker-btn:hover { background: #e53e3e; color: white; }
+.workers-list-wrapper::-webkit-scrollbar { width: 6px; }
+.workers-list-wrapper::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 3px; }
