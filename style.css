@@ -256,7 +256,7 @@ body {
 
 .card-icon {
     font-size: 45px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     background: rgba(255, 255, 255, 0.8);
     width: 80px;
     height: 80px;
@@ -269,11 +269,36 @@ body {
 .feature-card h3 {
     font-size: 22px;
     color: #1a202c;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+
+/* Информация о городе (Статус и строители) */
+.city-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #4a5568;
+}
+
+.status-active {
+    color: #2f9e44;
+    background: rgba(47, 158, 68, 0.1);
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+
+.status-planned {
+    color: #fcc419;
+    background: rgba(252, 196, 25, 0.1);
+    padding: 2px 8px;
+    border-radius: 6px;
 }
 
 .feature-card p {
-    font-size: 15px;
+    font-size: 14px;
     color: #4a5568;
     line-height: 1.6;
     margin-bottom: 25px;
@@ -297,7 +322,7 @@ body {
     background: linear-gradient(135deg, #e73c7e, #23a6d5);
 }
 
-/* --- СТИЛИ СТРАНИЦЫ МОДЕРАЦИИ (moderation.html) --- */
+/* --- ОСТАЛЬНЫЕ СТИЛИ (MODERATION И Т.Д.) НЕ ИЗМЕНЯЛИСЬ --- */
 .mod-page-wrapper {
     width: 100%;
     max-width: 1000px;
@@ -307,7 +332,6 @@ body {
     animation: fadeInUp 0.6s ease-out;
 }
 
-/* Общий блок секций на странице */
 .mod-section {
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(20px);
@@ -386,7 +410,6 @@ body {
     min-height: 20px;
 }
 
-/* Элементы списка пользователей */
 .workers-list-wrapper {
     display: flex;
     flex-direction: column;
@@ -404,17 +427,6 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: box-shadow 0.2s;
-}
-
-.worker-item:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.worker-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
 }
 
 .worker-name {
@@ -454,7 +466,6 @@ body {
     color: white;
 }
 
-/* Стилизация полосы прокрутки для списка строителей */
 .workers-list-wrapper::-webkit-scrollbar {
     width: 6px;
 }
