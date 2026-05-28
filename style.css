@@ -30,7 +30,7 @@ body {
     width: 100%;
     max-width: 400px;
     text-align: center;
-    margin: auto; /* Центрирует карточку, если на странице только она */
+    margin: auto;
 }
 
 .login-card h2 {
@@ -94,20 +94,31 @@ body {
     color: #333;
 }
 
-.nav-links a {
+/* Кнопка Модерация с радужным переливом при наведении */
+.moderation-link {
     color: #555;
     text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    margin: 0 20px;
-    padding: 5px 0;
-    transition: color 0.3s ease;
-    border-bottom: 2px solid transparent;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 20px;
+    transition: all 0.4s ease;
+    background: transparent;
+    display: inline-block;
 }
 
-.nav-links a:hover, .nav-links a.active {
-    color: #23a6d5;
-    border-bottom: 2px solid #23a6d5;
+.moderation-link:hover {
+    color: #fff;
+    background: linear-gradient(90deg, #ff007f, #ff7f00, #ff00ff, #00ffff, #00ff00, #ff007f);
+    background-size: 400% 400%;
+    animation: rainbowShift 3s linear infinite;
+    box-shadow: 0 4px 15px rgba(231, 60, 126, 0.4);
+    transform: scale(1.05);
+}
+
+@keyframes rainbowShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 400% 50%; }
 }
 
 .logout-btn {
