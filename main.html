@@ -10,17 +10,46 @@
     <!-- Верхняя панель навигации (шапка) -->
     <header class="main-header">
         <div class="logo">Мирополис <span class="logo-badge">PRO</span></div>
-        
-        <!-- Красивые градиентные вкладки -->
         <nav class="nav-links">
             <a href="rules.html" class="rules-link">Правила</a>
             <a href="moderation.html" class="moderation-link">Модерация</a>
         </nav>
         
-        <!-- Кнопка профиля -->
-        <div class="profile-container" id="profileMenuBtn">
-            <div class="profile-avatar" id="headerAvatar">K</div>
-            <span class="profile-name" id="headerUsername">Kranovschik</span>
+        <!-- Интерактивный блок профиля -->
+        <div class="profile-menu-container">
+            <div class="user-profile-block" id="profileTrigger">
+                <div class="user-avatar" id="headerAvatar">K</div>
+                <span class="user-name" id="headerUsername">Kranovschik</span>
+            </div>
+
+            <!-- Выпадающее меню настроек -->
+            <div class="profile-dropdown" id="profileDropdown">
+                <h3>Настройки профиля</h3>
+                
+                <div class="dropdown-group">
+                    <label>Сменить аватарку</label>
+                    <input type="file" id="avatarInput" accept="image/*">
+                </div>
+
+                <div class="dropdown-group">
+                    <label>Новое имя</label>
+                    <input type="text" id="changeNameInput" placeholder="Новый никнейм">
+                </div>
+
+                <div class="dropdown-group">
+                    <label>Новый пароль</label>
+                    <input type="password" id="changePassInput" placeholder="Новый пароль">
+                </div>
+
+                <button class="save-profile-btn" id="saveProfileBtn">Сохранить</button>
+                
+                <hr class="dropdown-divider">
+                
+                <!-- Возвращённая кнопка выхода -->
+                <button class="dropdown-logout-btn" id="logoutBtn">
+                    <span>Выйти из аккаунта</span>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -32,7 +61,6 @@
                 <p>Главная рабочая среда инженеров, архитекторов и строителей сервера.</p>
             </section>
 
-            <!-- Карточка Городов -->
             <div class="features-grid" style="grid-template-columns: 1fr;">
                 <div class="feature-card">
                     <div class="card-icon">🗺️</div>
@@ -43,35 +71,6 @@
             </div>
         </div>
     </main>
-
-    <!-- Выпадающее меню профиля -->
-    <div class="profile-dropdown" id="profileDropdown">
-        <div class="dropdown-header">
-            <div class="dropdown-avatar" id="dropdownAvatar">K</div>
-            <div>
-                <h4 id="dropdownUsername">Kranovschik</h4>
-                <p>Строитель сервера</p>
-            </div>
-        </div>
-        <div class="dropdown-divider"></div>
-        <div class="dropdown-body">
-            <div class="dropdown-item">
-                <label>Аватарка:</label>
-                <input type="file" id="avatarUpload" accept="image/*">
-            </div>
-            <div class="dropdown-item">
-                <label>Новое имя:</label>
-                <input type="text" id="changeUsername" placeholder="Изменить ник">
-            </div>
-            <div class="dropdown-item">
-                <label>Новый пароль:</label>
-                <input type="password" id="changePassword" placeholder="Новый пароль">
-            </div>
-            <button class="save-profile-btn" id="saveProfileBtn">Сохранить</button>
-        </div>
-        <div class="dropdown-divider"></div>
-        <button class="dropdown-logout-btn" id="logoutBtn">Выйти из системы</button>
-    </div>
 
     <script src="script.js"></script>
 </body>
