@@ -11,18 +11,42 @@
     <header class="main-header">
         <div class="logo">Мирополис <span class="logo-badge">PRO</span></div>
         <nav class="nav-links">
-            <a href="moderation.html" class="moderation-link">Модерация</a>
+            <!-- Новая градиентная вкладка Правила -->
+            <a href="rules.html" class="nav-gradient-btn rules-link">Правила</a>
+            <a href="moderation.html" class="nav-gradient-btn moderation-link">Модерация</a>
         </nav>
         
-        <!-- Новый блок профиля в шапке -->
-        <div class="profile-container" id="profileMenuBtn">
-            <div class="profile-avatar" id="headerAvatar">K</div>
-            <span class="profile-name" id="headerUsername">Kranovschik</span>
+        <!-- Кнопка профиля -->
+        <div class="profile-menu-container">
+            <button class="profile-btn" id="profileToggleBtn">
+                <div class="profile-avatar" id="headerAvatar">K</div>
+                <span class="profile-name" id="headerUsername">Kranovschik</span>
+            </button>
             
-            <!-- Выпадающее меню -->
+            <!-- Выпадающее меню профиля -->
             <div class="profile-dropdown" id="profileDropdown">
-                <button id="openSettingsBtn">⚙️ Настройки</button>
-                <button class="dropdown-logout" onclick="window.location.href='index.html'">🚪 Выйти</button>
+                <div class="dropdown-header">
+                    <p class="dropdown-user-name" id="dropdownUsername">Kranovschik</p>
+                    <p class="dropdown-user-role">Строитель сервера</p>
+                </div>
+                <hr class="dropdown-divider">
+                <div class="dropdown-body">
+                    <div class="dropdown-input-group">
+                        <label>Сменить имя</label>
+                        <input type="text" id="editUsername" placeholder="Новое имя">
+                    </div>
+                    <div class="dropdown-input-group">
+                        <label>Сменить пароль</label>
+                        <input type="password" id="editPassword" placeholder="Новый пароль">
+                    </div>
+                    <div class="dropdown-input-group">
+                        <label>Аватарка (ссылка на фото)</label>
+                        <input type="text" id="editAvatarUrl" placeholder="https://example.com">
+                    </div>
+                    <button class="save-profile-btn" id="saveProfileBtn">Сохранить</button>
+                </div>
+                <hr class="dropdown-divider">
+                <button class="dropdown-logout-btn" onclick="logoutUser()">Выйти из аккаунта</button>
             </div>
         </div>
     </header>
@@ -45,36 +69,6 @@
             </div>
         </div>
     </main>
-
-    <!-- Модальное окно настроек профиля -->
-    <div class="modal-overlay" id="settingsModal">
-        <div class="modal-card">
-            <div class="modal-header-box">
-                <h2>Настройки профиля</h2>
-                <button class="close-modal-btn" id="closeSettingsBtn">&times;</button>
-            </div>
-            
-            <form id="profileSettingsForm" class="modal-form">
-                <!-- Загрузка фото -->
-                <div class="avatar-upload-box">
-                    <div class="preview-avatar-large" id="modalAvatarPreview">K</div>
-                    <label for="avatarInput" class="upload-label">Выбрать фото</label>
-                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
-                </div>
-
-                <div class="modal-input-group">
-                    <label for="editUsername">Имя пользователя</label>
-                    <input type="text" id="editUsername" required>
-                </div>
-                <div class="modal-input-group">
-                    <label for="editPassword">Новый пароль</label>
-                    <input type="password" id="editPassword" required>
-                </div>
-                <button type="submit" class="add-worker-btn">Сохранить изменения</button>
-                <p id="settingsStatusMsg" class="mod-status-msg"></p>
-            </form>
-        </div>
-    </div>
 
     <script src="script.js"></script>
 </body>
