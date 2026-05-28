@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель Управления | Города Мирополиса</title>
+    <title>Панель Управления | Сервер Строителей</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,46 +23,42 @@
     <main class="main-container">
         <div class="dashboard-wrapper">
             <section class="welcome-banner">
-                <h1>Города Мирополиса</h1>
-                <p>Выберите интересующий город проекта для просмотра строительных планов и прогресса объектов.</p>
+                <h1>Добро пожаловать в Мирополис</h1>
+                <p>Главная рабочая среда инженеров, архитекторов и строителей сервера.</p>
             </section>
 
-            <!-- Сетка городов проекта -->
+            <!-- Сетка из 4 интерактивных карточек -->
             <div class="features-grid">
-                <!-- Город 1 -->
-                <div class="feature-card city-card">
-                    <div class="card-icon">🏙️</div>
-                    <h3>Центральный Сити</h3>
-                    <div class="city-info">
-                        <span>Статус: <strong class="status-active">Строится</strong></span>
-                        <span>Строителей: <strong>14 игроков</strong></span>
-                    </div>
-                    <p>Столица и главный мегаполис сервера с небоскрёбами, развитой инфраструктурой и метрополитеном.</p>
-                    <button class="card-btn">Войти в город</button>
+                <!-- Карточка 1: Проекты -->
+                <div class="feature-card">
+                    <div class="card-icon">🏗️</div>
+                    <h3>Текущие Проекты</h3>
+                    <p>Просмотр активных строек, планов кварталов и масштабных чертежей.</p>
+                    <button class="card-btn">Открыть списки</button>
                 </div>
 
-                <!-- Город 2 -->
-                <div class="feature-card city-card">
-                    <div class="card-icon">🌲</div>
-                    <h3>Хвойный Бор</h3>
-                    <div class="city-info">
-                        <span>Статус: <strong class="status-active">Строится</strong></span>
-                        <span>Строителей: <strong>6 игроков</strong></span>
-                    </div>
-                    <p>Уютный пригородный городок в таёжном биоме. Основной упор сделан на деревянную и средневековую архитектуру.</p>
-                    <button class="card-btn">Войти в город</button>
+                <!-- Карточка 2: ТЗ -->
+                <div class="feature-card">
+                    <div class="card-icon">📝</div>
+                    <h3>Тех. Задания</h3>
+                    <p>Инструкции по строительству, нормативы материалов и регламенты.</p>
+                    <button class="card-btn">Проверить ТЗ</button>
                 </div>
 
-                <!-- Город 3 -->
-                <div class="feature-card city-card">
-                    <div class="card-icon">🏜️</div>
-                    <h3>Песчаный Оазис</h3>
-                    <div class="city-info">
-                        <span>Статус: <strong class="status-planned">В планах</strong></span>
-                        <span>Строителей: <strong>2 игрока</strong></span>
-                    </div>
-                    <p>Фантастический восточный город посреди пустыни. Ожидает завоза основных стройматериалов и расширения команды.</p>
-                    <button class="card-btn">Войти в город</button>
+                <!-- Карточка 3: Склад -->
+                <div class="feature-card">
+                    <div class="card-icon">📊</div>
+                    <h3>Склад ресурсов</h3>
+                    <p>Мониторинг строительных блоков, учёт ресурсов и логистика поставок.</p>
+                    <button class="card-btn">На склад</button>
+                </div>
+
+                <!-- Карточка 4: НОВАЯ КАРТОЧКА ГОРОДА -->
+                <div class="feature-card">
+                    <div class="card-icon">🗺️</div>
+                    <h3>Города проекта</h3>
+                    <p>Список всех построенных и планируемых городов на сервере Мирополис.</p>
+                    <button class="card-btn">Смотреть города</button>
                 </div>
             </div>
         </div>
