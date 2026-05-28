@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Верхняя панель навигации (шапка) -->
+    <!-- Шапка сайта -->
     <header class="main-header">
         <div class="logo">Мирополис <span class="logo-badge">PRO</span></div>
         <nav class="nav-links">
@@ -15,45 +15,14 @@
             <a href="moderation.html" class="moderation-link">Модерация</a>
         </nav>
         
-        <!-- Интерактивный блок профиля -->
-        <div class="profile-menu-container">
-            <div class="user-profile-block" id="profileTrigger">
-                <div class="user-avatar" id="headerAvatar">K</div>
-                <span class="user-name" id="headerUsername">Kranovschik</span>
-            </div>
-
-            <!-- Выпадающее меню настроек -->
-            <div class="profile-dropdown" id="profileDropdown">
-                <h3>Настройки профиля</h3>
-                
-                <div class="dropdown-group">
-                    <label>Сменить аватарку</label>
-                    <input type="file" id="avatarInput" accept="image/*">
-                </div>
-
-                <div class="dropdown-group">
-                    <label>Новое имя</label>
-                    <input type="text" id="changeNameInput" placeholder="Новый никнейм">
-                </div>
-
-                <div class="dropdown-group">
-                    <label>Новый пароль</label>
-                    <input type="password" id="changePassInput" placeholder="Новый пароль">
-                </div>
-
-                <button class="save-profile-btn" id="saveProfileBtn">Сохранить</button>
-                
-                <hr class="dropdown-divider">
-                
-                <!-- Возвращённая кнопка выхода -->
-                <button class="dropdown-logout-btn" id="logoutBtn">
-                    <span>Выйти из аккаунта</span>
-                </button>
-            </div>
+        <!-- Клик по этому блоку теперь ведет на profile.html -->
+        <div class="user-profile-block" onclick="window.location.href='profile.html'" style="cursor: pointer;">
+            <span class="username-display" id="navUsername">Kranovschik</span>
+            <div class="avatar-circle" id="navAvatar">K</div>
         </div>
     </header>
 
-    <!-- Главный блок с контентом -->
+    <!-- Главный контент -->
     <main class="main-container">
         <div class="dashboard-wrapper" style="max-width: 450px;">
             <section class="welcome-banner">
