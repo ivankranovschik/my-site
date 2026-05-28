@@ -3,14 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель управления | Сервер Строителей</title>
+    <title>Главное меню | Сервер Строителей</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="login-card" style="max-width: 600px;">
-        <h2>Добро пожаловать, Kranovschik!</h2>
-        <p style="color: #666; margin-bottom: 20px;">Вы успешно вошли на сайт для строителей.</p>
-        <button onclick="window.location.href='index.html'">Выйти</button>
-    </div>
+    <!-- Верхняя панель навигации (шапка) -->
+    <header class="main-header">
+        <div class="logo">Мирополис 🛠️</div>
+        <nav class="nav-links">
+            <a href="#" class="active">Главная</a>
+            <a href="#">Проекты</a>
+            <a href="#">Чертежи</a>
+            <a href="#">Ресурсы</a>
+        </nav>
+        <button class="logout-btn" onclick="window.location.href='index.html'">Выйти</button>
+    </header>
+
+    <!-- Главный блок с контентом -->
+    <main class="main-container">
+        <div class="welcome-box">
+            <h1>Добро пожаловать на сайт для строителей Мирополиса</h1>
+            <p>Здесь вы можете управлять строительными проектами, координировать команду и отслеживать прогресс объектов в реальном времени.</p>
+            <div class="welcome-actions">
+                <button class="action-btn">Перейти к проектам</button>
+                <button class="action-btn secondary">Инструкции</button>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
