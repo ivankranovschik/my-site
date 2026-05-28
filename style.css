@@ -94,31 +94,38 @@ body {
     color: #333;
 }
 
-/* Кнопка Модерация с радужным переливом при наведении */
+/* Кнопка Модерация с постоянным стильным градиентом */
 .moderation-link {
-    color: #555;
+    color: white;
     text-decoration: none;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
-    padding: 8px 20px;
-    border-radius: 20px;
-    transition: all 0.4s ease;
-    background: transparent;
+    padding: 10px 24px;
+    border-radius: 30px;
+    /* Фиолетово-розово-синий градиент */
+    background: linear-gradient(-45deg, #7415ff, #e73c7e, #23a6d5);
+    background-size: 200% 200%;
+    /* Постоянное плавное переливание */
+    animation: buttonGradient 6s ease infinite;
+    box-shadow: 0 4px 15px rgba(116, 21, 255, 0.3);
+    transition: all 0.3s ease;
     display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.moderation-link:hover {
-    color: #fff;
-    background: linear-gradient(90deg, #ff007f, #ff7f00, #ff00ff, #00ffff, #00ff00, #ff007f);
-    background-size: 400% 400%;
-    animation: rainbowShift 3s linear infinite;
-    box-shadow: 0 4px 15px rgba(231, 60, 126, 0.4);
-    transform: scale(1.05);
-}
-
-@keyframes rainbowShift {
+/* Анимация перелива градиента внутри кнопки */
+@keyframes buttonGradient {
     0% { background-position: 0% 50%; }
-    100% { background-position: 400% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Эффект при наведении курсора */
+.moderation-link:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 25px rgba(231, 60, 126, 0.5);
+    filter: brightness(1.1);
 }
 
 .logout-btn {
