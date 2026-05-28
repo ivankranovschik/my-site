@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Города Проекта | Мирополис</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Верхняя панель навигации (шапка) -->
+    <header class="main-header">
+        <div class="logo">Мирополис <span class="logo-badge">CITIES</span></div>
+        <nav class="nav-links">
+            <a href="main.html" class="back-link">← Вернуться в меню</a>
+        </nav>
+        <button class="logout-btn" onclick="window.location.href='index.html'">Выйти</button>
+    </header>
+
+    <!-- Главный блок с контентом городов -->
+    <main class="main-container">
+        <div class="dashboard-wrapper">
+            <section class="welcome-banner">
+                <h1>Города Мирополиса</h1>
+                <p>Выберите интересующий город проекта для просмотра строительных планов и прогресса объектов.</p>
+            </section>
+
+            <!-- Сетка твоих городов -->
+            <div class="features-grid">
+                <!-- 1. Рубайск (Столица) -->
+                <div class="feature-card city-card">
+                    <div class="card-icon">👑</div>
+                    <h3>Рубайск</h3>
+                    <div class="city-info">
+                        <span>Статус: <strong class="status-active">Столица</strong></span>
+                        <span>Развитие: <strong>Максимальное</strong></span>
+                    </div>
+                    <p>Главный мегаполис и административный центр сервера. Место сосредоточения ключевых построек и масштабных проектов.</p>
+                    <button class="card-btn">Открыть чертежи</button>
+                </div>
+
+                <!-- 2. Минск -->
+                <div class="feature-card city-card">
+                    <div class="card-icon">🏙️</div>
+                    <h3>Минск</h3>
+                    <div class="city-info">
+                        <span>Статус: <strong class="status-active">Строится</strong></span>
+                        <span>Тип: <strong>Современный город</strong></span>
+                    </div>
+                    <p>Активно развивающийся город с уникальной планировкой улиц, новыми жилыми кварталами и промышленными зонами.</p>
+                    <button class="card-btn">Открыть чертежи</button>
+                </div>
+
+                <!-- 3. Североморск -->
+                <div class="feature-card city-card">
+                    <div class="card-icon">⚓</div>
+                    <h3>Североморск</h3>
+                    <div class="city-info">
+                        <span>Статус: <strong class="status-active">Строится</strong></span>
+                        <span>Тип: <strong>Портовый город</strong></span>
+                    </div>
+                    <p>Важный стратегический объект в северном биоме. Крупный морской порт, верфи и прибрежные оборонительные форты.</p>
+                    <button class="card-btn">Открыть чертежи</button>
+                </div>
+
+                <!-- 4. Егоровск -->
+                <div class="feature-card city-card">
+                    <div class="card-icon">🏡</div>
+                    <h3>Егоровск</h3>
+                    <div class="city-info">
+                        <span>Статус: <strong class="status-active">Строится</strong></span>
+                        <span>Тип: <strong>Уютный пригород</strong></span>
+                    </div>
+                    <p>Уютное поселение с малоэтажной застройкой, парками и зонами отдыха для комфортного проживания строителей.</p>
+                    <button class="card-btn">Открыть чертежи</button>
+                </div>
+
+                <!-- 5. Магистральск -->
+                <div class="feature-card city-card">
+                    <div class="card-icon">🚂</div>
+                    <h3>Магистральск</h3>
+                    <div class="city-info">
+                        <span>Статус: <strong class="status-planned">В планах</strong></span>
+                        <span>Тип: <strong>Ж/Д Узел</strong></span>
+                    </div>
+                    <p>Проектируемый логистический центр. Здесь сойдутся все ветки железных дорог, магистрали и склады ресурсов сервера.</p>
+                    <button class="card-btn">Открыть чертежи</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
