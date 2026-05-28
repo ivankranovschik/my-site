@@ -7,16 +7,46 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Верхняя панель навигации (шапка) -->
     <header class="main-header">
         <div class="logo">Мирополис <span class="logo-badge">CITIES</span></div>
         <nav class="nav-links">
-            <a href="main.html" class="back-link">← Вернуться в меню</a>
+            <a href="rules.html" class="nav-gradient-btn rules-link">Правила</a>
+            <a href="main.html" class="back-link">← В меню</a>
         </nav>
-        <button class="logout-btn" onclick="window.location.href='index.html'">Выйти</button>
+        
+        <!-- Профиль -->
+        <div class="profile-menu-container">
+            <button class="profile-btn" id="profileToggleBtn">
+                <div class="profile-avatar" id="headerAvatar">K</div>
+                <span class="profile-name" id="headerUsername">Kranovschik</span>
+            </button>
+            <div class="profile-dropdown" id="profileDropdown">
+                <div class="dropdown-header">
+                    <p class="dropdown-user-name" id="dropdownUsername">Kranovschik</p>
+                    <p class="dropdown-user-role">Строитель сервера</p>
+                </div>
+                <hr class="dropdown-divider">
+                <div class="dropdown-body">
+                    <div class="dropdown-input-group">
+                        <label>Сменить имя</label>
+                        <input type="text" id="editUsername" placeholder="Новое имя">
+                    </div>
+                    <div class="dropdown-input-group">
+                        <label>Сменить пароль</label>
+                        <input type="password" id="editPassword" placeholder="Новый пароль">
+                    </div>
+                    <div class="dropdown-input-group">
+                        <label>Аватарка (ссылка)</label>
+                        <input type="text" id="editAvatarUrl" placeholder="Ссылка на фото">
+                    </div>
+                    <button class="save-profile-btn" id="saveProfileBtn">Сохранить</button>
+                </div>
+                <hr class="dropdown-divider">
+                <button class="dropdown-logout-btn" onclick="logoutUser()">Выйти</button>
+            </div>
+        </div>
     </header>
 
-    <!-- Главный блок с контентом городов -->
     <main class="main-container">
         <div class="dashboard-wrapper">
             <section class="welcome-banner">
@@ -24,59 +54,41 @@
                 <p>Текущие статусы застройки и планирования объектов на сервере.</p>
             </section>
 
-            <!-- Сетка твоих городов с новыми статусами -->
             <div class="features-grid">
-                <!-- 1. Рубайск -->
                 <div class="feature-card city-card">
                     <div class="card-icon">👑</div>
                     <h3>Рубайск</h3>
-                    <div class="city-info">
-                        <span>Статус: <strong class="status-active">Строится</strong></span>
-                    </div>
+                    <div class="city-info"><span>Статус: <strong class="status-active">Строится</strong></span></div>
                     <button class="card-btn">Открыть чертежи</button>
                 </div>
-
-                <!-- 2. Минск -->
                 <div class="feature-card city-card">
                     <div class="card-icon">🏙️</div>
                     <h3>Минск</h3>
-                    <div class="city-info">
-                        <span>Статус: <strong class="status-discuss">Обсуждения</strong></span>
-                    </div>
+                    <div class="city-info"><span>Статус: <strong class="status-discuss">Обсуждения</strong></span></div>
                     <button class="card-btn">Открыть чертежи</button>
                 </div>
-
-                <!-- 3. Североморск -->
                 <div class="feature-card city-card">
                     <div class="card-icon">⚓</div>
                     <h3>Североморск</h3>
-                    <div class="city-info">
-                        <span>Статус: <strong class="status-planned">В планах</strong></span>
-                    </div>
+                    <div class="city-info"><span>Статус: <strong class="status-planned">В планах</strong></span></div>
                     <button class="card-btn">Открыть чертежи</button>
                 </div>
-
-                <!-- 4. Егоровск -->
                 <div class="feature-card city-card">
                     <div class="card-icon">🏡</div>
                     <h3>Егоровск</h3>
-                    <div class="city-info">
-                        <span>Статус: <strong class="status-waiting">Ожидается</strong></span>
-                    </div>
+                    <div class="city-info"><span>Статус: <strong class="status-waiting">Ожидается</strong></span></div>
                     <button class="card-btn">Открыть чертежи</button>
                 </div>
-
-                <!-- 5. Магистральск (Обновленная иконка дороги) -->
                 <div class="feature-card city-card">
                     <div class="card-icon">🛣️</div>
                     <h3>Магистральск</h3>
-                    <div class="city-info">
-                        <span>Статус: <strong class="status-active">Строится</strong></span>
-                    </div>
+                    <div class="city-info"><span>Статус: <strong class="status-active">Строится</strong></span></div>
                     <button class="card-btn">Открыть чертежи</button>
                 </div>
             </div>
         </div>
     </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
