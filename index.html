@@ -7,6 +7,7 @@
 <title>Мирополис | Вход</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -15,26 +16,30 @@
 }
 
 body{
-    min-height:100vh;
+    height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    overflow:hidden;
     background:
-    linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),
-    url('https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1920&q=80');
-    background-size:cover;
-    background-position:center;
+    linear-gradient(135deg,#0f172a,#1e293b,#334155,#0f172a);
+    background-size:400% 400%;
+    animation:bg 12s ease infinite;
+}
+
+@keyframes bg{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
 }
 
 .login-box{
     width:420px;
-    backdrop-filter:blur(14px);
-    background:rgba(255,255,255,0.12);
-    border:1px solid rgba(255,255,255,0.2);
-    border-radius:24px;
     padding:40px;
-    box-shadow:0 20px 40px rgba(0,0,0,.35);
+    border-radius:24px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(255,255,255,0.15);
+    box-shadow:0 15px 40px rgba(0,0,0,.4);
 }
 
 .logo{
@@ -44,96 +49,91 @@ body{
 
 .logo h1{
     color:white;
-    font-size:42px;
-    margin-bottom:10px;
+    font-size:46px;
+    margin-bottom:8px;
 }
 
 .logo p{
-    color:#d1d5db;
+    color:#cbd5e1;
 }
 
-.input-group{
-    margin-bottom:18px;
-}
-
-.input-group label{
+label{
     display:block;
     color:white;
     margin-bottom:8px;
+    margin-top:15px;
     font-weight:600;
 }
 
-.input-group input{
+input{
     width:100%;
     padding:14px;
     border:none;
     border-radius:12px;
-    background:rgba(255,255,255,0.15);
+    background:rgba(255,255,255,0.12);
     color:white;
     font-size:16px;
 }
 
-.input-group input::placeholder{
-    color:#d1d5db;
+input::placeholder{
+    color:#cbd5e1;
 }
 
-.input-group input:focus{
+input:focus{
     outline:none;
-    background:rgba(255,255,255,0.22);
+    background:rgba(255,255,255,0.18);
 }
 
-.login-btn{
+button{
     width:100%;
+    margin-top:25px;
     padding:14px;
     border:none;
     border-radius:12px;
     background:#f59e0b;
     color:white;
-    font-size:17px;
+    font-size:18px;
     font-weight:bold;
     cursor:pointer;
     transition:.3s;
 }
 
-.login-btn:hover{
+button:hover{
     background:#d97706;
     transform:translateY(-2px);
 }
 
-.footer{
+#error{
+    margin-top:15px;
     text-align:center;
-    margin-top:20px;
-    color:#d1d5db;
-    font-size:14px;
+    color:#ffb4b4;
 }
 
-#error{
-    color:#ffb4b4;
+.footer{
     text-align:center;
-    margin-top:15px;
+    color:#94a3b8;
+    margin-top:20px;
 }
+
 </style>
 </head>
+
 <body>
 
 <div class="login-box">
 
     <div class="logo">
-        <h1>🏙 Мирополис</h1>
+        <h1>🏗 Мирополис</h1>
         <p>Панель управления строителей</p>
     </div>
 
-    <div class="input-group">
-        <label>Имя пользователя</label>
-        <input type="text" id="login" placeholder="Введите логин">
-    </div>
+    <label>Имя пользователя</label>
+    <input type="text" id="login" placeholder="Введите логин">
 
-    <div class="input-group">
-        <label>Пароль</label>
-        <input type="password" id="password" placeholder="Введите пароль">
-    </div>
+    <label>Пароль</label>
+    <input type="password" id="password" placeholder="Введите пароль">
 
-    <button class="login-btn" onclick="login()">
+    <button onclick="login()">
         Войти
     </button>
 
@@ -146,17 +146,21 @@ body{
 </div>
 
 <script>
-function login(){
-    const user = document.getElementById("login").value;
-    const pass = document.getElementById("password").value;
 
-    if(user === "admin" && pass === "12345"){
-        alert("Успешный вход!");
-    } else {
+function login(){
+
+    let login = document.getElementById("login").value;
+    let password = document.getElementById("password").value;
+
+    if(login === "admin" && password === "12345"){
+        alert("Добро пожаловать!");
+    }else{
         document.getElementById("error").innerText =
         "Неверный логин или пароль";
     }
+
 }
+
 </script>
 
 </body>
