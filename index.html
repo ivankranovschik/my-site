@@ -7,7 +7,6 @@
 <title>Мирополис | Вход</title>
 
 <style>
-
 *{
     margin:0;
     padding:0;
@@ -16,30 +15,34 @@
 }
 
 body{
-    height:100vh;
+    min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    background:
-    linear-gradient(135deg,#0f172a,#1e293b,#334155,#0f172a);
-    background-size:400% 400%;
-    animation:bg 12s ease infinite;
-}
 
-@keyframes bg{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
+    background:
+    linear-gradient(
+        rgba(0,0,0,0.55),
+        rgba(0,0,0,0.55)
+    ),
+    url("moscow.jpg");
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
 }
 
 .login-box{
-    width:420px;
+    width:450px;
     padding:40px;
+
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,0.2);
     border-radius:24px;
-    background:rgba(255,255,255,0.08);
-    backdrop-filter:blur(15px);
-    border:1px solid rgba(255,255,255,0.15);
-    box-shadow:0 15px 40px rgba(0,0,0,.4);
+
+    box-shadow:0 20px 50px rgba(0,0,0,0.4);
 }
 
 .logo{
@@ -49,72 +52,75 @@ body{
 
 .logo h1{
     color:white;
-    font-size:46px;
+    font-size:48px;
     margin-bottom:8px;
 }
 
 .logo p{
-    color:#cbd5e1;
+    color:#d1d5db;
+    font-size:18px;
 }
 
 label{
     display:block;
     color:white;
     margin-bottom:8px;
-    margin-top:15px;
+    margin-top:18px;
     font-weight:600;
 }
 
 input{
     width:100%;
-    padding:14px;
+    padding:15px;
     border:none;
     border-radius:12px;
-    background:rgba(255,255,255,0.12);
+    background:rgba(255,255,255,0.15);
     color:white;
     font-size:16px;
 }
 
 input::placeholder{
-    color:#cbd5e1;
+    color:#d1d5db;
 }
 
 input:focus{
     outline:none;
-    background:rgba(255,255,255,0.18);
+    background:rgba(255,255,255,0.22);
 }
 
 button{
     width:100%;
     margin-top:25px;
-    padding:14px;
+    padding:15px;
+
     border:none;
     border-radius:12px;
+
     background:#f59e0b;
     color:white;
+
     font-size:18px;
     font-weight:bold;
+
     cursor:pointer;
-    transition:.3s;
+    transition:0.3s;
 }
 
 button:hover{
     background:#d97706;
-    transform:translateY(-2px);
 }
 
 #error{
-    margin-top:15px;
     text-align:center;
     color:#ffb4b4;
+    margin-top:15px;
 }
 
 .footer{
     text-align:center;
-    color:#94a3b8;
+    color:#cbd5e1;
     margin-top:20px;
 }
-
 </style>
 </head>
 
@@ -123,7 +129,7 @@ button:hover{
 <div class="login-box">
 
     <div class="logo">
-        <h1>🏗 Мирополис</h1>
+        <h1>🏙 Мирополис</h1>
         <p>Панель управления строителей</p>
     </div>
 
@@ -146,21 +152,22 @@ button:hover{
 </div>
 
 <script>
-
 function login(){
 
-    let login = document.getElementById("login").value;
-    let password = document.getElementById("password").value;
+    const login =
+    document.getElementById("login").value;
+
+    const password =
+    document.getElementById("password").value;
 
     if(login === "admin" && password === "12345"){
-        alert("Добро пожаловать!");
-    }else{
+        alert("Добро пожаловать в Мирополис!");
+    }
+    else{
         document.getElementById("error").innerText =
         "Неверный логин или пароль";
     }
-
 }
-
 </script>
 
 </body>
