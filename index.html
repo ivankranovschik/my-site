@@ -1,1 +1,164 @@
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мирополис | Вход</title>
 
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    background:
+    linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),
+    url('https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1920&q=80');
+    background-size:cover;
+    background-position:center;
+}
+
+.login-box{
+    width:420px;
+    backdrop-filter:blur(14px);
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.2);
+    border-radius:24px;
+    padding:40px;
+    box-shadow:0 20px 40px rgba(0,0,0,.35);
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.logo h1{
+    color:white;
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.logo p{
+    color:#d1d5db;
+}
+
+.input-group{
+    margin-bottom:18px;
+}
+
+.input-group label{
+    display:block;
+    color:white;
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+.input-group input{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:rgba(255,255,255,0.15);
+    color:white;
+    font-size:16px;
+}
+
+.input-group input::placeholder{
+    color:#d1d5db;
+}
+
+.input-group input:focus{
+    outline:none;
+    background:rgba(255,255,255,0.22);
+}
+
+.login-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#f59e0b;
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.login-btn:hover{
+    background:#d97706;
+    transform:translateY(-2px);
+}
+
+.footer{
+    text-align:center;
+    margin-top:20px;
+    color:#d1d5db;
+    font-size:14px;
+}
+
+#error{
+    color:#ffb4b4;
+    text-align:center;
+    margin-top:15px;
+}
+</style>
+</head>
+<body>
+
+<div class="login-box">
+
+    <div class="logo">
+        <h1>🏙 Мирополис</h1>
+        <p>Панель управления строителей</p>
+    </div>
+
+    <div class="input-group">
+        <label>Имя пользователя</label>
+        <input type="text" id="login" placeholder="Введите логин">
+    </div>
+
+    <div class="input-group">
+        <label>Пароль</label>
+        <input type="password" id="password" placeholder="Введите пароль">
+    </div>
+
+    <button class="login-btn" onclick="login()">
+        Войти
+    </button>
+
+    <div id="error"></div>
+
+    <div class="footer">
+        Мирополис © 2026
+    </div>
+
+</div>
+
+<script>
+function login(){
+    const user = document.getElementById("login").value;
+    const pass = document.getElementById("password").value;
+
+    if(user === "admin" && pass === "12345"){
+        alert("Успешный вход!");
+    } else {
+        document.getElementById("error").innerText =
+        "Неверный логин или пароль";
+    }
+}
+</script>
+
+</body>
+</html>
+```
