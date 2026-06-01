@@ -2,6 +2,8 @@ let power = true;
 let currentFloor = 1;
 let playerInside = false;
 
+updateDisplays();
+
 function togglePower(){
 
     power = !power;
@@ -26,6 +28,8 @@ function callLift(){
 
         currentFloor = 1;
 
+        updateDisplays();
+
         document.getElementById("status").innerText =
             "Лифт прибыл";
 
@@ -35,6 +39,11 @@ function callLift(){
 }
 
 function goToFloor(floor){
+
+    if(!power){
+        alert("Нет питания");
+        return;
+    }
 
     if(!playerInside){
         alert("Сначала войдите в лифт");
@@ -49,6 +58,8 @@ function goToFloor(floor){
     setTimeout(() => {
 
         currentFloor = floor;
+
+        updateDisplays();
 
         document.getElementById("status").innerText =
             "Прибыли на этаж " + floor;
@@ -74,6 +85,17 @@ function enterLift(){
         "Вы внутри лифта";
 }
 
+function exitLift(){
+
+    playerInside = false;
+
+    document.getElementById("insidePanel").style.display =
+        "none";
+
+    document.getElementById("status").innerText =
+        "Вы вышли из лифта";
+}
+
 function openDoors(){
 
     document.getElementById("doorLeft").style.left =
@@ -90,4 +112,13 @@ function closeDoors(){
 
     document.getElementById("doorRight").style.right =
         "0px";
+}
+
+function updateDisplays(){
+
+    document.getElementById("floorDisplay").innerText =
+        currentFloor;
+
+    document.getElementById("cabinDisplay").innerText =
+        currentFloor;
 }
