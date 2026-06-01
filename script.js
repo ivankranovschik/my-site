@@ -2,6 +2,7 @@ let power = true;
 let currentFloor = 1;
 let playerInside = false;
 let liftReady = true;
+let moving = false;
 
 updateDisplays();
 
@@ -18,6 +19,7 @@ function togglePower(){
     if(!power){
 
         liftReady = false;
+        moving = false;
 
         document.getElementById("power").innerText =
             "Сеть: ВЫКЛ";
@@ -53,6 +55,10 @@ function callLift(){
         return;
     }
 
+    if(moving){
+        return;
+    }
+
     if(!liftReady){
 
         document.getElementById("status").innerText =
@@ -75,25 +81,12 @@ function callLift(){
     }
 
     document.getElementById("status").innerText =
-        "Лифт едет...";
+        "Лифт прибыл";
 
-    closeDoors();
-
-    setTimeout(() => {
-
-        currentFloor = 1;
-
-        updateDisplays();
-
-        document.getElementById("status").innerText =
-            "Лифт прибыл";
-
-        openDoors();
-
-    },3000);
+    openDoors();
 }
 
-function goToFloor(floor){
+function goToFloor(targetFloor){
 
     if(!power){
 
@@ -113,30 +106,68 @@ function goToFloor(floor){
         return;
     }
 
+    if(moving){
+        return;
+    }
+
+    if(targetFloor === currentFloor){
+        return;
+    }
+
+    moving = true;
+
     closeDoors();
 
+    let direction =
+        targetFloor > currentFloor ? 1 : -1;
+
     document.getElementById("status").innerText =
-        "Едем на этаж " + floor;
+        "Лифт движется";
 
-    setTimeout(() => {
+    let moveInterval = setInterval(() => {
 
-        currentFloor = floor;
+        if(!power){
+
+            clearInterval(moveInterval);
+
+            moving = false;
+
+            document.getElementById("status").innerText =
+                "Аварийная остановка";
+
+            return;
+        }
+
+        currentFloor += direction;
 
         updateDisplays();
 
-        document.getElementById("status").innerText =
-            "Прибыли на этаж " + floor;
+        if(currentFloor === targetFloor){
 
-        openDoors();
+            clearInterval(moveInterval);
 
-    },3000);
+            moving = false;
+
+            document.getElementById("status").innerText =
+                "Прибыли на этаж " + targetFloor;
+
+            openDoors();
+        }
+
+    },4000);
 }
 
 function enterLift(){
 
     if(!liftReady){
 
-        alert("Лифт ещё не запущен");
+        alert("Лифт не запущен");
+        return;
+    }
+
+    if(moving){
+
+        alert("Лифт движется");
         return;
     }
 
@@ -150,6 +181,12 @@ function enterLift(){
 }
 
 function exitLift(){
+
+    if(moving){
+
+        alert("Нельзя выйти во время движения");
+        return;
+    }
 
     playerInside = false;
 
