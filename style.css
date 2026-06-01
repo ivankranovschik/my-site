@@ -1,12 +1,44 @@
-body {
-    font-family: Arial;
-    text-align: center;
+body{
+    font-family:Arial;
+    text-align:center;
 }
 
-#lift {
-    width: 100px;
-    height: 100px;
-    background: gray;
-    margin: 20px auto;
-    transition: 2s;
+#liftShaft{
+    width:220px;
+    height:250px;
+    margin:auto;
+    border:4px solid black;
+    position:relative;
+}
+
+#lift{
+    width:200px;
+    height:220px;
+    background:#bdbdbd;
+    margin:auto;
+    position:relative;
+    overflow:hidden;
+}
+
+#doorLeft{
+    width:100px;
+    height:220px;
+    background:#777;
+    position:absolute;
+    left:0;
+    transition:1s;
+}
+
+#doorRight{
+    width:100px;
+    height:220px;
+    background:#666;
+    position:absolute;
+    right:0;
+    transition:1s;
+}
+
+#insidePanel{
+    display:none;
+    padding-top:20px;
 }
