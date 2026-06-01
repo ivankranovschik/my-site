@@ -1,146 +1,31 @@
-```html
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Мирополис | Вход</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
-}
-
-body{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    background:
-    linear-gradient(
-        rgba(15,23,42,0.55),
-        rgba(15,23,42,0.55)
-    ),
-    url("https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1920&q=80");
-
-    background-size:cover;
-    background-position:center;
-}
-
-.login-box{
-    width:450px;
-
-    padding:40px;
-
-    background:rgba(255,255,255,0.12);
-
-    backdrop-filter:blur(18px);
-
-    border-radius:24px;
-
-    border:1px solid rgba(255,255,255,0.2);
-
-    box-shadow:0 20px 50px rgba(0,0,0,0.4);
-}
-
-.logo{
-    text-align:center;
-    margin-bottom:30px;
-}
-
-.logo h1{
-    color:white;
-    font-size:48px;
-}
-
-.logo p{
-    color:#d1d5db;
-    margin-top:8px;
-}
-
-label{
-    display:block;
-    color:white;
-    margin-top:15px;
-    margin-bottom:8px;
-    font-weight:bold;
-}
-
-input{
-    width:100%;
-    padding:15px;
-
-    border:none;
-    border-radius:12px;
-
-    background:rgba(255,255,255,0.15);
-
-    color:white;
-    font-size:16px;
-}
-
-input::placeholder{
-    color:#d1d5db;
-}
-
-button{
-    width:100%;
-    margin-top:25px;
-
-    padding:15px;
-
-    border:none;
-    border-radius:12px;
-
-    background:#2563eb;
-
-    color:white;
-
-    font-size:18px;
-    font-weight:bold;
-
-    cursor:pointer;
-}
-
-button:hover{
-    background:#1d4ed8;
-}
-
-.footer{
-    text-align:center;
-    color:#cbd5e1;
-    margin-top:20px;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>Лифтёр</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div class="login-box">
+<h1>Симулятор лифтёра</h1>
 
-    <div class="logo">
-        <h1>🏙 Мирополис</h1>
-        <p>Панель управления строителей</p>
-    </div>
+<div id="panel">
+    <button onclick="togglePower()">Питание</button>
+    <p id="power">Сеть: ВКЛ</p>
 
-    <label>Имя пользователя</label>
-    <input type="text" placeholder="Введите имя пользователя">
-
-    <label>Пароль</label>
-    <input type="password" placeholder="Введите пароль">
-
-    <button>Войти</button>
-
-    <div class="footer">
-        Мирополис © 2026
-    </div>
-
+    <button onclick="goToFloor(1)">1 этаж</button>
+    <button onclick="goToFloor(5)">5 этаж</button>
+    <button onclick="goToFloor(10)">10 этаж</button>
+    <button onclick="goToFloor(16)">16 этаж</button>
 </div>
+
+<div id="lift">
+    Лифт
+</div>
+
+<p id="floorText">Этаж: 1</p>
+
+<script src="script.js"></script>
 
 </body>
 </html>
-```
