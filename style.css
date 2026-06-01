@@ -42,3 +42,38 @@ body{
     display:none;
     padding-top:20px;
 }
+
+#callButton{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    border:3px solid black;
+    background:#ddd;
+    cursor:pointer;
+}
+
+#callButton:hover{
+    background:#bbb;
+}
+
+#floorDisplay{
+    width:80px;
+    margin:auto;
+    margin-bottom:15px;
+    background:black;
+    color:red;
+    font-size:32px;
+    font-family:monospace;
+    border-radius:4px;
+}
+
+#cabinDisplay{
+    width:80px;
+    margin:auto;
+    margin-bottom:15px;
+    background:black;
+    color:red;
+    font-size:32px;
+    font-family:monospace;
+    border-radius:4px;
+}
