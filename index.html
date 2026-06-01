@@ -1,29 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Лифтёр</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Лифтёр</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <h1>Симулятор лифтёра</h1>
 
-<div id="panel">
-    <button onclick="togglePower()">Питание</button>
-    <p id="power">Сеть: ВКЛ</p>
+<p id="power">Сеть: ВКЛ</p>
+<button onclick="togglePower()">Вкл/Выкл питание</button>
 
-    <button onclick="goToFloor(1)">1 этаж</button>
-    <button onclick="goToFloor(5)">5 этаж</button>
-    <button onclick="goToFloor(10)">10 этаж</button>
-    <button onclick="goToFloor(16)">16 этаж</button>
+<hr>
+
+<h2>Этаж 1</h2>
+
+<button onclick="callLift()">Вызвать лифт</button>
+
+<div id="liftShaft">
+
+    <div id="lift">
+
+        <div id="doorLeft"></div>
+        <div id="doorRight"></div>
+
+        <div id="insidePanel">
+
+            <h3>Панель лифта</h3>
+
+            <button onclick="goToFloor(1)">1</button>
+            <button onclick="goToFloor(2)">2</button>
+            <button onclick="goToFloor(3)">3</button>
+            <button onclick="goToFloor(4)">4</button>
+            <button onclick="goToFloor(5)">5</button>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div id="lift">
-    Лифт
-</div>
+<p id="status">Лифт на 1 этаже</p>
 
-<p id="floorText">Этаж: 1</p>
+<button onclick="enterLift()">Войти в лифт</button>
 
 <script src="script.js"></script>
 
