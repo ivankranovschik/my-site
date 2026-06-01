@@ -1,6 +1,7 @@
 let power = true;
 let currentFloor = 1;
 let playerInside = false;
+let liftReady = true;
 
 updateDisplays();
 
@@ -8,14 +9,68 @@ function togglePower(){
 
     power = !power;
 
-    document.getElementById("power").innerText =
-        "Сеть: " + (power ? "ВКЛ" : "ВЫКЛ");
+    const floorDisplay =
+        document.getElementById("floorDisplay");
+
+    const cabinDisplay =
+        document.getElementById("cabinDisplay");
+
+    if(!power){
+
+        liftReady = false;
+
+        document.getElementById("power").innerText =
+            "Сеть: ВЫКЛ";
+
+        floorDisplay.innerText = "";
+        cabinDisplay.innerText = "";
+
+        document.getElementById("status").innerText =
+            "Питание отключено";
+
+        closeDoors();
+
+    }else{
+
+        document.getElementById("power").innerText =
+            "Сеть: ВКЛ";
+
+        floorDisplay.innerText = "--";
+        cabinDisplay.innerText = "--";
+
+        document.getElementById("status").innerText =
+            "Нажмите кнопку вызова";
+
+        liftReady = false;
+    }
 }
 
 function callLift(){
 
     if(!power){
-        alert("Лифт отключён");
+
+        alert("Нет питания");
+        return;
+    }
+
+    if(!liftReady){
+
+        document.getElementById("status").innerText =
+            "Запуск лифта...";
+
+        setTimeout(() => {
+
+            liftReady = true;
+
+            updateDisplays();
+
+            document.getElementById("status").innerText =
+                "Лифт готов к работе";
+
+            openDoors();
+
+        },1500);
+
         return;
     }
 
@@ -41,11 +96,19 @@ function callLift(){
 function goToFloor(floor){
 
     if(!power){
+
         alert("Нет питания");
         return;
     }
 
+    if(!liftReady){
+
+        alert("Сначала вызовите лифт");
+        return;
+    }
+
     if(!playerInside){
+
         alert("Сначала войдите в лифт");
         return;
     }
@@ -71,8 +134,9 @@ function goToFloor(floor){
 
 function enterLift(){
 
-    if(currentFloor !== 1){
-        alert("Лифт не на этаже");
+    if(!liftReady){
+
+        alert("Лифт ещё не запущен");
         return;
     }
 
