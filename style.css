@@ -1,0 +1,12 @@
+body {
+    font-family: Arial;
+    text-align: center;
+}
+
+#lift {
+    width: 100px;
+    height: 100px;
+    background: gray;
+    margin: 20px auto;
+    transition: 2s;
+}
