@@ -16,7 +16,11 @@
 
 <h2>Этаж 1</h2>
 
-<button onclick="callLift()">Вызвать лифт</button>
+<div id="floorDisplay">1</div>
+
+<button id="callButton" onclick="callLift()"></button>
+
+<br><br>
 
 <div id="liftShaft">
 
@@ -26,6 +30,8 @@
         <div id="doorRight"></div>
 
         <div id="insidePanel">
+
+            <div id="cabinDisplay">1</div>
 
             <h3>Панель лифта</h3>
 
@@ -44,6 +50,7 @@
 <p id="status">Лифт на 1 этаже</p>
 
 <button onclick="enterLift()">Войти в лифт</button>
+<button onclick="exitLift()">Выйти из лифта</button>
 
 <script src="script.js"></script>
 
