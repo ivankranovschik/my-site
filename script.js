@@ -28,9 +28,9 @@ function togglePower() {
         document.getElementById("power").innerText =
             "Сеть: ВЫКЛ";
 
-        // Табло гаснет
-        floorDisplay.innerText = "";
-        cabinDisplay.innerText = "";
+        // Чёрное табло без цифр
+        floorDisplay.innerText = " ";
+        cabinDisplay.innerText = " ";
 
         document.getElementById("status").innerText =
             "Питание отключено";
@@ -42,7 +42,6 @@ function togglePower() {
         document.getElementById("power").innerText =
             "Сеть: ВКЛ";
 
-        // После включения показывает --
         floorDisplay.innerText = "--";
         cabinDisplay.innerText = "--";
 
@@ -64,7 +63,6 @@ function callLift() {
     if (moving)
         return;
 
-    // Первый запуск после включения сети
     if (!liftReady) {
 
         document.getElementById("status").innerText =
@@ -128,12 +126,19 @@ function goToFloor(targetFloor) {
     let direction =
         targetFloor > currentFloor ? 1 : -1;
 
-    // Сразу после закрытия дверей показываем следующий этаж
-    currentFloor += direction;
+    // Через секунду после начала движения
+    setTimeout(() => {
 
-    updateDisplays(
-        (direction > 0 ? "↑" : "↓") + currentFloor
-    );
+        if (!moving || !power)
+            return;
+
+        currentFloor += direction;
+
+        updateDisplays(
+            (direction > 0 ? "↑" : "↓") + currentFloor
+        );
+
+    }, 1000);
 
     moveInterval = setInterval(() => {
 
