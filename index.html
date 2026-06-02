@@ -10,17 +10,35 @@
 
 <h1>Лифтёрская</h1>
 
-<p id="power">Сеть: ВКЛ</p>
+<div id="powerPanel">
 
-<button onclick="togglePower()">
-Вкл/Выкл питание
+<h2>Питание</h2>
+
+<button onclick="togglePassengerPower()">
+Пассажирский лифт
 </button>
+
+<button onclick="toggleCargoPower()">
+Грузовой лифт
+</button>
+
+<p id="passengerPower">
+Пассажирский: ВКЛ
+</p>
+
+<p id="cargoPower">
+Грузовой: ВКЛ
+</p>
+
+</div>
 
 <hr>
 
+<div id="dispatcherPanel">
+
 <h2>Панель лифтёра</h2>
 
-<div id="dispatcherPanel">
+<div class="controlBlock">
 
 <h3>Пассажирский лифт</h3>
 
@@ -28,7 +46,9 @@
 <button onclick="manualStopPassenger()">■</button>
 <button onclick="manualDownPassenger()">▼</button>
 
-<br><br>
+</div>
+
+<div class="controlBlock">
 
 <h3>Грузовой лифт</h3>
 
@@ -38,15 +58,15 @@
 
 </div>
 
-<hr>
+</div>
 
-<h2>Этаж 1</h2>
+<hr>
 
 <div id="liftsContainer">
 
 <div class="liftBlock">
 
-<h3>Пассажирский лифт</h3>
+<h2>Пассажирский</h2>
 
 <div id="floorDisplay">1</div>
 
@@ -62,12 +82,11 @@ onclick="callLift()"></button>
 <div id="doorLeft"></div>
 <div id="doorRight"></div>
 
-<div id="insidePanel"
-style="display:none;">
+<div id="insidePanel">
 
 <div id="cabinDisplay">1</div>
 
-<h3>Панель лифта</h3>
+<h3>Кнопки этажей</h3>
 
 <div id="floorButtons">
 
@@ -114,7 +133,7 @@ style="display:none;">
 
 <div class="liftBlock">
 
-<h3>Грузовой лифт</h3>
+<h2>Грузовой</h2>
 
 <div id="cargoDisplay">1</div>
 
@@ -139,7 +158,7 @@ onclick="callCargoLift()"></button>
 </div>
 
 <p id="status">
-Лифт на 1 этаже
+Лифтёрская готова
 </p>
 
 <button onclick="enterLift()">
