@@ -3,98 +3,151 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Симулятор лифтёра</title>
+<title>Лифтёрская</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Симулятор лифтёра</h1>
+<h1>Лифтёрская</h1>
 
 <p id="power">Сеть: ВКЛ</p>
 
 <button onclick="togglePower()">
-    Вкл/Выкл питание
+Вкл/Выкл питание
 </button>
+
+<hr>
+
+<h2>Панель лифтёра</h2>
+
+<div id="dispatcherPanel">
+
+<h3>Пассажирский лифт</h3>
+
+<button onclick="manualUpPassenger()">▲</button>
+<button onclick="manualStopPassenger()">■</button>
+<button onclick="manualDownPassenger()">▼</button>
+
+<br><br>
+
+<h3>Грузовой лифт</h3>
+
+<button onclick="manualUpCargo()">▲</button>
+<button onclick="manualStopCargo()">■</button>
+<button onclick="manualDownCargo()">▼</button>
+
+</div>
 
 <hr>
 
 <h2>Этаж 1</h2>
 
+<div id="liftsContainer">
+
+<div class="liftBlock">
+
+<h3>Пассажирский лифт</h3>
+
 <div id="floorDisplay">1</div>
 
-<button id="callButton" onclick="callLift()"></button>
+<button id="callButton"
+onclick="callLift()"></button>
 
 <br><br>
 
 <div id="liftShaft">
 
-    <div id="lift">
+<div id="lift">
 
-        <div id="doorLeft"></div>
-        <div id="doorRight"></div>
+<div id="doorLeft"></div>
+<div id="doorRight"></div>
 
-        <div id="insidePanel" style="display:none;">
+<div id="insidePanel"
+style="display:none;">
 
-            <div id="cabinDisplay">1</div>
+<div id="cabinDisplay">1</div>
 
-            <h3>Панель лифта</h3>
+<h3>Панель лифта</h3>
 
-            <div id="floorButtons">
+<div id="floorButtons">
 
-                <button onclick="goToFloor(1)">1</button>
-                <button onclick="goToFloor(2)">2</button>
-                <button onclick="goToFloor(3)">3</button>
-                <button onclick="goToFloor(4)">4</button>
+<button onclick="goToFloor(1)">1</button>
+<button onclick="goToFloor(2)">2</button>
+<button onclick="goToFloor(3)">3</button>
+<button onclick="goToFloor(4)">4</button>
 
-                <br>
+<br>
 
-                <button onclick="goToFloor(5)">5</button>
-                <button onclick="goToFloor(6)">6</button>
-                <button onclick="goToFloor(7)">7</button>
-                <button onclick="goToFloor(8)">8</button>
+<button onclick="goToFloor(5)">5</button>
+<button onclick="goToFloor(6)">6</button>
+<button onclick="goToFloor(7)">7</button>
+<button onclick="goToFloor(8)">8</button>
 
-                <br>
+<br>
 
-                <button onclick="goToFloor(9)">9</button>
-                <button onclick="goToFloor(10)">10</button>
-                <button onclick="goToFloor(11)">11</button>
-                <button onclick="goToFloor(12)">12</button>
+<button onclick="goToFloor(9)">9</button>
+<button onclick="goToFloor(10)">10</button>
+<button onclick="goToFloor(11)">11</button>
+<button onclick="goToFloor(12)">12</button>
 
-                <br>
+<br>
 
-                <button onclick="goToFloor(13)">13</button>
-                <button onclick="goToFloor(14)">14</button>
-                <button onclick="goToFloor(15)">15</button>
-                <button onclick="goToFloor(16)">16</button>
+<button onclick="goToFloor(13)">13</button>
+<button onclick="goToFloor(14)">14</button>
+<button onclick="goToFloor(15)">15</button>
+<button onclick="goToFloor(16)">16</button>
 
-            </div>
+</div>
 
-            <br>
+<br>
 
-            <button onclick="openDoors()">
-                ◀ ▶
-            </button>
+<button onclick="openDoors()">◀ ▶</button>
+<button onclick="closeDoors()">▶ ◀</button>
 
-            <button onclick="closeDoors()">
-                ▶ ◀
-            </button>
+</div>
 
-        </div>
+</div>
 
-    </div>
+</div>
+
+</div>
+
+<div class="liftBlock">
+
+<h3>Грузовой лифт</h3>
+
+<div id="cargoDisplay">1</div>
+
+<button id="cargoCallButton"
+onclick="callCargoLift()"></button>
+
+<br><br>
+
+<div id="cargoShaft">
+
+<div id="cargoLift">
+
+<div id="cargoDoorLeft"></div>
+<div id="cargoDoorRight"></div>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
 <p id="status">
-    Лифт на 1 этаже
+Лифт на 1 этаже
 </p>
 
 <button onclick="enterLift()">
-    Войти в лифт
+Войти в лифт
 </button>
 
 <button onclick="exitLift()">
-    Выйти из лифта
+Выйти из лифта
 </button>
 
 <script src="script.js"></script>
