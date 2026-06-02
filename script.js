@@ -3,26 +3,9 @@ let currentFloor = 1;
 let playerInside = false;
 let liftReady = true;
 let moving = false;
+let moveInterval = null;
 
-window.onload = function () {
-
-    const panel =
-        document.getElementById("floorButtons");
-
-    for (let i = 1; i <= 16; i++) {
-
-        const btn =
-            document.createElement("button");
-
-        btn.innerText = i;
-
-        btn.onclick = () => goToFloor(i);
-
-        panel.appendChild(btn);
-    }
-
-    updateDisplays();
-};
+updateDisplays();
 
 function togglePower() {
 
@@ -39,14 +22,15 @@ function togglePower() {
         liftReady = false;
         moving = false;
 
+        if (moveInterval)
+            clearInterval(moveInterval);
+
         document.getElementById("power").innerText =
             "Сеть: ВЫКЛ";
 
+        // Табло гаснет
         floorDisplay.innerText = "";
         cabinDisplay.innerText = "";
-
-        floorDisplay.style.background = "#000";
-        cabinDisplay.style.background = "#000";
 
         document.getElementById("status").innerText =
             "Питание отключено";
@@ -58,9 +42,7 @@ function togglePower() {
         document.getElementById("power").innerText =
             "Сеть: ВКЛ";
 
-        floorDisplay.style.background = "#000";
-        cabinDisplay.style.background = "#000";
-
+        // После включения показывает --
         floorDisplay.innerText = "--";
         cabinDisplay.innerText = "--";
 
@@ -82,6 +64,7 @@ function callLift() {
     if (moving)
         return;
 
+    // Первый запуск после включения сети
     if (!liftReady) {
 
         document.getElementById("status").innerText =
@@ -139,20 +122,20 @@ function goToFloor(targetFloor) {
 
     closeDoors();
 
-    let direction =
-        targetFloor > currentFloor ? 1 : -1;
-
-    currentFloor += direction;
-
-    updateDisplays(
-        (direction > 0 ? "↑" : "↓") +
-        currentFloor
-    );
-
     document.getElementById("status").innerText =
         "Лифт движется";
 
-    let moveInterval = setInterval(() => {
+    let direction =
+        targetFloor > currentFloor ? 1 : -1;
+
+    // Сразу после закрытия дверей показываем следующий этаж
+    currentFloor += direction;
+
+    updateDisplays(
+        (direction > 0 ? "↑" : "↓") + currentFloor
+    );
+
+    moveInterval = setInterval(() => {
 
         if (!power) {
 
@@ -185,8 +168,7 @@ function goToFloor(targetFloor) {
         currentFloor += direction;
 
         updateDisplays(
-            (direction > 0 ? "↑" : "↓") +
-            currentFloor
+            (direction > 0 ? "↑" : "↓") + currentFloor
         );
 
     }, 4000);
@@ -251,11 +233,6 @@ function closeDoors() {
 
     document.getElementById("doorRight").style.right =
         "0px";
-}
-
-function ringBell() {
-
-    alert("ДИНЬ-ДОНЬ");
 }
 
 function updateDisplays(text = currentFloor) {
