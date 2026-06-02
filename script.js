@@ -4,9 +4,27 @@ let playerInside = false;
 let liftReady = true;
 let moving = false;
 
-updateDisplays();
+window.onload = function () {
 
-function togglePower(){
+    const panel =
+        document.getElementById("floorButtons");
+
+    for (let i = 1; i <= 16; i++) {
+
+        const btn =
+            document.createElement("button");
+
+        btn.innerText = i;
+
+        btn.onclick = () => goToFloor(i);
+
+        panel.appendChild(btn);
+    }
+
+    updateDisplays();
+};
+
+function togglePower() {
 
     power = !power;
 
@@ -16,7 +34,7 @@ function togglePower(){
     const cabinDisplay =
         document.getElementById("cabinDisplay");
 
-    if(!power){
+    if (!power) {
 
         liftReady = false;
         moving = false;
@@ -27,15 +45,21 @@ function togglePower(){
         floorDisplay.innerText = "";
         cabinDisplay.innerText = "";
 
+        floorDisplay.style.background = "#000";
+        cabinDisplay.style.background = "#000";
+
         document.getElementById("status").innerText =
             "Питание отключено";
 
         closeDoors();
 
-    }else{
+    } else {
 
         document.getElementById("power").innerText =
             "Сеть: ВКЛ";
+
+        floorDisplay.style.background = "#000";
+        cabinDisplay.style.background = "#000";
 
         floorDisplay.innerText = "--";
         cabinDisplay.innerText = "--";
@@ -47,19 +71,18 @@ function togglePower(){
     }
 }
 
-function callLift(){
+function callLift() {
 
-    if(!power){
+    if (!power) {
 
         alert("Нет питания");
         return;
     }
 
-    if(moving){
+    if (moving)
         return;
-    }
 
-    if(!liftReady){
+    if (!liftReady) {
 
         document.getElementById("status").innerText =
             "Запуск лифта...";
@@ -75,7 +98,7 @@ function callLift(){
 
             openDoors();
 
-        },1500);
+        }, 1500);
 
         return;
     }
@@ -86,33 +109,31 @@ function callLift(){
     openDoors();
 }
 
-function goToFloor(targetFloor){
+function goToFloor(targetFloor) {
 
-    if(!power){
+    if (!power) {
 
         alert("Нет питания");
         return;
     }
 
-    if(!liftReady){
+    if (!liftReady) {
 
         alert("Сначала вызовите лифт");
         return;
     }
 
-    if(!playerInside){
+    if (!playerInside) {
 
         alert("Сначала войдите в лифт");
         return;
     }
 
-    if(moving){
+    if (moving)
         return;
-    }
 
-    if(targetFloor === currentFloor){
+    if (targetFloor === currentFloor)
         return;
-    }
 
     moving = true;
 
@@ -121,12 +142,19 @@ function goToFloor(targetFloor){
     let direction =
         targetFloor > currentFloor ? 1 : -1;
 
+    currentFloor += direction;
+
+    updateDisplays(
+        (direction > 0 ? "↑" : "↓") +
+        currentFloor
+    );
+
     document.getElementById("status").innerText =
         "Лифт движется";
 
     let moveInterval = setInterval(() => {
 
-        if(!power){
+        if (!power) {
 
             clearInterval(moveInterval);
 
@@ -138,34 +166,41 @@ function goToFloor(targetFloor){
             return;
         }
 
-        currentFloor += direction;
-
-        updateDisplays();
-
-        if(currentFloor === targetFloor){
+        if (currentFloor === targetFloor) {
 
             clearInterval(moveInterval);
 
             moving = false;
 
+            updateDisplays(currentFloor);
+
             document.getElementById("status").innerText =
-                "Прибыли на этаж " + targetFloor;
+                "Прибыли на этаж " + currentFloor;
 
             openDoors();
+
+            return;
         }
 
-    },4000);
+        currentFloor += direction;
+
+        updateDisplays(
+            (direction > 0 ? "↑" : "↓") +
+            currentFloor
+        );
+
+    }, 4000);
 }
 
-function enterLift(){
+function enterLift() {
 
-    if(!liftReady){
+    if (!liftReady) {
 
         alert("Лифт не запущен");
         return;
     }
 
-    if(moving){
+    if (moving) {
 
         alert("Лифт движется");
         return;
@@ -180,9 +215,9 @@ function enterLift(){
         "Вы внутри лифта";
 }
 
-function exitLift(){
+function exitLift() {
 
-    if(moving){
+    if (moving) {
 
         alert("Нельзя выйти во время движения");
         return;
@@ -197,7 +232,10 @@ function exitLift(){
         "Вы вышли из лифта";
 }
 
-function openDoors(){
+function openDoors() {
+
+    if (moving)
+        return;
 
     document.getElementById("doorLeft").style.left =
         "-100px";
@@ -206,7 +244,7 @@ function openDoors(){
         "-100px";
 }
 
-function closeDoors(){
+function closeDoors() {
 
     document.getElementById("doorLeft").style.left =
         "0px";
@@ -215,11 +253,16 @@ function closeDoors(){
         "0px";
 }
 
-function updateDisplays(){
+function ringBell() {
+
+    alert("ДИНЬ-ДОНЬ");
+}
+
+function updateDisplays(text = currentFloor) {
 
     document.getElementById("floorDisplay").innerText =
-        currentFloor;
+        text;
 
     document.getElementById("cabinDisplay").innerText =
-        currentFloor;
+        text;
 }
