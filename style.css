@@ -15,7 +15,7 @@ h1{
     border: 3px solid #666;
     border-radius: 8px;
     padding: 10px;
-    width: 350px;
+    width: 400px;
     margin: auto;
     margin-bottom: 20px;
 }
@@ -25,19 +25,40 @@ h1{
     border: 3px solid #666;
     border-radius: 8px;
     padding: 10px;
-    width: 600px;
+    width: 700px;
     margin: auto;
+    margin-bottom: 20px;
+}
+
+#cameraPanel{
+    background: #d0d0d0;
+    border: 3px solid #666;
+    border-radius: 8px;
+    padding: 10px;
+    width: 700px;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.cameraBlock{
+    display: inline-block;
+    width: 250px;
+    margin: 10px;
+    padding: 10px;
+    background: #efefef;
+    border: 2px solid #888;
+    border-radius: 6px;
 }
 
 .controlBlock{
     display: inline-block;
-    margin: 10px 30px;
+    margin: 10px 40px;
 }
 
 .controlBlock button{
-    width: 60px;
+    width: 65px;
     height: 50px;
-    font-size: 24px;
+    font-size: 22px;
 }
 
 #liftsContainer{
@@ -55,23 +76,24 @@ h1{
 #floorDisplay,
 #cargoDisplay,
 #cabinDisplay{
-    width: 100px;
-    height: 45px;
-    line-height: 45px;
+    width: 120px;
+    height: 50px;
+    line-height: 50px;
     margin: auto;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     background: black;
     color: red;
-    font-size: 32px;
+    font-size: 30px;
     font-family: monospace;
     border-radius: 4px;
     border: 2px solid #222;
+    font-weight: bold;
 }
 
 #callButton,
 #cargoCallButton{
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
     border-radius: 50%;
     border: 3px solid black;
     background: #dcdcdc;
@@ -90,6 +112,7 @@ h1{
     border: 4px solid black;
     background: #8b8b8b;
     position: relative;
+    border-radius: 4px;
 }
 
 #lift,
@@ -155,6 +178,13 @@ button{
 
 #status{
     margin-top: 20px;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
+    background: #d0d0d0;
+    border: 2px solid #666;
+    border-radius: 6px;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
 }
