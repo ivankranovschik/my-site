@@ -84,6 +84,42 @@
 
 <hr>
 
+<div id="cameraPanel">
+
+<h2>Камеры</h2>
+
+<div class="cameraBlock">
+
+<h3>Пассажирский лифт</h3>
+
+<p id="cameraPassengerFloor">
+Этаж: 1
+</p>
+
+<p id="cameraPassengerDoors">
+Двери: Закрыты
+</p>
+
+</div>
+
+<div class="cameraBlock">
+
+<h3>Грузовой лифт</h3>
+
+<p id="cameraCargoFloor">
+Этаж: 1
+</p>
+
+<p id="cameraCargoDoors">
+Двери: Закрыты
+</p>
+
+</div>
+
+</div>
+
+<hr>
+
 <div id="liftsContainer">
 
 <div class="liftBlock">
@@ -151,6 +187,14 @@ onclick="callLift()"></button>
 
 </div>
 
+<button onclick="enterLift()">
+Войти
+</button>
+
+<button onclick="exitLift()">
+Выйти
+</button>
+
 </div>
 
 <div class="liftBlock">
@@ -179,9 +223,11 @@ onclick="callCargoLift()"></button>
 
 </div>
 
-<p id="status">
+<hr>
+
+<div id="status">
 Лифтёрская готова
-</p>
+</div>
 
 <script src="script.js"></script>
 
