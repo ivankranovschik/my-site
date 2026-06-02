@@ -80,6 +80,26 @@
 
 </div>
 
+<div class="controlBlock">
+
+<h3>Аварии</h3>
+
+<button onclick="emergencyStop()">
+СТОП
+</button>
+
+<br><br>
+
+<button onclick="toggleOverload()">
+Перегруз
+</button>
+
+<button onclick="toggleObstacle()">
+Препятствие
+</button>
+
+</div>
+
 </div>
 
 <hr>
@@ -100,6 +120,10 @@
 Двери: Закрыты
 </p>
 
+<p id="cameraPassengerState">
+Стоит
+</p>
+
 </div>
 
 <div class="cameraBlock">
@@ -113,6 +137,38 @@
 <p id="cameraCargoDoors">
 Двери: Закрыты
 </p>
+
+<p id="cameraCargoState">
+Стоит
+</p>
+
+</div>
+
+</div>
+
+<hr>
+
+<h2>Положение лифтов</h2>
+
+<div id="positionPanel">
+
+<div class="positionBlock">
+
+<h3>Пассажирский</h3>
+
+<div id="passengerPosition">
+1 этаж
+</div>
+
+</div>
+
+<div class="positionBlock">
+
+<h3>Грузовой</h3>
+
+<div id="cargoPosition">
+1 этаж
+</div>
 
 </div>
 
@@ -178,8 +234,13 @@ onclick="callLift()"></button>
 
 <br>
 
-<button onclick="openDoors()">◀ ▶</button>
-<button onclick="closeDoors()">▶ ◀</button>
+<button onclick="openDoors()">
+◀ ▶
+</button>
+
+<button onclick="closeDoors()">
+▶ ◀
+</button>
 
 </div>
 
@@ -218,6 +279,30 @@ onclick="callCargoLift()"></button>
 </div>
 
 </div>
+
+<br>
+
+<button onclick="openCargoDoors()">
+Открыть двери
+</button>
+
+<button onclick="closeCargoDoors()">
+Закрыть двери
+</button>
+
+</div>
+
+</div>
+
+<hr>
+
+<div id="logPanel">
+
+<h2>Журнал событий</h2>
+
+<div id="eventLog">
+
+Лифтёрская запущена
 
 </div>
 
