@@ -8,65 +8,61 @@ body{
 
 h1{
     margin-top: 0;
+    color: #222;
 }
 
-#powerPanel{
-    background: #d0d0d0;
-    border: 3px solid #666;
-    border-radius: 8px;
-    padding: 10px;
-    width: 400px;
-    margin: auto;
-    margin-bottom: 20px;
-}
-
-#dispatcherPanel{
-    background: #d0d0d0;
-    border: 3px solid #666;
-    border-radius: 8px;
-    padding: 10px;
-    width: 700px;
-    margin: auto;
-    margin-bottom: 20px;
-}
-
+#powerPanel,
+#dispatcherPanel,
 #cameraPanel{
     background: #d0d0d0;
     border: 3px solid #666;
     border-radius: 8px;
-    padding: 10px;
-    width: 700px;
+    padding: 12px;
     margin: auto;
     margin-bottom: 20px;
 }
 
+#powerPanel{
+    width: 450px;
+}
+
+#dispatcherPanel{
+    width: 800px;
+}
+
+#cameraPanel{
+    width: 800px;
+}
+
 .cameraBlock{
     display: inline-block;
-    width: 250px;
+    width: 280px;
     margin: 10px;
     padding: 10px;
-    background: #efefef;
-    border: 2px solid #888;
+    background: #111;
+    color: #00ff00;
+    border: 3px solid #444;
     border-radius: 6px;
+    font-family: monospace;
 }
 
 .controlBlock{
     display: inline-block;
-    margin: 10px 40px;
+    margin: 10px 50px;
 }
 
 .controlBlock button{
-    width: 65px;
-    height: 50px;
-    font-size: 22px;
+    width: 70px;
+    height: 55px;
+    font-size: 24px;
 }
 
 #liftsContainer{
     display: flex;
     justify-content: center;
-    gap: 60px;
+    align-items: flex-start;
+    gap: 80px;
     flex-wrap: wrap;
-    margin-top: 20px;
 }
 
 .liftBlock{
@@ -81,19 +77,25 @@ h1{
     line-height: 50px;
     margin: auto;
     margin-bottom: 12px;
-    background: black;
-    color: red;
+
+    background: #000;
+    color: #ff2a2a;
+
     font-size: 30px;
-    font-family: monospace;
-    border-radius: 4px;
-    border: 2px solid #222;
     font-weight: bold;
+    font-family: monospace;
+
+    border: 3px solid #222;
+    border-radius: 4px;
+
+    box-shadow:
+        0 0 10px rgba(255,0,0,0.5);
 }
 
 #callButton,
 #cargoCallButton{
-    width: 55px;
-    height: 55px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     border: 3px solid black;
     background: #dcdcdc;
@@ -105,30 +107,45 @@ h1{
     background: #bdbdbd;
 }
 
-#liftShaft,
-#cargoShaft{
-    width: 240px;
-    height: 280px;
+#liftShaft{
+    width: 260px;
+    height: 320px;
     border: 4px solid black;
-    background: #8b8b8b;
+    background: #888;
     position: relative;
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
-#lift,
-#cargoLift{
-    width: 220px;
-    height: 250px;
+#lift{
+    width: 240px;
+    height: 290px;
     margin: auto;
     position: relative;
     overflow: hidden;
     background: #c0c0c0;
 }
 
-#doorLeft,
-#cargoDoorLeft{
-    width: 110px;
-    height: 250px;
+#cargoShaft{
+    width: 320px;
+    height: 380px;
+    border: 4px solid black;
+    background: #777;
+    position: relative;
+    border-radius: 5px;
+}
+
+#cargoLift{
+    width: 300px;
+    height: 350px;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    background: #b5b5b5;
+}
+
+#doorLeft{
+    width: 120px;
+    height: 290px;
     position: absolute;
     left: 0;
     top: 0;
@@ -140,10 +157,9 @@ h1{
     transition: 1s;
 }
 
-#doorRight,
-#cargoDoorRight{
-    width: 110px;
-    height: 250px;
+#doorRight{
+    width: 120px;
+    height: 290px;
     position: absolute;
     right: 0;
     top: 0;
@@ -151,6 +167,34 @@ h1{
         to left,
         #666,
         #9a9a9a
+    );
+    transition: 1s;
+}
+
+#cargoDoorLeft{
+    width: 150px;
+    height: 350px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: linear-gradient(
+        to right,
+        #555,
+        #888
+    );
+    transition: 1s;
+}
+
+#cargoDoorRight{
+    width: 150px;
+    height: 350px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: linear-gradient(
+        to left,
+        #555,
+        #888
     );
     transition: 1s;
 }
@@ -178,13 +222,19 @@ button{
 
 #status{
     margin-top: 20px;
+
     font-size: 20px;
     font-weight: bold;
+
     background: #d0d0d0;
+
     border: 2px solid #666;
     border-radius: 6px;
-    width: 500px;
+
+    width: 600px;
+
     margin-left: auto;
     margin-right: auto;
+
     padding: 10px;
 }
