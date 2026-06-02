@@ -18,8 +18,18 @@
 Пассажирский лифт
 </button>
 
+<button onclick="identifyPassenger()">
+Определиться ПЛ
+</button>
+
+<br><br>
+
 <button onclick="toggleCargoPower()">
 Грузовой лифт
+</button>
+
+<button onclick="identifyCargo()">
+Определиться ГЛ
 </button>
 
 <p id="passengerPower">
@@ -40,7 +50,13 @@
 
 <div class="controlBlock">
 
-<h3>Пассажирский лифт</h3>
+<h3>Пассажирский</h3>
+
+<button onclick="togglePassengerInspection()">
+Ревизия
+</button>
+
+<br><br>
 
 <button onclick="manualUpPassenger()">▲</button>
 <button onclick="manualStopPassenger()">■</button>
@@ -50,7 +66,13 @@
 
 <div class="controlBlock">
 
-<h3>Грузовой лифт</h3>
+<h3>Грузовой</h3>
+
+<button onclick="toggleCargoInspection()">
+Ревизия
+</button>
+
+<br><br>
 
 <button onclick="manualUpCargo()">▲</button>
 <button onclick="manualStopCargo()">■</button>
@@ -160,14 +182,6 @@ onclick="callCargoLift()"></button>
 <p id="status">
 Лифтёрская готова
 </p>
-
-<button onclick="enterLift()">
-Войти в лифт
-</button>
-
-<button onclick="exitLift()">
-Выйти из лифта
-</button>
 
 <script src="script.js"></script>
 
