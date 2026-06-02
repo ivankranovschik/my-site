@@ -7,19 +7,67 @@ let cargoReady = true;
 let passengerInspection = false;
 let cargoInspection = false;
 
+let playerInside = false;
+
 let currentFloor = 1;
 let cargoFloor = 1;
 
 let passengerInterval = null;
 let cargoInterval = null;
 
-updateDisplays();
+let passengerDirection = "";
+let cargoDirection = "";
 
-function updateDisplays(text = currentFloor){
+updateAll();
 
-    document.getElementById("floorDisplay").innerText = text;
-    document.getElementById("cabinDisplay").innerText = text;
-    document.getElementById("cargoDisplay").innerText = cargoFloor;
+function updateAll(){
+
+    updatePassengerDisplay();
+    updateCargoDisplay();
+    updateCameras();
+}
+
+function updatePassengerDisplay(){
+
+    const text =
+        passengerDirection + currentFloor;
+
+    document.getElementById(
+        "floorDisplay"
+    ).innerText = text;
+
+    document.getElementById(
+        "cabinDisplay"
+    ).innerText = text;
+}
+
+function updateCargoDisplay(){
+
+    document.getElementById(
+        "cargoDisplay"
+    ).innerText =
+        cargoDirection + cargoFloor;
+}
+
+function updateCameras(){
+
+    const pFloor =
+        document.getElementById(
+            "cameraPassengerFloor"
+        );
+
+    const cFloor =
+        document.getElementById(
+            "cameraCargoFloor"
+        );
+
+    if(pFloor)
+        pFloor.innerText =
+            "Этаж: " + currentFloor;
+
+    if(cFloor)
+        cFloor.innerText =
+            "Этаж: " + cargoFloor;
 }
 
 function togglePassengerPower(){
@@ -28,31 +76,39 @@ function togglePassengerPower(){
 
     if(!passengerPower){
 
-        manualStopPassenger();
-
         passengerReady = false;
 
-        document.getElementById("passengerPower").innerText =
+        manualStopPassenger();
+
+        document.getElementById(
+            "passengerPower"
+        ).innerText =
             "Пассажирский: ВЫКЛ";
 
-        document.getElementById("floorDisplay").innerText =
-            " ";
+        document.getElementById(
+            "floorDisplay"
+        ).innerText = " ";
 
-        document.getElementById("cabinDisplay").innerText =
-            " ";
+        document.getElementById(
+            "cabinDisplay"
+        ).innerText = " ";
 
     }else{
 
         passengerReady = false;
 
-        document.getElementById("passengerPower").innerText =
+        document.getElementById(
+            "passengerPower"
+        ).innerText =
             "Пассажирский: ВКЛ";
 
-        document.getElementById("floorDisplay").innerText =
-            "--";
+        document.getElementById(
+            "floorDisplay"
+        ).innerText = "--";
 
-        document.getElementById("cabinDisplay").innerText =
-            "--";
+        document.getElementById(
+            "cabinDisplay"
+        ).innerText = "--";
     }
 }
 
@@ -62,56 +118,76 @@ function toggleCargoPower(){
 
     if(!cargoPower){
 
-        manualStopCargo();
-
         cargoReady = false;
 
-        document.getElementById("cargoPower").innerText =
+        manualStopCargo();
+
+        document.getElementById(
+            "cargoPower"
+        ).innerText =
             "Грузовой: ВЫКЛ";
 
-        document.getElementById("cargoDisplay").innerText =
-            " ";
+        document.getElementById(
+            "cargoDisplay"
+        ).innerText = " ";
 
     }else{
 
         cargoReady = false;
 
-        document.getElementById("cargoPower").innerText =
+        document.getElementById(
+            "cargoPower"
+        ).innerText =
             "Грузовой: ВКЛ";
 
-        document.getElementById("cargoDisplay").innerText =
-            "--";
+        document.getElementById(
+            "cargoDisplay"
+        ).innerText = "--";
     }
 }
 
 function identifyPassenger(){
 
-    if(!passengerPower) return;
+    if(!passengerPower)
+        return;
 
-    document.getElementById("floorDisplay").innerText =
-        "↓--";
+    document.getElementById(
+        "status"
+    ).innerText =
+        "Определение пассажирского";
 
-    document.getElementById("cabinDisplay").innerText =
-        "↓--";
+    document.getElementById(
+        "floorDisplay"
+    ).innerText = "↓--";
 
-    document.getElementById("status").innerText =
-        "Определение пассажирского лифта";
+    document.getElementById(
+        "cabinDisplay"
+    ).innerText = "↓--";
 
     setTimeout(() => {
 
         currentFloor = 1;
 
-        document.getElementById("floorDisplay").innerText =
-            "↓1";
+        document.getElementById(
+            "floorDisplay"
+        ).innerText = "↓1";
 
-        document.getElementById("cabinDisplay").innerText =
-            "↓1";
+        document.getElementById(
+            "cabinDisplay"
+        ).innerText = "↓1";
 
         setTimeout(() => {
 
             passengerReady = true;
 
-            updateDisplays(1);
+            passengerDirection = "";
+
+            updatePassengerDisplay();
+
+            document.getElementById(
+                "status"
+            ).innerText =
+                "Пассажирский готов";
 
         },2000);
 
@@ -120,27 +196,38 @@ function identifyPassenger(){
 
 function identifyCargo(){
 
-    if(!cargoPower) return;
+    if(!cargoPower)
+        return;
 
-    document.getElementById("cargoDisplay").innerText =
-        "↓--";
+    document.getElementById(
+        "status"
+    ).innerText =
+        "Определение грузового";
 
-    document.getElementById("status").innerText =
-        "Определение грузового лифта";
+    document.getElementById(
+        "cargoDisplay"
+    ).innerText = "↓--";
 
     setTimeout(() => {
 
         cargoFloor = 1;
 
-        document.getElementById("cargoDisplay").innerText =
-            "↓1";
+        document.getElementById(
+            "cargoDisplay"
+        ).innerText = "↓1";
 
         setTimeout(() => {
 
             cargoReady = true;
 
-            document.getElementById("cargoDisplay").innerText =
-                "1";
+            cargoDirection = "";
+
+            updateCargoDisplay();
+
+            document.getElementById(
+                "status"
+            ).innerText =
+                "Грузовой готов";
 
         },2000);
 
@@ -149,68 +236,120 @@ function identifyCargo(){
 
 function togglePassengerInspection(){
 
-    passengerInspection = !passengerInspection;
+    passengerInspection =
+        !passengerInspection;
 
-    document.getElementById("status").innerText =
+    document.getElementById(
+        "status"
+    ).innerText =
         passengerInspection
-        ? "Ревизия пассажирского ВКЛ"
-        : "Ревизия пассажирского ВЫКЛ";
+        ? "Ревизия ПЛ ВКЛ"
+        : "Ревизия ПЛ ВЫКЛ";
 }
 
 function toggleCargoInspection(){
 
-    cargoInspection = !cargoInspection;
+    cargoInspection =
+        !cargoInspection;
 
-    document.getElementById("status").innerText =
+    document.getElementById(
+        "status"
+    ).innerText =
         cargoInspection
-        ? "Ревизия грузового ВКЛ"
-        : "Ревизия грузового ВЫКЛ";
+        ? "Ревизия ГЛ ВКЛ"
+        : "Ревизия ГЛ ВЫКЛ";
+}
+
+function callLift(){
+
+    if(!passengerReady)
+        return;
+
+    openDoors();
+
+    document.getElementById(
+        "status"
+    ).innerText =
+        "Пассажирский вызван";
+}
+
+function callCargoLift(){
+
+    if(!cargoReady)
+        return;
+
+    document.getElementById(
+        "status"
+    ).innerText =
+        "Грузовой вызван";
 }
 
 function goToFloor(targetFloor){
 
-    if(!passengerPower) return;
-    if(!passengerReady) return;
+    if(!passengerReady)
+        return;
+
+    clearInterval(passengerInterval);
 
     closeDoors();
 
-    let direction =
-        targetFloor > currentFloor ? 1 : -1;
+    const direction =
+        targetFloor > currentFloor
+        ? 1
+        : -1;
 
-    passengerInterval = setInterval(() => {
+    passengerDirection =
+        direction > 0 ? "↑" : "↓";
+
+    passengerInterval =
+        setInterval(() => {
 
         if(currentFloor === targetFloor){
 
-            clearInterval(passengerInterval);
+            clearInterval(
+                passengerInterval
+            );
+
+            passengerDirection = "";
+
+            updatePassengerDisplay();
 
             openDoors();
+
+            document.getElementById(
+                "status"
+            ).innerText =
+                "Прибыли";
 
             return;
         }
 
         currentFloor += direction;
 
-        updateDisplays(
-            (direction > 0 ? "↑" : "↓") +
-            currentFloor
-        );
+        updatePassengerDisplay();
+        updateCameras();
 
     },4000);
 }
 
 function manualUpPassenger(){
 
-    if(!passengerInspection) return;
+    if(!passengerInspection)
+        return;
 
     clearInterval(passengerInterval);
 
-    passengerInterval = setInterval(() => {
+    passengerInterval =
+        setInterval(() => {
 
         if(currentFloor < 16){
 
             currentFloor++;
 
-            updateDisplays(currentFloor);
+            passengerDirection = "";
+
+            updatePassengerDisplay();
+            updateCameras();
         }
 
     },6000);
@@ -218,17 +357,22 @@ function manualUpPassenger(){
 
 function manualDownPassenger(){
 
-    if(!passengerInspection) return;
+    if(!passengerInspection)
+        return;
 
     clearInterval(passengerInterval);
 
-    passengerInterval = setInterval(() => {
+    passengerInterval =
+        setInterval(() => {
 
         if(currentFloor > 1){
 
             currentFloor--;
 
-            updateDisplays(currentFloor);
+            passengerDirection = "";
+
+            updatePassengerDisplay();
+            updateCameras();
         }
 
     },6000);
@@ -241,18 +385,22 @@ function manualStopPassenger(){
 
 function manualUpCargo(){
 
-    if(!cargoInspection) return;
+    if(!cargoInspection)
+        return;
 
     clearInterval(cargoInterval);
 
-    cargoInterval = setInterval(() => {
+    cargoInterval =
+        setInterval(() => {
 
         if(cargoFloor < 16){
 
             cargoFloor++;
 
-            document.getElementById("cargoDisplay").innerText =
-                cargoFloor;
+            cargoDirection = "";
+
+            updateCargoDisplay();
+            updateCameras();
         }
 
     },6000);
@@ -260,18 +408,22 @@ function manualUpCargo(){
 
 function manualDownCargo(){
 
-    if(!cargoInspection) return;
+    if(!cargoInspection)
+        return;
 
     clearInterval(cargoInterval);
 
-    cargoInterval = setInterval(() => {
+    cargoInterval =
+        setInterval(() => {
 
         if(cargoFloor > 1){
 
             cargoFloor--;
 
-            document.getElementById("cargoDisplay").innerText =
-                cargoFloor;
+            cargoDirection = "";
+
+            updateCargoDisplay();
+            updateCameras();
         }
 
     },6000);
@@ -282,32 +434,62 @@ function manualStopCargo(){
     clearInterval(cargoInterval);
 }
 
-function callLift(){
+function enterLift(){
 
-    if(passengerReady)
-        openDoors();
+    playerInside = true;
+
+    document.getElementById(
+        "status"
+    ).innerText =
+        "Вы вошли в лифт";
 }
 
-function callCargoLift(){
+function exitLift(){
 
-    document.getElementById("status").innerText =
-        "Грузовой вызван";
+    playerInside = false;
+
+    document.getElementById(
+        "status"
+    ).innerText =
+        "Вы вышли из лифта";
 }
 
 function openDoors(){
 
-    document.getElementById("doorLeft").style.left =
-        "-110px";
+    document.getElementById(
+        "doorLeft"
+    ).style.left = "-110px";
 
-    document.getElementById("doorRight").style.right =
-        "-110px";
+    document.getElementById(
+        "doorRight"
+    ).style.right = "-110px";
+
+    const cam =
+        document.getElementById(
+            "cameraPassengerDoors"
+        );
+
+    if(cam)
+        cam.innerText =
+            "Двери: Открыты";
 }
 
 function closeDoors(){
 
-    document.getElementById("doorLeft").style.left =
-        "0px";
+    document.getElementById(
+        "doorLeft"
+    ).style.left = "0px";
 
-    document.getElementById("doorRight").style.right =
-        "0px";
+    document.getElementById(
+        "doorRight"
+    ).style.right = "0px";
+
+    const cam =
+        document.getElementById(
+            "cameraPassengerDoors"
+        );
+
+    if(cam)
+        cam.innerText =
+            "Двери: Закрыты";
 }
