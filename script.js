@@ -1,50 +1,36 @@
 let passengerPower = true;
 let cargoPower = true;
 
+let passengerReady = true;
+let cargoReady = true;
+
+let passengerInspection = false;
+let cargoInspection = false;
+
 let currentFloor = 1;
 let cargoFloor = 1;
 
-let playerInside = false;
-
-let passengerMoving = false;
-let cargoMoving = false;
-
-let passengerManualInterval = null;
-let cargoManualInterval = null;
-let passengerAutoInterval = null;
+let passengerInterval = null;
+let cargoInterval = null;
 
 updateDisplays();
 
 function updateDisplays(text = currentFloor){
 
-    document.getElementById("floorDisplay").innerText =
-        text;
-
-    document.getElementById("cabinDisplay").innerText =
-        text;
-
-    document.getElementById("cargoDisplay").innerText =
-        cargoFloor;
+    document.getElementById("floorDisplay").innerText = text;
+    document.getElementById("cabinDisplay").innerText = text;
+    document.getElementById("cargoDisplay").innerText = cargoFloor;
 }
 
 function togglePassengerPower(){
 
     passengerPower = !passengerPower;
 
-    if(passengerPower){
-
-        document.getElementById("passengerPower").innerText =
-            "Пассажирский: ВКЛ";
-
-        document.getElementById("floorDisplay").innerText =
-            currentFloor;
-
-        document.getElementById("cabinDisplay").innerText =
-            currentFloor;
-
-    }else{
+    if(!passengerPower){
 
         manualStopPassenger();
+
+        passengerReady = false;
 
         document.getElementById("passengerPower").innerText =
             "Пассажирский: ВЫКЛ";
@@ -54,6 +40,19 @@ function togglePassengerPower(){
 
         document.getElementById("cabinDisplay").innerText =
             " ";
+
+    }else{
+
+        passengerReady = false;
+
+        document.getElementById("passengerPower").innerText =
+            "Пассажирский: ВКЛ";
+
+        document.getElementById("floorDisplay").innerText =
+            "--";
+
+        document.getElementById("cabinDisplay").innerText =
+            "--";
     }
 }
 
@@ -61,278 +60,238 @@ function toggleCargoPower(){
 
     cargoPower = !cargoPower;
 
-    if(cargoPower){
-
-        document.getElementById("cargoPower").innerText =
-            "Грузовой: ВКЛ";
-
-        document.getElementById("cargoDisplay").innerText =
-            cargoFloor;
-
-    }else{
+    if(!cargoPower){
 
         manualStopCargo();
+
+        cargoReady = false;
 
         document.getElementById("cargoPower").innerText =
             "Грузовой: ВЫКЛ";
 
         document.getElementById("cargoDisplay").innerText =
             " ";
+
+    }else{
+
+        cargoReady = false;
+
+        document.getElementById("cargoPower").innerText =
+            "Грузовой: ВКЛ";
+
+        document.getElementById("cargoDisplay").innerText =
+            "--";
     }
 }
 
-function callLift(){
+function identifyPassenger(){
 
-    if(!passengerPower)
-        return;
+    if(!passengerPower) return;
 
-    openDoors();
+    document.getElementById("floorDisplay").innerText =
+        "↓--";
+
+    document.getElementById("cabinDisplay").innerText =
+        "↓--";
 
     document.getElementById("status").innerText =
-        "Пассажирский лифт вызван";
+        "Определение пассажирского лифта";
+
+    setTimeout(() => {
+
+        currentFloor = 1;
+
+        document.getElementById("floorDisplay").innerText =
+            "↓1";
+
+        document.getElementById("cabinDisplay").innerText =
+            "↓1";
+
+        setTimeout(() => {
+
+            passengerReady = true;
+
+            updateDisplays(1);
+
+        },2000);
+
+    },5000);
 }
 
-function callCargoLift(){
+function identifyCargo(){
 
-    if(!cargoPower)
-        return;
+    if(!cargoPower) return;
+
+    document.getElementById("cargoDisplay").innerText =
+        "↓--";
 
     document.getElementById("status").innerText =
-        "Грузовой лифт вызван";
+        "Определение грузового лифта";
+
+    setTimeout(() => {
+
+        cargoFloor = 1;
+
+        document.getElementById("cargoDisplay").innerText =
+            "↓1";
+
+        setTimeout(() => {
+
+            cargoReady = true;
+
+            document.getElementById("cargoDisplay").innerText =
+                "1";
+
+        },2000);
+
+    },5000);
+}
+
+function togglePassengerInspection(){
+
+    passengerInspection = !passengerInspection;
+
+    document.getElementById("status").innerText =
+        passengerInspection
+        ? "Ревизия пассажирского ВКЛ"
+        : "Ревизия пассажирского ВЫКЛ";
+}
+
+function toggleCargoInspection(){
+
+    cargoInspection = !cargoInspection;
+
+    document.getElementById("status").innerText =
+        cargoInspection
+        ? "Ревизия грузового ВКЛ"
+        : "Ревизия грузового ВЫКЛ";
 }
 
 function goToFloor(targetFloor){
 
-    if(!passengerPower)
-        return;
-
-    if(passengerMoving)
-        return;
-
-    if(targetFloor === currentFloor)
-        return;
-
-    passengerMoving = true;
+    if(!passengerPower) return;
+    if(!passengerReady) return;
 
     closeDoors();
 
-    document.getElementById("status").innerText =
-        "Закрытие дверей";
-
-    const direction =
+    let direction =
         targetFloor > currentFloor ? 1 : -1;
 
-    setTimeout(() => {
+    passengerInterval = setInterval(() => {
 
-        document.getElementById("status").innerText =
-            "Лифт тронулся";
+        if(currentFloor === targetFloor){
 
-        passengerAutoInterval = setInterval(() => {
+            clearInterval(passengerInterval);
 
-            if(!passengerPower){
+            openDoors();
 
-                clearInterval(passengerAutoInterval);
+            return;
+        }
 
-                passengerMoving = false;
+        currentFloor += direction;
 
-                return;
-            }
+        updateDisplays(
+            (direction > 0 ? "↑" : "↓") +
+            currentFloor
+        );
 
-            currentFloor += direction;
-
-            updateDisplays(
-                currentFloor
-            );
-
-            if(currentFloor === targetFloor){
-
-                clearInterval(passengerAutoInterval);
-
-                passengerMoving = false;
-
-                openDoors();
-
-                document.getElementById("status").innerText =
-                    "Прибыли на этаж " +
-                    currentFloor;
-            }
-
-        },4000);
-
-    },2000);
+    },4000);
 }
 
 function manualUpPassenger(){
 
-    if(!passengerPower)
-        return;
+    if(!passengerInspection) return;
 
-    manualStopPassenger();
+    clearInterval(passengerInterval);
 
-    passengerMoving = true;
+    passengerInterval = setInterval(() => {
 
-    document.getElementById("status").innerText =
-        "Пассажирский лифт вверх";
+        if(currentFloor < 16){
 
-    let timer = 0;
+            currentFloor++;
 
-    passengerManualInterval = setInterval(() => {
-
-        timer++;
-
-        if(timer >= 6){
-
-            timer = 0;
-
-            if(currentFloor < 16){
-
-                currentFloor++;
-
-                updateDisplays(currentFloor);
-            }
+            updateDisplays(currentFloor);
         }
 
-    },1000);
+    },6000);
 }
 
 function manualDownPassenger(){
 
-    if(!passengerPower)
-        return;
+    if(!passengerInspection) return;
 
-    manualStopPassenger();
+    clearInterval(passengerInterval);
 
-    passengerMoving = true;
+    passengerInterval = setInterval(() => {
 
-    document.getElementById("status").innerText =
-        "Пассажирский лифт вниз";
+        if(currentFloor > 1){
 
-    let timer = 0;
+            currentFloor--;
 
-    passengerManualInterval = setInterval(() => {
-
-        timer++;
-
-        if(timer >= 6){
-
-            timer = 0;
-
-            if(currentFloor > 1){
-
-                currentFloor--;
-
-                updateDisplays(currentFloor);
-            }
+            updateDisplays(currentFloor);
         }
 
-    },1000);
+    },6000);
 }
 
 function manualStopPassenger(){
 
-    clearInterval(passengerManualInterval);
-    clearInterval(passengerAutoInterval);
-
-    passengerMoving = false;
-
-    document.getElementById("status").innerText =
-        "Пассажирский лифт остановлен";
+    clearInterval(passengerInterval);
 }
 
 function manualUpCargo(){
 
-    if(!cargoPower)
-        return;
+    if(!cargoInspection) return;
 
-    manualStopCargo();
+    clearInterval(cargoInterval);
 
-    cargoMoving = true;
+    cargoInterval = setInterval(() => {
 
-    document.getElementById("status").innerText =
-        "Грузовой лифт вверх";
+        if(cargoFloor < 16){
 
-    let timer = 0;
+            cargoFloor++;
 
-    cargoManualInterval = setInterval(() => {
-
-        timer++;
-
-        if(timer >= 6){
-
-            timer = 0;
-
-            if(cargoFloor < 16){
-
-                cargoFloor++;
-
-                document.getElementById(
-                    "cargoDisplay"
-                ).innerText = cargoFloor;
-            }
+            document.getElementById("cargoDisplay").innerText =
+                cargoFloor;
         }
 
-    },1000);
+    },6000);
 }
 
 function manualDownCargo(){
 
-    if(!cargoPower)
-        return;
+    if(!cargoInspection) return;
 
-    manualStopCargo();
+    clearInterval(cargoInterval);
 
-    cargoMoving = true;
+    cargoInterval = setInterval(() => {
 
-    document.getElementById("status").innerText =
-        "Грузовой лифт вниз";
+        if(cargoFloor > 1){
 
-    let timer = 0;
+            cargoFloor--;
 
-    cargoManualInterval = setInterval(() => {
-
-        timer++;
-
-        if(timer >= 6){
-
-            timer = 0;
-
-            if(cargoFloor > 1){
-
-                cargoFloor--;
-
-                document.getElementById(
-                    "cargoDisplay"
-                ).innerText = cargoFloor;
-            }
+            document.getElementById("cargoDisplay").innerText =
+                cargoFloor;
         }
 
-    },1000);
+    },6000);
 }
 
 function manualStopCargo(){
 
-    clearInterval(cargoManualInterval);
-
-    cargoMoving = false;
-
-    document.getElementById("status").innerText =
-        "Грузовой лифт остановлен";
+    clearInterval(cargoInterval);
 }
 
-function enterLift(){
+function callLift(){
 
-    playerInside = true;
-
-    document.getElementById("status").innerText =
-        "Вы вошли в лифт";
+    if(passengerReady)
+        openDoors();
 }
 
-function exitLift(){
-
-    playerInside = false;
+function callCargoLift(){
 
     document.getElementById("status").innerText =
-        "Вы вышли из лифта";
+        "Грузовой вызван";
 }
 
 function openDoors(){
