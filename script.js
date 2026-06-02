@@ -151,6 +151,8 @@ function identifyPassenger(){
     if(!passengerPower)
         return;
 
+    passengerReady = false;
+
     document.getElementById(
         "status"
     ).innerText =
@@ -164,40 +166,103 @@ function identifyPassenger(){
         "cabinDisplay"
     ).innerText = "↓--";
 
-    setTimeout(() => {
+    closeDoors();
 
-        currentFloor = 1;
+    const floorsToGo =
+        currentFloor - 1;
 
-        document.getElementById(
-            "floorDisplay"
-        ).innerText = "↓1";
-
-        document.getElementById(
-            "cabinDisplay"
-        ).innerText = "↓1";
+    if(floorsToGo <= 0){
 
         setTimeout(() => {
 
-            passengerReady = true;
-
-            passengerDirection = "";
-
-            updatePassengerDisplay();
+            document.getElementById(
+                "floorDisplay"
+            ).innerText = "--";
 
             document.getElementById(
-                "status"
-            ).innerText =
-                "Пассажирский готов";
+                "cabinDisplay"
+            ).innerText = "--";
 
-        },2000);
+            setTimeout(() => {
 
-    },5000);
+                currentFloor = 1;
+
+                updatePassengerDisplay();
+
+                setTimeout(() => {
+
+                    openDoors();
+
+                    passengerReady = true;
+
+                    document.getElementById(
+                        "status"
+                    ).innerText =
+                        "Пассажирский готов";
+
+                },1000);
+
+            },1000);
+
+        },1000);
+
+        return;
+    }
+
+    let identifyInterval =
+        setInterval(() => {
+
+        if(currentFloor > 1){
+
+            currentFloor--;
+
+            updateCameras();
+        }
+
+        if(currentFloor <= 1){
+
+            clearInterval(
+                identifyInterval
+            );
+
+            currentFloor = 1;
+
+            document.getElementById(
+                "floorDisplay"
+            ).innerText = "--";
+
+            document.getElementById(
+                "cabinDisplay"
+            ).innerText = "--";
+
+            setTimeout(() => {
+
+                updatePassengerDisplay();
+
+                setTimeout(() => {
+
+                    openDoors();
+
+                    passengerReady = true;
+
+                    document.getElementById(
+                        "status"
+                    ).innerText =
+                        "Пассажирский готов";
+
+                },1000);
+
+            },1000);
+        }
+
+    },4000);
 }
-
 function identifyCargo(){
 
     if(!cargoPower)
         return;
+
+    cargoReady = false;
 
     document.getElementById(
         "status"
@@ -208,30 +273,74 @@ function identifyCargo(){
         "cargoDisplay"
     ).innerText = "↓--";
 
-    setTimeout(() => {
+    const floorsToGo =
+        cargoFloor - 1;
 
-        cargoFloor = 1;
-
-        document.getElementById(
-            "cargoDisplay"
-        ).innerText = "↓1";
+    if(floorsToGo <= 0){
 
         setTimeout(() => {
 
-            cargoReady = true;
+            document.getElementById(
+                "cargoDisplay"
+            ).innerText = "--";
 
-            cargoDirection = "";
+            setTimeout(() => {
 
-            updateCargoDisplay();
+                cargoFloor = 1;
+
+                updateCargoDisplay();
+
+                cargoReady = true;
+
+                document.getElementById(
+                    "status"
+                ).innerText =
+                    "Грузовой готов";
+
+            },1000);
+
+        },1000);
+
+        return;
+    }
+
+    let identifyInterval =
+        setInterval(() => {
+
+        if(cargoFloor > 1){
+
+            cargoFloor--;
+
+            updateCameras();
+        }
+
+        if(cargoFloor <= 1){
+
+            clearInterval(
+                identifyInterval
+            );
+
+            cargoFloor = 1;
 
             document.getElementById(
-                "status"
-            ).innerText =
-                "Грузовой готов";
+                "cargoDisplay"
+            ).innerText = "--";
 
-        },2000);
+            setTimeout(() => {
 
-    },5000);
+                updateCargoDisplay();
+
+                cargoReady = true;
+
+                document.getElementById(
+                    "status"
+                ).innerText =
+                    "Грузовой готов";
+
+            },1000);
+        }
+
+    },4000);
 }
 
 function togglePassengerInspection(){
