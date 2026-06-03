@@ -384,15 +384,28 @@ function callLift(){
 
 function callCargoLift(){
 
+    if(!cargoPower)
+        return;
+
     if(!cargoReady)
         return;
+
+    openCargoDoors();
 
     document.getElementById(
         "status"
     ).innerText =
         "Грузовой вызван";
-}
 
+    const cam =
+        document.getElementById(
+            "cameraCargoDoors"
+        );
+
+    if(cam)
+        cam.innerText =
+            "Двери: Открыты";
+}
 function goToFloor(targetFloor){
 
     if(!passengerReady)
