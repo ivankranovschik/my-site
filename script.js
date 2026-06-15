@@ -1,617 +1,108 @@
-let passengerPower = true;
-let cargoPower = true;
+// Данные для входа
+const ADMIN_USER = "Админ";
+const ADMIN_PASS = "12345";
 
-let passengerReady = true;
-let cargoReady = true;
+// Заглушка для расписания (пока просто статичная, потом сделаем изменение)
+const defaultSchedule = {
+    "Понедельник": ["Математика", "Русский язык", "Литература"],
+    "Вторник": ["История", "Физика", "Математика"],
+    "Среда": ["Русский язык", "Литература", "Физкультура"]
+};
 
-let passengerInspection = false;
-let cargoInspection = false;
+// Массив для хранения оценок (загружается из памяти браузера или создается пустым)
+let grades = JSON.parse(localStorage.getItem('diary_grades')) || [];
 
-let playerInside = false;
+// Проверка входа при загрузке страницы
+window.onload = function() {
+    renderSchedule();
+    renderGrades();
+};
 
-let currentFloor = 1;
-let cargoFloor = 1;
+// Функция логина
+function handleLogin() {
+    const userInp = document.getElementById('username').value;
+    const passInp = document.getElementById('password').value;
+    const errorMsg = document.getElementById('login-error');
 
-let passengerInterval = null;
-let cargoInterval = null;
-
-let passengerDirection = "";
-let cargoDirection = "";
-
-updateAll();
-
-function updateAll(){
-
-    updatePassengerDisplay();
-    updateCargoDisplay();
-    updateCameras();
-}
-
-function updatePassengerDisplay(){
-
-    const text =
-        passengerDirection + currentFloor;
-
-    document.getElementById(
-        "floorDisplay"
-    ).innerText = text;
-
-    document.getElementById(
-        "cabinDisplay"
-    ).innerText = text;
-}
-
-function updateCargoDisplay(){
-
-    document.getElementById(
-        "cargoDisplay"
-    ).innerText =
-        cargoDirection + cargoFloor;
-}
-
-function updateCameras(){
-
-    const pFloor =
-        document.getElementById(
-            "cameraPassengerFloor"
-        );
-
-    const cFloor =
-        document.getElementById(
-            "cameraCargoFloor"
-        );
-
-    if(pFloor)
-        pFloor.innerText =
-            "Этаж: " + currentFloor;
-
-    if(cFloor)
-        cFloor.innerText =
-            "Этаж: " + cargoFloor;
-}
-
-function togglePassengerPower(){
-
-    passengerPower = !passengerPower;
-
-    if(!passengerPower){
-
-        passengerReady = false;
-
-        manualStopPassenger();
-
-        document.getElementById(
-            "passengerPower"
-        ).innerText =
-            "Пассажирский: ВЫКЛ";
-
-        document.getElementById(
-            "floorDisplay"
-        ).innerText = " ";
-
-        document.getElementById(
-            "cabinDisplay"
-        ).innerText = " ";
-
-    }else{
-
-        passengerReady = false;
-
-        document.getElementById(
-            "passengerPower"
-        ).innerText =
-            "Пассажирский: ВКЛ";
-
-        document.getElementById(
-            "floorDisplay"
-        ).innerText = "--";
-
-        document.getElementById(
-            "cabinDisplay"
-        ).innerText = "--";
+    if (userInp === ADMIN_USER && passInp === ADMIN_PASS) {
+        errorMsg.textContent = "";
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('main-screen').classList.remove('hidden');
+        document.getElementById('user-display').textContent = ADMIN_USER;
+    } else {
+        errorMsg.textContent = "Неверное имя пользователя или пароль!";
     }
 }
 
-function toggleCargoPower(){
+// Функция выхода
+function handleLogout() {
+    document.getElementById('username').value = "";
+    document.getElementById('password').value = "";
+    document.getElementById('main-screen').classList.add('hidden');
+    document.getElementById('login-screen').classList.remove('hidden');
+}
 
-    cargoPower = !cargoPower;
+// Переключение вкладок (Расписание / Оценки)
+function switchTab(tabName) {
+    document.getElementById('tab-schedule').classList.add('hidden');
+    document.getElementById('tab-grades').classList.add('hidden');
+    document.getElementById('tab-schedule-btn').classList.remove('active');
+    document.getElementById('tab-grades-btn').classList.remove('active');
 
-    if(!cargoPower){
-
-        cargoReady = false;
-
-        manualStopCargo();
-
-        document.getElementById(
-            "cargoPower"
-        ).innerText =
-            "Грузовой: ВЫКЛ";
-
-        document.getElementById(
-            "cargoDisplay"
-        ).innerText = " ";
-
-    }else{
-
-        cargoReady = false;
-
-        document.getElementById(
-            "cargoPower"
-        ).innerText =
-            "Грузовой: ВКЛ";
-
-        document.getElementById(
-            "cargoDisplay"
-        ).innerText = "--";
+    if (tabName === 'schedule') {
+        document.getElementById('tab-schedule').classList.remove('hidden');
+        document.getElementById('tab-schedule-btn').classList.add('active');
+    } else if (tabName === 'grades') {
+        document.getElementById('tab-grades').classList.remove('hidden');
+        document.getElementById('tab-grades-btn').classList.add('active');
     }
 }
 
-function identifyPassenger(){
+// Отображение расписания
+function renderSchedule() {
+    const container = document.getElementById('schedule-container');
+    container.innerHTML = "";
 
-    if(!passengerPower)
-        return;
-
-    passengerReady = false;
-
-    document.getElementById(
-        "status"
-    ).innerText =
-        "Определение пассажирского";
-
-    document.getElementById(
-        "floorDisplay"
-    ).innerText = "↓--";
-
-    document.getElementById(
-        "cabinDisplay"
-    ).innerText = "↓--";
-
-    closeDoors();
-
-    const floorsToGo =
-        currentFloor - 1;
-
-    if(floorsToGo <= 0){
-
-        setTimeout(() => {
-
-            document.getElementById(
-                "floorDisplay"
-            ).innerText = "--";
-
-            document.getElementById(
-                "cabinDisplay"
-            ).innerText = "--";
-
-            setTimeout(() => {
-
-                currentFloor = 1;
-
-                updatePassengerDisplay();
-
-                setTimeout(() => {
-
-                    openDoors();
-
-                    passengerReady = true;
-
-                    document.getElementById(
-                        "status"
-                    ).innerText =
-                        "Пассажирский готов";
-
-                },1000);
-
-            },1000);
-
-        },1000);
-
-        return;
+    for (const day in defaultSchedule) {
+        const dayCard = document.createElement('div');
+        dayCard.className = 'day-card';
+        
+        let lessonsList = defaultSchedule[day].map(lesson => `<li>${lesson}</li>`).join('');
+        
+        dayCard.innerHTML = `
+            <h4>${day}</h4>
+            <ol>${lessonsList}</ol>
+        `;
+        container.appendChild(dayCard);
     }
-
-    let identifyInterval =
-        setInterval(() => {
-
-        if(currentFloor > 1){
-
-            currentFloor--;
-
-            updateCameras();
-        }
-
-        if(currentFloor <= 1){
-
-            clearInterval(
-                identifyInterval
-            );
-
-            currentFloor = 1;
-
-            document.getElementById(
-                "floorDisplay"
-            ).innerText = "--";
-
-            document.getElementById(
-                "cabinDisplay"
-            ).innerText = "--";
-
-            setTimeout(() => {
-
-                updatePassengerDisplay();
-
-                setTimeout(() => {
-
-                    openDoors();
-
-                    passengerReady = true;
-
-                    document.getElementById(
-                        "status"
-                    ).innerText =
-                        "Пассажирский готов";
-
-                },1000);
-
-            },1000);
-        }
-
-    },4000);
-}
-function identifyCargo(){
-
-    if(!cargoPower)
-        return;
-
-    cargoReady = false;
-
-    document.getElementById(
-        "status"
-    ).innerText =
-        "Определение грузового";
-
-    document.getElementById(
-        "cargoDisplay"
-    ).innerText = "↓--";
-
-    const floorsToGo =
-        cargoFloor - 1;
-
-    if(floorsToGo <= 0){
-
-        setTimeout(() => {
-
-            document.getElementById(
-                "cargoDisplay"
-            ).innerText = "--";
-
-            setTimeout(() => {
-
-                cargoFloor = 1;
-
-                updateCargoDisplay();
-
-                cargoReady = true;
-
-                document.getElementById(
-                    "status"
-                ).innerText =
-                    "Грузовой готов";
-
-            },1000);
-
-        },1000);
-
-        return;
-    }
-
-    let identifyInterval =
-        setInterval(() => {
-
-        if(cargoFloor > 1){
-
-            cargoFloor--;
-
-            updateCameras();
-        }
-
-        if(cargoFloor <= 1){
-
-            clearInterval(
-                identifyInterval
-            );
-
-            cargoFloor = 1;
-
-            document.getElementById(
-                "cargoDisplay"
-            ).innerText = "--";
-
-            setTimeout(() => {
-
-                updateCargoDisplay();
-
-                cargoReady = true;
-
-                document.getElementById(
-                    "status"
-                ).innerText =
-                    "Грузовой готов";
-
-            },1000);
-        }
-
-    },4000);
 }
 
-function togglePassengerInspection(){
+// Добавление оценки
+function addGrade() {
+    const subject = document.getElementById('subject-select').value;
+    const grade = document.getElementById('grade-select').value;
+    const date = new Date().toLocaleDateString('ru-RU');
 
-    passengerInspection =
-        !passengerInspection;
-
-    document.getElementById(
-        "status"
-    ).innerText =
-        passengerInspection
-        ? "Ревизия ПЛ ВКЛ"
-        : "Ревизия ПЛ ВЫКЛ";
+    const newGrade = { subject, grade, date };
+    grades.push(newGrade);
+    
+    // Сохраняем в память браузера
+    localStorage.setItem('diary_grades', JSON.stringify(grades));
+    
+    renderGrades();
 }
 
-function toggleCargoInspection(){
-
-    cargoInspection =
-        !cargoInspection;
-
-    document.getElementById(
-        "status"
-    ).innerText =
-        cargoInspection
-        ? "Ревизия ГЛ ВКЛ"
-        : "Ревизия ГЛ ВЫКЛ";
-}
-
-function callLift(){
-
-    if(!passengerReady)
-        return;
-
-    openDoors();
-
-    document.getElementById(
-        "status"
-    ).innerText =
-        "Пассажирский вызван";
-}
-
-function callCargoLift(){
-
-    if(!cargoPower)
-        return;
-
-    if(!cargoReady)
-        return;
-
-    openCargoDoors();
-
-    document.getElementById(
-        "status"
-    ).innerText =
-        "Грузовой вызван";
-
-    const cam =
-        document.getElementById(
-            "cameraCargoDoors"
-        );
-
-    if(cam)
-        cam.innerText =
-            "Двери: Открыты";
-}
-function goToFloor(targetFloor){
-
-    if(!passengerReady)
-        return;
-
-    clearInterval(passengerInterval);
-
-    closeDoors();
-
-    const direction =
-        targetFloor > currentFloor
-        ? 1
-        : -1;
-
-    passengerDirection =
-        direction > 0 ? "↑" : "↓";
-
-    passengerInterval =
-        setInterval(() => {
-
-        if(currentFloor === targetFloor){
-
-            clearInterval(
-                passengerInterval
-            );
-
-            passengerDirection = "";
-
-            updatePassengerDisplay();
-
-            openDoors();
-
-            document.getElementById(
-                "status"
-            ).innerText =
-                "Прибыли";
-
-            return;
-        }
-
-        currentFloor += direction;
-
-        updatePassengerDisplay();
-        updateCameras();
-
-    },4000);
-}
-
-function manualUpPassenger(){
-
-    if(!passengerInspection)
-        return;
-
-    clearInterval(passengerInterval);
-
-    passengerInterval =
-        setInterval(() => {
-
-        if(currentFloor < 16){
-
-            currentFloor++;
-
-            passengerDirection = "";
-
-            updatePassengerDisplay();
-            updateCameras();
-        }
-
-    },6000);
-}
-
-function manualDownPassenger(){
-
-    if(!passengerInspection)
-        return;
-
-    clearInterval(passengerInterval);
-
-    passengerInterval =
-        setInterval(() => {
-
-        if(currentFloor > 1){
-
-            currentFloor--;
-
-            passengerDirection = "";
-
-            updatePassengerDisplay();
-            updateCameras();
-        }
-
-    },6000);
-}
-
-function manualStopPassenger(){
-
-    clearInterval(passengerInterval);
-}
-
-function manualUpCargo(){
-
-    if(!cargoInspection)
-        return;
-
-    clearInterval(cargoInterval);
-
-    cargoInterval =
-        setInterval(() => {
-
-        if(cargoFloor < 16){
-
-            cargoFloor++;
-
-            cargoDirection = "";
-
-            updateCargoDisplay();
-            updateCameras();
-        }
-
-    },6000);
-}
-
-function manualDownCargo(){
-
-    if(!cargoInspection)
-        return;
-
-    clearInterval(cargoInterval);
-
-    cargoInterval =
-        setInterval(() => {
-
-        if(cargoFloor > 1){
-
-            cargoFloor--;
-
-            cargoDirection = "";
-
-            updateCargoDisplay();
-            updateCameras();
-        }
-
-    },6000);
-}
-
-function manualStopCargo(){
-
-    clearInterval(cargoInterval);
-}
-
-function enterLift(){
-
-    playerInside = true;
-
-    document.getElementById(
-        "status"
-    ).innerText =
-        "Вы вошли в лифт";
-}
-
-function exitLift(){
-
-    playerInside = false;
-
-    document.getElementById(
-        "status"
-    ).innerText =
-        "Вы вышли из лифта";
-}
-
-function openDoors(){
-
-    document.getElementById(
-        "doorLeft"
-    ).style.left = "-110px";
-
-    document.getElementById(
-        "doorRight"
-    ).style.right = "-110px";
-
-    const cam =
-        document.getElementById(
-            "cameraPassengerDoors"
-        );
-
-    if(cam)
-        cam.innerText =
-            "Двери: Открыты";
-}
-
-function closeDoors(){
-
-    document.getElementById(
-        "doorLeft"
-    ).style.left = "0px";
-
-    document.getElementById(
-        "doorRight"
-    ).style.right = "0px";
-
-    const cam =
-        document.getElementById(
-            "cameraPassengerDoors"
-        );
-
-    if(cam)
-        cam.innerText =
-            "Двери: Закрыты";
+// Отображение списка оценок
+function renderGrades() {
+    const list = document.getElementById('grades-list');
+    list.innerHTML = "";
+
+    grades.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span><strong>${item.subject}</strong> — Оценка: ${item.grade}</span>
+            <small style="color: #888;">${item.date}</small>
+        `;
+        list.appendChild(li);
+    });
 }
