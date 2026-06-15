@@ -1,320 +1,74 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Лифтёрская</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Школьный Дневник</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Лифтёрская</h1>
-
-<div id="powerPanel">
-
-<h2>Питание</h2>
-
-<button onclick="togglePassengerPower()">
-Пассажирский лифт
-</button>
-
-<button onclick="identifyPassenger()">
-Определиться ПЛ
-</button>
-
-<br><br>
-
-<button onclick="toggleCargoPower()">
-Грузовой лифт
-</button>
-
-<button onclick="identifyCargo()">
-Определиться ГЛ
-</button>
-
-<p id="passengerPower">
-Пассажирский: ВКЛ
-</p>
-
-<p id="cargoPower">
-Грузовой: ВКЛ
-</p>
-
-</div>
-
-<hr>
-
-<div id="dispatcherPanel">
-
-<h2>Панель лифтёра</h2>
-
-<div class="controlBlock">
-
-<h3>Пассажирский</h3>
-
-<button onclick="togglePassengerInspection()">
-Ревизия
-</button>
-
-<br><br>
-
-<button onclick="manualUpPassenger()">▲</button>
-<button onclick="manualStopPassenger()">■</button>
-<button onclick="manualDownPassenger()">▼</button>
-
-</div>
-
-<div class="controlBlock">
-
-<h3>Грузовой</h3>
-
-<button onclick="toggleCargoInspection()">
-Ревизия
-</button>
-
-<br><br>
-
-<button onclick="manualUpCargo()">▲</button>
-<button onclick="manualStopCargo()">■</button>
-<button onclick="manualDownCargo()">▼</button>
-
-</div>
-
-<div class="controlBlock">
-
-<h3>Аварии</h3>
-
-<button onclick="emergencyStop()">
-СТОП
-</button>
-
-<br><br>
-
-<button onclick="toggleOverload()">
-Перегруз
-</button>
-
-<button onclick="toggleObstacle()">
-Препятствие
-</button>
-
-</div>
-
-</div>
-
-<hr>
-
-<div id="cameraPanel">
-
-<h2>Камеры</h2>
-
-<div class="cameraBlock">
-
-<h3>Пассажирский лифт</h3>
-
-<p id="cameraPassengerFloor">
-Этаж: 1
-</p>
-
-<p id="cameraPassengerDoors">
-Двери: Закрыты
-</p>
-
-<p id="cameraPassengerState">
-Стоит
-</p>
-
-</div>
-
-<div class="cameraBlock">
-
-<h3>Грузовой лифт</h3>
-
-<p id="cameraCargoFloor">
-Этаж: 1
-</p>
-
-<p id="cameraCargoDoors">
-Двери: Закрыты
-</p>
-
-<p id="cameraCargoState">
-Стоит
-</p>
-
-</div>
-
-</div>
-
-<hr>
-
-<h2>Положение лифтов</h2>
-
-<div id="positionPanel">
-
-<div class="positionBlock">
-
-<h3>Пассажирский</h3>
-
-<div id="passengerPosition">
-1 этаж
-</div>
-
-</div>
-
-<div class="positionBlock">
-
-<h3>Грузовой</h3>
-
-<div id="cargoPosition">
-1 этаж
-</div>
-
-</div>
-
-</div>
-
-<hr>
-
-<div id="liftsContainer">
-
-<div class="liftBlock">
-
-<h2>Пассажирский</h2>
-
-<div id="floorDisplay">1</div>
-
-<button id="callButton"
-onclick="callLift()"></button>
-
-<br><br>
-
-<div id="liftShaft">
-
-<div id="lift">
-
-<div id="doorLeft"></div>
-<div id="doorRight"></div>
-
-<div id="insidePanel">
-
-<div id="cabinDisplay">1</div>
-
-<h3>Кнопки этажей</h3>
-
-<div id="floorButtons">
-
-<button onclick="goToFloor(1)">1</button>
-<button onclick="goToFloor(2)">2</button>
-<button onclick="goToFloor(3)">3</button>
-<button onclick="goToFloor(4)">4</button>
-
-<br>
-
-<button onclick="goToFloor(5)">5</button>
-<button onclick="goToFloor(6)">6</button>
-<button onclick="goToFloor(7)">7</button>
-<button onclick="goToFloor(8)">8</button>
-
-<br>
-
-<button onclick="goToFloor(9)">9</button>
-<button onclick="goToFloor(10)">10</button>
-<button onclick="goToFloor(11)">11</button>
-<button onclick="goToFloor(12)">12</button>
-
-<br>
-
-<button onclick="goToFloor(13)">13</button>
-<button onclick="goToFloor(14)">14</button>
-<button onclick="goToFloor(15)">15</button>
-<button onclick="goToFloor(16)">16</button>
-
-</div>
-
-<br>
-
-<button onclick="openDoors()">
-◀ ▶
-</button>
-
-<button onclick="closeDoors()">
-▶ ◀
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<button onclick="enterLift()">
-Войти
-</button>
-
-<button onclick="exitLift()">
-Выйти
-</button>
-
-</div>
-
-<div class="liftBlock">
-
-<h2>Грузовой</h2>
-
-<div id="cargoDisplay">1</div>
-
-<button id="cargoCallButton"
-onclick="callCargoLift()"></button>
-
-<br><br>
-
-<div id="cargoShaft">
-
-<div id="cargoLift">
-
-<div id="cargoDoorLeft"></div>
-<div id="cargoDoorRight"></div>
-
-</div>
-
-</div>
-
-<br>
-
-<button onclick="openCargoDoors()">
-Открыть двери
-</button>
-
-<button onclick="closeCargoDoors()">
-Закрыть двери
-</button>
-
-</div>
-
-</div>
-
-<hr>
-
-<div id="logPanel">
-
-<h2>Журнал событий</h2>
-
-<div id="eventLog">
-
-Лифтёрская запущена
-
-</div>
-
-</div>
-
-<hr>
-
-<div id="status">
-Лифтёрская готова
-</div>
-
-<script src="script.js"></script>
-
+    <!-- ОКНО ВХОДА -->
+    <div id="login-screen" class="container auth-box">
+        <h2>Вход в дневник</h2>
+        <div class="input-group">
+            <label for="username">Имя пользователя</label>
+            <input type="text" id="username" placeholder="Введите имя...">
+        </div>
+        <div class="input-group">
+            <label for="password">Пароль</label>
+            <input type="password" id="password" placeholder="Введите пароль...">
+        </div>
+        <button onclick="handleLogin()">Войти</button>
+        <p id="login-error" class="error-msg"></p>
+    </div>
+
+    <!-- ОСНОВНОЙ ЭКРАН ДНЕВНИКА (по умолчанию скрыт) -->
+    <div id="main-screen" class="container main-box hidden">
+        <header>
+            <h1>Панель управления: <span id="user-display"></span></h1>
+            <button onclick="handleLogout()" class="btn-logout">Выйти</button>
+        </header>
+
+        <!-- Переключатель вкладок -->
+        <nav class="tabs">
+            <button id="tab-schedule-btn" class="tab-btn active" onclick="switchTab('schedule')">Расписание</button>
+            <button id="tab-grades-btn" class="tab-btn" onclick="switchTab('grades')">Оценки</button>
+        </nav>
+
+        <!-- Вкладка: Расписание -->
+        <section id="tab-schedule" class="tab-content">
+            <h3>Расписание уроков</h3>
+            <div id="schedule-container">
+                <!-- Сюда JavaScript добавит дни недели -->
+            </div>
+        </section>
+
+        <!-- Вкладка: Оценки -->
+        <section id="tab-grades" class="tab-content hidden">
+            <h3>Выставление оценок</h3>
+            <div class="grade-form">
+                <select id="subject-select">
+                    <option value="Математика">Математика</option>
+                    <option value="Русский язык">Русский язык</option>
+                    <option value="Литература">Литература</option>
+                    <option value="История">История</option>
+                    <option value="Физика">Физика</option>
+                </select>
+                <select id="grade-select">
+                    <option value="5">5</option>
+                    <option value="4">4</option>
+                    <option value="3">3</option>
+                    <option value="2">2</option>
+                </select>
+                <button onclick="addGrade()">Поставить оценку</button>
+            </div>
+            <ul id="grades-list">
+                <!-- Сюда JavaScript будет добавлять оценки -->
+            </ul>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
