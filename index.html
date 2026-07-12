@@ -3,111 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Интерактивный Школьный Дневник</title>
+    <title>Симулятор Заправки</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <!-- Кастомные всплывающие уведомления -->
-    <div id="toast-container"></div>
-
-    <!-- ЭКРАН ВХОДА -->
-    <div id="login-screen" class="container auth-box">
-        <h2>Вход в дневник</h2>
-        <div class="input-group">
-            <label for="username">Имя пользователя</label>
-            <input type="text" id="username" placeholder="Введите имя...">
+    <div class="game-container">
+        <h1>⛽ Gas Station Tycoon</h1>
+        
+        <div class="stats">
+            <p>💰 Баланс: $<span id="money">2000</span></p>
+            <p>⛽ Топливо: <span id="fuel">500</span> / 1000 л</p>
+            <p>💵 Цена продажи: $<span id="price">2.5</span>/л</p>
         </div>
-        <div class="input-group">
-            <label for="password">Пароль</label>
-            <input type="password" id="password" placeholder="Введите пароль...">
+
+        <div class="station-visual">
+            <div id="car" class="car hidden">🚗</div>
+            <div class="pump">⛽</div>
         </div>
-        <button onclick="handleLogin()">Войти</button>
-        <p id="login-error" class="error-msg"></p>
-    </div>
 
-    <!-- ОСНОВНОЙ ЭКРАН ДНЕВНИКА -->
-    <div id="main-screen" class="container main-box hidden">
-        <header>
-            <div class="profile-section">
-                <div class="avatar" onclick="changeAvatar()">
-                    <img id="user-avatar" src="https://dicebear.com" alt="Аватар">
-                </div>
-                <div>
-                    <h1 id="user-display">Админ</h1>
-                    <span class="user-badge">Ученик 9-А класса</span>
-                </div>
-            </div>
-            
-            <div class="header-controls">
-                <div id="live-clock" class="clock-display">00:00:00</div>
-                <button id="theme-toggle" onclick="toggleTheme()" class="btn-theme">🌙</button>
-                <button onclick="handleLogout()" class="btn-logout">Выйти</button>
-            </div>
-        </header>
-
-        <!-- Навигация по вкладкам -->
-        <nav class="tabs">
-            <button id="tab-schedule-btn" class="tab-btn active" onclick="switchTab('schedule')">🗓 Расписание и ДЗ</button>
-            <button id="tab-grades-btn" class="tab-btn" onclick="switchTab('grades')">📊 Оценки и Статистика</button>
-        </nav>
-
-        <!-- Вкладка: Расписание и Домашние задания -->
-        <section id="tab-schedule" class="tab-content">
-            <div class="section-header">
-                <h3>Расписание и Домашние Задания</h3>
-                <button onclick="openScheduleEditor()" class="btn-small">✏️ Редактировать предметы</button>
-            </div>
-            
-            <div id="schedule-container">
-                <!-- Контент генерируется через JS -->
-            </div>
-        </section>
-
-        <!-- Вкладка: Оценки и Статистика -->
-        <section id="tab-grades" class="tab-content hidden">
-            <h3>Выставление оценок</h3>
-            <div class="grade-form">
-                <select id="subject-select">
-                    <!-- Заполняется автоматически из списка предметов -->
-                </select>
-                <select id="grade-select">
-                    <option value="5">5 (Отлично)</option>
-                    <option value="4">4 (Хорошо)</option>
-                    <option value="3">3 (Удовл.)</option>
-                    <option value="2">2 (Неуд.)</option>
-                </select>
-                <button onclick="addGrade()">Поставить оценку</button>
-            </div>
-
-            <div class="analytics-box">
-                <h4>Средний балл по предметам:</h4>
-                <div id="stats-container" class="stats-grid">
-                    <!-- Статистика выводится тут -->
-                </div>
-            </div>
-
-            <h4 style="margin-top: 20px; margin-bottom: 10px;">История оценок:</h4>
-            <ul id="grades-list">
-                <!-- Оценки выводятся тут -->
-            </ul>
-        </section>
-    </div>
-
-    <!-- Модальное окно редактора расписания -->
-    <div id="editor-modal" class="modal hidden">
-        <div class="modal-content">
-            <h3>Редактор предметов дня</h3>
-            <h4 id="editor-day-title">День недели</h4>
-            <div id="modal-lessons-list"></div>
-            <button onclick="addLessonInEditor()" class="btn-secondary">+ Добавить строку урока</button>
-            <div class="modal-actions">
-                <button onclick="saveScheduleEditor()" class="btn-success">Сохранить</button>
-                <button onclick="closeScheduleEditor()" class="btn-logout">Отмена</button>
-            </div>
+        <div class="actions">
+            <button id="serve-btn" disabled>Заправить клиента</button>
+            <button id="buy-fuel-btn">Закупить 100л бензина (-$120)</button>
+            <button id="raise-price-btn">Повысить цену (+$0.5)</button>
+            <button id="lower-price-btn">Снизить цену (-$0.5)</button>
         </div>
-    </div>
 
+        <div id="log" class="log">Ожидание клиентов...</div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
