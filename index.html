@@ -3,19 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>БПЛА Стратегия: Canvas Графика</title>
+    <title>Симулятор БПЛА: FP-1 и Герань-2</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-wrapper">
         <header>
-            <h1>🛸 Drone Warfare: Векторная Графика и Авто-ПВО</h1>
-            <div class="resource-bar">
-                <span>💰 Бюджет: $<span id="money">800</span></span>
-                <span>😈 Бюджет Врага: $<span id="enemy-money">800</span></span>
-                <span>🔋 Штаб Игрока: <span id="base-hp">100</span>%</span>
-                <span>🚩 Контроль: <span id="control-pct">50</span>%</span>
-            </div>
+            <h1>🛸 Демонстрация БПЛА: FP-1 и Герань-2</h1>
+            <p>Нажмите кнопки ниже, чтобы выпустить детальные модели дронов на тестовый полигон</p>
         </header>
 
         <main>
@@ -24,25 +19,11 @@
             </div>
 
             <div class="control-panel">
-                <div class="control-group">
-                    <h3>🚀 Разведка и FPV</h3>
-                    <button id="spawn-orlan">🛸 Орлан-10 ($150)</button>
-                    <button id="spawn-fp1">⚡ FP-1 (FPV-камикадзе) ($120)</button>
-                    <button id="spawn-globalhawk">✈️ RQ-4 Global Hawk ($400)</button>
-                </div>
-                <div class="control-group">
-                    <h3>💥 Дальние Ударные БПЛА</h3>
-                    <button id="spawn-shahed">📐 Герань / Shahed ($200)</button>
-                    <button id="spawn-bayraktar">🛩️ Bayraktar TB2 ($500)</button>
-                </div>
-                <div class="control-group">
-                    <h3>🛡️ Оборона Базы</h3>
-                    <p class="hint">🎯 Ваше ПВО теперь стреляет автоматически! Но вы также можете кликать мышкой.</p>
-                    <button id="upgrade-pao">⚡ Модернизация ЗРК ($450)</button>
-                </div>
+                <button id="spawn-fp1">⚡ Запустить FPV-дрон «FP-1»</button>
+                <button id="spawn-geran">📐 Запустить БПЛА «Герань-2»</button>
             </div>
         </main>
-        <div id="status-log" class="log">Системы автоматического наведения ПВО активированы. Начните выпуск БПЛА.</div>
+        <div class="log">Модели имеют реальные пропорции фюзеляжа и крыльев (вид сверху).</div>
     </div>
     <script src="script.js"></script>
 </body>
