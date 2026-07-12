@@ -1,4 +1,154 @@
-const canvas = document.getElementById('mapCanvas');
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('mapCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let drones = [];
+
+    class Drone {
+        constructor(y, model) {
+            this.x = -50; // Начинают полет за левым экраном
+            this.y = y;
+            this.model = model;
+            
+            if (model === 'fp1') {
+                this.name = "FP-1 (FPV-квадрокоптер)";
+                this.speed = 3.5;
+                this.color = "#00ffcc";
+            } else if (model === 'geran') {
+                this.name = "Герань-2 (Камикадзе)";
+                this.speed = 2.0;
+                this.color = "#ff3333";
+            }
+        }
+
+        update() {
+            this.x += this.speed;
+        }
+
+        draw() {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            
+            // Стили линий для чертежного вида
+            ctx.strokeStyle = this.color;
+            ctx.lineWidth = 2.5;
+            ctx.fillStyle = "rgba(0,0,0,0.5)";
+
+            if (this.model === 'fp1') {
+                // --- РЕАЛИСТИЧНЫЙ КВАДРОКОПТЕР FP-1 ---
+                // Н-образная или Х-образная карбоновая рама
+                ctx.beginPath();
+                ctx.moveTo(-12, -12); ctx.lineTo(12, 12);
+                ctx.moveTo(12, -12); ctx.lineTo(-12, 12);
+                ctx.stroke();
+
+                // Прямоугольный корпус по центру (аккумулятор + плата + камера на носу)
+                ctx.fillStyle = "#222";
+                ctx.fillRect(-5, -12, 10, 24);
+                ctx.strokeRect(-5, -12, 10, 24);
+
+                // Объектив курсовой камеры на носу (впереди по ходу движения)
+                ctx.fillStyle = "#ffcc00";
+                ctx.beginPath();
+                ctx.arc(0, 14, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                // 4 Пропеллера на концах лучей рамы
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+                ctx.lineWidth = 1.5;
+                const propPositions = [[-12,-12], [12,-12], [-12,12], [12,12]];
+                propPositions.forEach(([px, py]) => {
+                    ctx.beginPath();
+                    ctx.arc(px, py, 7, 0, Math.PI * 2); // Радиус вращения лопастей
+                    ctx.stroke();
+                    // Ось мотора по центру вращения
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath(); ctx.arc(px, py, 2, 0, Math.PI * 2); ctx.fill();
+                });
+
+            } else if (this.model === 'geran') {
+                // --- РЕАЛИСТИЧНАЯ ГЕРАНЬ-2 (Delta Wing) ---
+                // Пропорции треугольного крыла со срезанной задней кромкой
+                ctx.beginPath();
+                ctx.moveTo(25, 0);       // Острый нос (впереди)
+                ctx.lineTo(-20, -25);    // Левое крыло (размах)
+                ctx.lineTo(-25, -25);    // Левый законцовочный киль (вертикальный стабилизатор)
+                ctx.lineTo(-21, 0);      // Задняя кромка фюзеляжа (двигатель)
+                ctx.lineTo(-25, 25);     // Правый законцовочный киль
+                ctx.lineTo(-20, 25);     // Правое крыло
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                // Прорисовка элевонов (закрылков) на задней кромке крыла
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(-18, -22); ctx.lineTo(-21, -5);
+                ctx.moveTo(-18, 22);  ctx.lineTo(-21, 5);
+                ctx.stroke();
+
+                // Винт толкающего двигателя внутреннего сгорания на хвосте
+                ctx.strokeStyle = "#fff";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(-24, -6); ctx.lineTo(-24, 6);
+                ctx.stroke();
+            }
+
+            ctx.restore();
+
+            // Текстовая подпись модели над дроном
+            ctx.fillStyle = "#858585";
+            ctx.font = "11px monospace";
+            ctx.textAlign = "center";
+            ctx.fillText(this.name, this.x, this.y - 35);
+        }
+    }
+
+    // Слушатели кликов кнопок
+    document.getElementById('spawn-fp1').addEventListener('click', () => {
+        drones.push(new Drone(Math.random() * 300 + 70, 'fp1'));
+    });
+
+    document.getElementById('spawn-geran').addEventListener('click', () => {
+        drones.push(new Drone(Math.random() * 300 + 70, 'geran'));
+    });
+
+    // Главный бесконечный цикл перерисовки полигона
+    function animate() {
+        // Очищаем полигон и рисуем сетку координат для эффекта радара/карты
+        ctx.fillStyle = '#0f1015';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Тусклая тактическая сетка
+        ctx.strokeStyle = '#1f2833';
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i < canvas.width; i += 40) {
+            ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
+        }
+        for (let j = 0; j < canvas.height; j += 40) {
+            ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(canvas.width, j); ctx.stroke();
+        }
+
+        // Обновляем позиции и рисуем каждый запущенный дрон
+        drones.forEach((drone, index) => {
+            drone.update();
+            drone.draw();
+
+            // Удаляем дрон из памяти, если он улетел за правый край
+            if (drone.x > canvas.width + 50) {
+                drones.splice(index, 1);
+            }
+        });
+
+        requestAnimationFrame(animate);
+    }
+
+    // Старт анимации
+    animate();
+});
+canvas = document.getElementById('mapCanvas');
 const ctx = canvas.getContext('2d');
 
 let money = 800;
