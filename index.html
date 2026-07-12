@@ -3,44 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>БПЛА Стратегия: Битва за Границу</title>
+    <title>БПЛА Стратегия: Реальные Модели</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-wrapper">
         <header>
-            <h1>🛸 Drone Warfare: Тактический Симулятор</h1>
+            <h1>🛸 Drone Warfare: Реальные Модели БПЛА</h1>
             <div class="resource-bar">
-                <span>💰 Бюджет: $<span id="money">1000</span></span>
-                <span>🔋 Энергия Базы: <span id="base-hp">100</span>%</span>
-                <span>🚩 Контроль территории: <span id="control-pct">50</span>%</span>
+                <span>💰 Бюджет: $<span id="money">800</span></span>
+                <span>🔋 Штаб Игрока: <span id="base-hp">100</span>%</span>
+                <span>🚩 Контроль: <span id="control-pct">50</span>%</span>
             </div>
         </header>
 
         <main>
-            <!-- Игровое поле: Карта вымышленной страны -->
             <div class="canvas-container">
-                <canvas id="mapCanvas" width="800" height="400"></canvas>
-                <div class="base-label player-base">Синяя База (Вы)</div>
-                <div class="base-label enemy-base">Красная База (Враг)</div>
+                <canvas id="mapCanvas" width="900" height="450"></canvas>
             </div>
 
-            <!-- Панель управления -->
             <div class="control-panel">
                 <div class="control-group">
-                    <h3>🚀 Запуск БПЛА</h3>
-                    <button id="spawn-scout">👁️ Разведчик ($150)</button>
-                    <button id="spawn-kamikaze">💥 Камикадзе ($300)</button>
+                    <h3>🚀 Запуск Разведчиков (Сбор данных)</h3>
+                    <button id="spawn-orlan">🛸 Орлан-10 ($150)</button>
+                    <button id="spawn-globalhawk">✈️ RQ-4 Global Hawk ($400)</button>
                 </div>
                 <div class="control-group">
-                    <h3>🛡️ ПВО и Командование</h3>
-                    <p class="hint">🎯 Кликайте по ВРАЖЕСКИМ (красным) дронам на карте, чтобы сбивать их!</p>
-                    <button id="upgrade-pao">⚡ Мощность ПВО ($500)</button>
+                    <h3>💥 Запуск Ударных БПЛА</h3>
+                    <button id="spawn-shahed">📐 Герань / Shahed ($200)</button>
+                    <button id="spawn-bayraktar">🛩️ Bayraktar TB2 ($500)</button>
+                </div>
+                <div class="control-group">
+                    <h3>🛡️ Улучшение ПВО Базы</h3>
+                    <button id="upgrade-pao">⚡ Модернизация ЗРК ($450)</button>
                 </div>
             </div>
         </main>
-
-        <div id="status-log" class="log">Ситуация на фронте стабильная. Готовы к запуску.</div>
+        <div id="status-log" class="log">Военные объекты развернуты. Заводы запущены.</div>
     </div>
     <script src="script.js"></script>
 </body>
