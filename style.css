@@ -1,5 +1,5 @@
 body {
-    background-color: #111216;
+    background-color: #0f1115;
     color: #e2e8f0;
     font-family: 'Segoe UI', system-ui, sans-serif;
     margin: 0;
@@ -17,7 +17,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #1e222b;
+    background: #1a1d24;
     padding: 15px 25px;
     border-radius: 12px;
     margin-bottom: 15px;
@@ -25,21 +25,26 @@ header {
     border-bottom: 2px solid #3b82f6;
 }
 
-h1 { margin: 0; font-size: 20px; color: #3b82f6; text-transform: uppercase; letter-spacing: 1px; }
+h1 { margin: 0; font-size: 18px; color: #3b82f6; text-transform: uppercase; letter-spacing: 1px; }
+
+.resource-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
 
 .resource-bar span {
-    margin-left: 20px;
     font-weight: bold;
-    font-size: 15px;
-    background: #111216;
+    font-size: 13px;
+    background: #0f1115;
     padding: 6px 12px;
     border-radius: 6px;
-    border: 1px solid #2d3139;
+    border: 1px solid #282c34;
 }
 
 .canvas-container {
     position: relative;
-    border: 2px solid #2d3139;
+    border: 2px solid #282c34;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 8px 30px rgba(0,0,0,0.7);
@@ -58,13 +63,13 @@ canvas {
 
 .control-group {
     flex: 1;
-    background: #1e222b;
+    background: #1a1d24;
     padding: 15px;
     border-radius: 12px;
-    border: 1px solid #2d3139;
+    border: 1px solid #282c34;
 }
 
-.control-group h3 { margin-top: 0; font-size: 14px; color: #94a3b8; text-transform: uppercase; border-bottom: 1px solid #2d3139; padding-bottom: 8px; }
+.control-group h3 { margin-top: 0; font-size: 13px; color: #94a3b8; text-transform: uppercase; border-bottom: 1px solid #282c34; padding-bottom: 8px; }
 
 button {
     background: #2563eb;
@@ -84,9 +89,11 @@ button:hover { background: #1d4ed8; filter: brightness(1.1); }
 #upgrade-pao { background: #10b981; }
 #upgrade-pao:hover { background: #059669; }
 
+.hint { font-size: 11px; color: #64748b; margin-bottom: 10px; font-style: italic;}
+
 .log {
     margin-top: 15px;
-    background: #161920;
+    background: #14161d;
     padding: 12px;
     border-radius: 8px;
     text-align: center;
