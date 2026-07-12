@@ -2,31 +2,34 @@ const canvas = document.getElementById('mapCanvas');
 const ctx = canvas.getContext('2d');
 
 let money = 800;
+let enemyMoney = 800;
 let baseHp = 100;
 let territoryControl = 50; 
-let playerPvoDmg = 50;
+let playerPvoDmg = 40;
+let playerPvoRadius = 350; // Радиус автоматического ПВО игрока
+let enemyPvoRadius = 350;  // Радиус ПВО врага
 
 let myDrones = [];
 let enemyDrones = [];
 let explosions = [];
-let tracers = []; // Трассирующие снаряды ПВО
+let tracers = [];
 
 const moneyEl = document.getElementById('money');
+const enemyMoneyEl = document.getElementById('enemy-money');
 const baseHpEl = document.getElementById('base-hp');
 const controlPctEl = document.getElementById('control-pct');
 const logEl = document.getElementById('status-log');
 
-// Структура военных объектов (баз)
 const militaryObjects = {
     player: [
-        { name: "Штаб Командования", x: 40, y: 120, size: 25, color: "#3b82f6" },
-        { name: "Завод БПЛА", x: 30, y: 220, size: 20, color: "#60a5fa" },
-        { name: "РЛС ПВО", x: 60, y: 320, size: 18, color: "#93c5fd" }
+        { name: "Штаб Игрока", x: 40, y: 120, size: 24, color: "#2563eb" },
+        { name: "Завод БПЛА", x: 30, y: 220, size: 20, color: "#3b82f6" },
+        { name: "ЗРК Патриот (Авто)", x: 60, y: 320, size: 18, color: "#60a5fa" }
     ],
     enemy: [
-        { name: "Бункер Врага", x: 860, y: 120, size: 25, color: "#ef4444" },
-        { name: "Сборочный Цех", x: 870, y: 220, size: 20, color: "#f87171" },
-        { name: "Радар Слежения", x: 840, y: 320, size: 18, color: "#fca5a5" }
+        { name: "Штаб Врага", x: 860, y: 120, size: 24, color: "#dc2626" },
+        { name: "Завод Врага", x: 870, y: 220, size: 20, color: "#ef4444" },
+        { name: "ЗРК С-400 (Авто)", x: 840, y: 320, size: 18, color: "#f87171" }
     ]
 };
 
@@ -35,17 +38,19 @@ class Drone {
         this.x = x;
         this.y = y;
         this.team = team;
-        this.model = model; // 'orlan', 'globalhawk', 'shahed', 'bayraktar'
+        this.model = model;
         
-        // Характеристики моделей БПЛА
+        // Балансировка характеристик и типов
         if (model === 'orlan') {
-            this.name = "Орлан-10"; this.speed = 1.6; this.maxHp = 35; this.type = "scout"; this.icon = "🛸";
+            this.name = "Орлан-10"; this.speed = 1.6; this.maxHp = 35; this.type = "scout";
+        } else if (model === 'fp1') {
+            this.name = "FP-1 (FPV)"; this.speed = 3.5; this.maxHp = 15; this.type = "kamikaze"; // Очень быстрый, но хрупкий
         } else if (model === 'globalhawk') {
-            this.name = "RQ-4 Global Hawk"; this.speed = 1.0; this.maxHp = 110; this.type = "scout"; this.icon = "✈️";
+            this.name = "RQ-4 Global"; this.speed = 0.9; this.maxHp = 120; this.type = "scout";
         } else if (model === 'shahed') {
-            this.name = "Shahed-136"; this.speed = 2.4; this.maxHp = 25; this.type = "kamikaze"; this.icon = "📐";
+            this.name = "Shahed-136"; this.speed = 2.2; this.maxHp = 25; this.type = "kamikaze";
         } else if (model === 'bayraktar') {
-            this.name = "Bayraktar TB2"; this.speed = 1.4; this.maxHp = 70; this.type = "kamikaze"; this.icon = "🛩️";
+            this.name = "Bayraktar TB2"; this.speed = 1.3; this.maxHp = 75; this.type = "kamikaze";
         }
 
         if (team === 'enemy') this.speed = -this.speed;
@@ -56,178 +61,162 @@ class Drone {
         this.x += this.speed;
     }
 
+    // Отрисовка НАСТОЯЩИХ силуэтов БПЛА (Вид сверху) вместо смайликов
     draw() {
         ctx.save();
         ctx.translate(this.x, this.y);
-        if (this.team === 'enemy') ctx.scale(-1, 1); // Поворот спрайта врага
+        if (this.team === 'enemy') ctx.scale(-1, 1); // Разворот носа графики для врага
         
-        // Силуэт/Иконка дрона
-        ctx.fillStyle = this.team === 'player' ? '#60a5fa' : '#f87171';
-        ctx.font = "20px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(this.icon, 0, 0);
+        ctx.strokeStyle = this.team === 'player' ? '#3b82f6' : '#ef4444';
+        ctx.fillStyle = this.team === 'player' ? 'rgba(59,130,246,0.3)' : 'rgba(239,68,68,0.3)';
+        ctx.lineWidth = 2;
+
+        if (this.model === 'fp1') {
+            // Отрисовка Квадрокоптера FPV (Рама крестом, 4 точки-мотора)
+            ctx.beginPath();
+            ctx.moveTo(-8, -8); ctx.lineTo(8, 8);
+            ctx.moveTo(8, -8); ctx.lineTo(-8, 8);
+            ctx.stroke();
+            // Центральный фюзеляж
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.fillRect(-4, -4, 8, 8);
+            // Винты
+            ctx.beginPath();
+            ctx.arc(-8, -8, 4, 0, Math.PI*2); ctx.arc(8, -8, 4, 0, Math.PI*2);
+            ctx.arc(-8, 8, 4, 0, Math.PI*2); ctx.arc(8, 8, 4, 0, Math.PI*2);
+            ctx.stroke();
+        } else if (this.model === 'shahed') {
+            // Отрисовка БПЛА типа "Летающее крыло" (Треугольник)
+            ctx.beginPath();
+            ctx.moveTo(12, 0); // Нос
+            ctx.lineTo(-10, -14); // Левое крыло
+            ctx.lineTo(-6, 0); // Хвост внутренний
+            ctx.lineTo(-10, 14); // Правое крыло
+            ctx.closePath();
+            ctx.fill(); ctx.stroke();
+        } else {
+            // Классический самолетный силуэт (Орлан, БаGlobalHawk, Байрактар)
+            let wingSpan = this.model === 'globalhawk' ? 24 : (this.model === 'bayraktar' ? 18 : 14);
+            let length = this.model === 'globalhawk' ? 16 : 12;
+            
+            ctx.beginPath();
+            // Фюзеляж
+            ctx.moveTo(-length, 0); ctx.lineTo(length, 0);
+            // Большие крылья
+            ctx.moveTo(2, -wingSpan); ctx.lineTo(4, wingSpan);
+            // Хвостовое оперение
+            ctx.moveTo(-length+2, -5); ctx.lineTo(-length+2, 5);
+            ctx.stroke();
+        }
+
         ctx.restore();
 
-        // Название и Полоска HP
-        ctx.fillStyle = '#94a3b8';
+        // Полоска здоровья и подпись названия
+        ctx.fillStyle = '#64748b';
         ctx.font = "9px monospace";
-        ctx.fillText(this.name, this.x - 25, this.y - 18);
+        ctx.fillText(this.name, this.x - 20, this.y - 16);
 
         ctx.fillStyle = 'rgba(0,0,0,0.6)';
-        ctx.fillRect(this.x - 20, this.y - 14, 40, 3);
-        ctx.fillStyle = this.team === 'player' ? '#3b82f6' : '#ef4444';
-        ctx.fillRect(this.x - 20, this.y - 14, (this.hp / this.maxHp) * 40, 3);
+        ctx.fillRect(this.x - 15, this.y - 11, 30, 3);
+        ctx.fillStyle = this.team === 'player' ? '#10b981' : '#ef4444';
+        ctx.fillRect(this.x - 15, this.y - 11, (this.hp / this.maxHp) * 30, 3);
     }
 }
 
-// Слушатели кнопок запуска игрока
+// Запуски игрока
 document.getElementById('spawn-orlan').addEventListener('click', () => { if (money >= 150) { money -= 150; myDrones.push(new Drone(80, Math.random() * 260 + 80, 'player', 'orlan')); } });
+document.getElementById('spawn-fp1').addEventListener('click', () => { if (money >= 120) { money -= 120; myDrones.push(new Drone(80, Math.random() * 260 + 80, 'player', 'fp1')); } });
 document.getElementById('spawn-globalhawk').addEventListener('click', () => { if (money >= 400) { money -= 400; myDrones.push(new Drone(80, Math.random() * 260 + 80, 'player', 'globalhawk')); } });
 document.getElementById('spawn-shahed').addEventListener('click', () => { if (money >= 200) { money -= 200; myDrones.push(new Drone(80, Math.random() * 260 + 80, 'player', 'shahed')); } });
 document.getElementById('spawn-bayraktar').addEventListener('click', () => { if (money >= 500) { money -= 500; myDrones.push(new Drone(80, Math.random() * 260 + 80, 'player', 'bayraktar')); } });
-document.getElementById('upgrade-pao').addEventListener('click', () => { if (money >= 450) { money -= 450; playerPvoDmg += 30; logEl.innerText = "ЗРК Базы улучшен! Мощность ПВО повышена."; } });
+document.getElementById('upgrade-pao').addEventListener('click', () => { if (money >= 450) { money -= 450; playerPvoDmg += 20; playerPvoRadius += 50; logEl.innerText = "ЗРК улучшен! Увеличен радиус авто-стрельбы и урон."; } });
 
-// Игрок сбивает врагов кликом (ПВО)
+// Ручной клик ПВО игрока
 canvas.addEventListener('mousedown', (e) => {
     const rect = canvas.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const clickY = e.clientY - rect.top;
-
-    explosions.push({x: clickX, y: clickY, radius: 2, maxRadius: 30, color: "rgba(251, 146, 60, "});
-    tracers.push({startX: 60, startY: 320, endX: clickX, endY: clickY, alpha: 1}); // Трассер от нашей РЛС ПВО
+    const clickX = e.clientX - rect.left; const clickY = e.clientY - rect.top;
+    explosions.push({x: clickX, y: clickY, radius: 2, maxRadius: 25, color: "rgba(251, 146, 60, "});
+    tracers.push({startX: 60, startY: 320, endX: clickX, endY: clickY, alpha: 1, color: "59, 130, 246"});
 
     enemyDrones.forEach((drone, index) => {
         if (Math.hypot(drone.x - clickX, drone.y - clickY) < 35) {
             drone.hp -= playerPvoDmg;
-            if (drone.hp <= 0) {
-                enemyDrones.splice(index, 1);
-                money += 80;
-                logEl.innerText = `Перехвачен ${drone.name}! Получены средства: +$80`;
-            }
+            if (drone.hp <= 0) { enemyDrones.splice(index, 1); money += 80; }
         }
     });
 });
 
-// ИИ Врага: пускает реальные дроны и сбивает автоматическим ПВО ваши дроны
+// Честная Экономика и Авто-ПВО Врага
 function enemyAIProcessing() {
-    // 1. Запуск вражеских дронов
-    if (Math.random() < 0.015) {
-        const models = ['orlan', 'shahed', 'bayraktar'];
-        const chosenModel = models[Math.floor(Math.random() * models.length)];
-        enemyDrones.push(new Drone(820, Math.random() * 260 + 80, 'enemy', chosenModel));
+    // Враг получает деньги со временем, как и игрок
+    enemyMoney += 0.08;
+
+    // 1. Покупка дронов врагом на основе его бюджета
+    if (Math.random() < 0.02) {
+        const droneConfigs = [
+            { model: 'fp1', cost: 120 },
+            { model: 'orlan', cost: 150 },
+            { model: 'shahed', cost: 200 },
+            { model: 'bayraktar', cost: 500 }
+        ];
+        // Выбираем случайный доступный по деньгам дрон
+        let affordable = droneConfigs.filter(d => enemyMoney >= d.cost);
+        if (affordable.length > 0) {
+            let choice = affordable[Math.floor(Math.random() * affordable.length)];
+            enemyMoney -= choice.cost;
+            enemyDrones.push(new Drone(820, Math.random() * 260 + 80, 'enemy', choice.model));
+        }
     }
 
-    // 2. РАБОТА ВРАЖЕСКОГО ПВО (Сбивает ваши дроны)
-    if (Math.random() < 0.04 && myDrones.length > 0) { // Частота выстрелов врага
-        let targetDrone = myDrones[Math.floor(Math.random() * myDrones.length)];
-        
-        // Враг стреляет только если дрон залетел на его половину карты
-        let enemyRadarX = militaryObjects.enemy[2].x;
-        let enemyRadarY = militaryObjects.enemy[2].y;
-        
-        if (targetDrone.x > (territoryControl / 100) * canvas.width - 50) {
-            tracers.push({startX: enemyRadarX, startY: enemyRadarY, endX: targetDrone.x, endY: targetDrone.y, alpha: 1, color: "239, 68, 68"});
-            explosions.push({x: targetDrone.x, y: targetDrone.y, radius: 2, maxRadius: 20, color: "rgba(239, 68, 68, "});
+    // 2. АВТОМАТИЧЕСКОЕ ПВО ВРАГА (С-400)
+    let enemyPvo = militaryObjects.enemy[2];
+    if (Math.random() < 0.03 && myDrones.length > 0) {
+        // Ищет ближайший к своей базе дрон игрока
+        let targetsInRadius = myDrones.filter(d => Math.hypot(d.x - enemyPvo.x, d.y - enemyPvo.y) < enemyPvoRadius);
+        if (targetsInRadius.length > 0) {
+            let target = targetsInRadius[0];
+            tracers.push({startX: enemyPvo.x, startY: enemyPvo.y, endX: target.x, endY: target.y, alpha: 1, color: "239, 68, 68"});
+            explosions.push({x: target.x, y: target.y, radius: 2, maxRadius: 18, color: "rgba(239, 68, 68, "});
             
-            targetDrone.hp -= 20; // Урон вражеского ПВО
-            logEl.innerText = `⚠️ Вражеский ЗРК обстрелял наш ${targetDrone.name}!`;
+            target.hp -= 15;
+            if (target.hp <= 0) {
+                myDrones.splice(myDrones.indexOf(target), 1);
+                enemyMoney += 60; // Враг получает награду за сбитие!
+                logEl.innerText = `❌ Вражеское авто-ПВО сбило наш ${target.name}.`;
+            }
+        }
+    }
+}
 
-            if (targetDrone.hp <= 0) {
-                myDrones.splice(myDrones.indexOf(targetDrone), 1);
-                logEl.innerText = `❌ Потеря: Наш ${targetDrone.name} был сбит вражеским ПВО.`;
+// АВТОМАТИЧЕСКОЕ ПВО ИГРОКА (Патриот)
+function playerAutoPvoProcessing() {
+    let playerPvo = militaryObjects.player[2];
+    if (Math.random() < 0.04 && enemyDrones.length > 0) {
+        // Находим вражеские дроны в радиусе защиты
+        let targetsInRadius = enemyDrones.filter(d => Math.hypot(d.x - playerPvo.x, d.y - playerPvo.y) < playerPvoRadius);
+        if (targetsInRadius.length > 0) {
+            let target = targetsInRadius[0]; // Атакуем первый попавшийся в зону радарный объект
+            tracers.push({startX: playerPvo.x, startY: playerPvo.y, endX: target.x, endY: target.y, alpha: 1, color: "34, 197, 94"});
+            explosions.push({x: target.x, y: target.y, radius: 2, maxRadius: 18, color: "rgba(34, 197, 94, "});
+            
+            target.hp -= 18;
+            if (target.hp <= 0) {
+                enemyDrones.splice(enemyDrones.indexOf(target), 1);
+                money += 80;
+                logEl.innerText = `🛡️ Авто-ПВО успешно уничтожило ${target.name}! +$80`;
             }
         }
     }
 }
 
 function gameLoop() {
-    // Фон военной карты
-    ctx.fillStyle = '#141722';
+    ctx.fillStyle = '#0b0d12';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Отрисовка секторов контроля территории
+    // Сектора влияния
     let frontLineX = (territoryControl / 100) * canvas.width;
-    ctx.fillStyle = 'rgba(59, 130, 246, 0.06)';
-    ctx.fillRect(0, 0, frontLineX, canvas.height);
-    ctx.fillStyle = 'rgba(239, 68, 68, 0.06)';
-    ctx.fillRect(frontLineX, 0, canvas.width - frontLineX, canvas.height);
+    ctx.fillStyle = 'rgba(59, 130, 246, 0.04)'; ctx.fillRect(0, 0, frontLineX, canvas.height);
+    ctx.fillStyle = 'rgba(239, 68, 68, 0.04)'; ctx.fillRect(frontLineX, 0, canvas.width - frontLineX, canvas.height);
 
-    // Линия соприкосновения (Фронт)
-    ctx.strokeStyle = 'rgba(234, 179, 8, 0.6)';
-    ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(frontLineX, 0); ctx.lineTo(frontLineX, canvas.height); ctx.stroke();
-
-    // Отрисовка военных объектов на базах
-    drawMilitaryObjects();
-
-    money += 0.08; 
-    moneyEl.innerText = Math.floor(money);
-    baseHpEl.innerText = baseHp;
-    controlPctEl.innerText = Math.floor(territoryControl);
-
-    enemyAIProcessing();
-
-    // Обновление наших БПЛА
-    myDrones.forEach((drone, index) => {
-        drone.update(); drone.draw();
-        if (drone.x >= 820) {
-            if (drone.type === 'kamikaze') { territoryControl += 5; } else { territoryControl += 2; money += 200; }
-            myDrones.splice(index, 1);
-            logEl.innerText = `🎯 Успех! Наш ${drone.name} нанес удар по инфраструктуре врага.`;
-        }
-    });
-
-    // Обновление вражеских БПЛА
-    enemyDrones.forEach((drone, index) => {
-        drone.update(); drone.draw();
-        if (drone.x <= 80) {
-            if (drone.type === 'kamikaze') { baseHp -= 12; territoryControl -= 4; } else { territoryControl -= 1.5; }
-            enemyDrones.splice(index, 1);
-            logEl.innerText = `💥 Критично! Вражеский ${drone.name} прорвался и атаковал наш объект!`;
-        }
-    });
-
-    // Отрисовка трассеров ПВО
-    tracers.forEach((t, index) => {
-        ctx.strokeStyle = `rgba(${t.color || '59, 130, 246'}, ${t.alpha})`;
-        ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(t.startX, t.startY); ctx.lineTo(t.endX, t.endY); ctx.stroke();
-        t.alpha -= 0.05;
-        if (t.alpha <= 0) tracers.splice(index, 1);
-    });
-
-    // Отрисовка взрывов
-    explosions.forEach((exp, index) => {
-        ctx.strokeStyle = exp.color + (1 - exp.radius/exp.maxRadius) + ')';
-        ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.arc(exp.x, exp.y, exp.radius, 0, Math.PI * 2); ctx.stroke();
-        exp.radius += 2;
-        if (exp.radius >= exp.maxRadius) explosions.splice(index, 1);
-    });
-
-    // Финал игры
-    if (baseHp <= 0 || territoryControl <= 0) { alert("Ваши военные объекты разрушены. Поражение."); resetGame(); }
-    else if (territoryControl >= 100) { alert("Вы полностью уничтожили силы противника! Победа!"); resetGame(); }
-    else { requestAnimationFrame(gameLoop); }
-}
-
-function drawMilitaryObjects() {
-    ['player', 'enemy'].forEach(team => {
-        militaryObjects[team].forEach(obj => {
-            ctx.fillStyle = obj.color;
-            ctx.fillRect(obj.x - obj.size/2, obj.y - obj.size/2, obj.size, obj.size);
-            ctx.fillStyle = '#64748b';
-            ctx.font = "9px sans-serif";
-            ctx.fillText(obj.name, obj.x - obj.size, obj.y + obj.size);
-        });
-    });
-}
-
-function resetGame() {
-    money = 800; baseHp = 100; territoryControl = 50; playerPvoDmg = 50;
-    myDrones = []; enemyDrones = []; explosions = []; tracers = [];
-    gameLoop();
-}
-
-gameLoop();
+    // Линия фронта
+ctx.strokeStyle = 'rgba(234, 179, 8, 0.4)'; ctx.lineWidth = 2;ctx.beginPath(); ctx.moveTo(frontLineX, 0); ctx.lineTo(frontLineX, canvas.height); ctx.stroke();// Отрисовка базdrawMilitaryObjects();// Обновление интерфейсов ресурсовmoney += 0.08;moneyEl.innerText = Math.floor(money);enemyMoneyEl.innerText = Math.floor(enemyMoney);baseHpEl.innerText = baseHp;controlPctEl.innerText = Math.floor(territoryControl);// Логика автоматических действий командenemyAIProcessing();playerAutoPvoProcessing();// Симуляция полета игрокаmyDrones.forEach((drone, index) => {drone.update(); drone.draw();if (drone.x >= 820) {if (drone.type === 'kamikaze') { territoryControl += (drone.model==='fp1'? 3 : 6); } else { territoryControl += 2.5; money += 180; }myDrones.splice(index, 1);logEl.innerText = 🎯 Наш ${drone.name} прорвался на базу врага!;}});// Симуляция полета врагаenemyDrones.forEach((drone, index) => {drone.update(); drone.draw();if (drone.x <= 80) {if (drone.type === 'kamikaze') { baseHp -= (drone.model==='fp1'? 6 : 14); territoryControl -= 4; } else { territoryControl -= 2; }enemyDrones.splice(index, 1);logEl.innerText = 🚨 Прорыв! Вражеский ${drone.name} нанес удар по штабу!;}});// Рисование снарядов/лучей ПВОtracers.forEach((t, index) => {ctx.strokeStyle = rgba(${t.color}, ${t.alpha});ctx.lineWidth = 2;ctx.beginPath(); ctx.moveTo(t.startX, t.startY); ctx.lineTo(t.endX, t.endY); ctx.stroke();t.alpha -= 0.06;if (t.alpha <= 0) tracers.splice(index, 1);});// Рисование колец взрывовexplosions.forEach((exp, index) => {ctx.strokeStyle = exp.color + (1 - exp.radius/exp.maxRadius) + ')';ctx.lineWidth = 2;ctx.beginPath(); ctx.arc(exp.x, exp.y, exp.radius, 0, Math.PI * 2); ctx.stroke();exp.radius += 2;if (exp.radius >= exp.maxRadius) explosions.splice(index, 1);});if (baseHp <= 0 || territoryControl <= 0) { alert("Ваш штаб уничтожен. Поражение."); resetGame(); }else if (territoryControl >= 100) { alert("Линия фронта полностью сдвинута. Полная Победа!"); resetGame(); }else { requestAnimationFrame(gameLoop); }}function drawMilitaryObjects() {['player', 'enemy'].forEach(team => {militaryObjects[team].forEach(obj => {ctx.fillStyle = obj.color;ctx.fillRect(obj.x - obj.size/2, obj.y - obj.size/2, obj.size, obj.size);// Названия зданийctx.fillStyle = '#475569';ctx.font = "9px sans-serif";ctx.fillText(obj.name, obj.x - obj.size, obj.y + obj.size + 4);});});}function resetGame() {money = 800; enemyMoney = 800; baseHp = 100; territoryControl = 50; playerPvoDmg = 40; playerPvoRadius = 350;myDrones = []; enemyDrones = []; explosions = []; tracers = [];gameLoop();}gameLoop();
