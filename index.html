@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Game Upgrader</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header>
+    <h1>🔥 GAME UPGRADER</h1>
+
+    <div class="balance">
+      💰 <span id="balance">1000</span> ₽
+    </div>
+  </header>
+
+  <main>
+
+    <div class="card">
+      <h2>🎁 Почасовая награда</h2>
+
+      <p>
+        Получай 100 игровых ₽ каждый час!
+      </p>
+
+      <button onclick="getReward()">
+        Забрать 100 ₽
+      </button>
+
+      <p id="message"></p>
+    </div>
+
+
+    <div class="card">
+      <h2>🎁 Кейсы</h2>
+
+      <p>
+        Открывай кейсы и получай игровые предметы!
+      </p>
+
+      <button onclick="openCase()">
+        Открыть кейс — 500 ₽
+      </button>
+    </div>
+
+
+    <div class="card">
+      <h2>⬆️ Апгрейдер</h2>
+
+      <p>
+        Улучшай игровые предметы!
+      </p>
+
+      <button>
+        Скоро будет
+      </button>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
