@@ -11,57 +11,334 @@
 
 <body>
 
-  <header>
-    <h1>🔥 GAME UPGRADER</h1>
+  <header class="header">
 
-    <div class="balance">
-      💰 <span id="balance">1000</span> ₽
+    <div class="logo">
+      🎮 GAME UPGRADER
     </div>
+
+    <div class="header-info">
+
+      <div class="balance-box">
+        <span>💰 Баланс</span>
+        <strong><span id="balance">1000</span> ₽</strong>
+      </div>
+
+    </div>
+
   </header>
+
+
+  <nav class="navigation">
+
+    <button onclick="showSection('home')">
+      🏠 Главная
+    </button>
+
+    <button onclick="showSection('cases')">
+      🎁 Кейсы
+    </button>
+
+    <button onclick="showSection('upgrade')">
+      ⬆️ Апгрейдер
+    </button>
+
+    <button onclick="showSection('inventory')">
+      🎒 Инвентарь
+    </button>
+
+  </nav>
+
 
   <main>
 
-    <div class="card">
-      <h2>🎁 Почасовая награда</h2>
 
-      <p>
-        Получай 100 игровых ₽ каждый час!
-      </p>
+    <!-- ГЛАВНАЯ -->
 
-      <button onclick="getReward()">
-        Забрать 100 ₽
-      </button>
+    <section id="home" class="page active">
 
-      <p id="message"></p>
-    </div>
+      <div class="hero">
 
+        <h1>Добро пожаловать в Game Upgrader 🔥</h1>
 
-    <div class="card">
-      <h2>🎁 Кейсы</h2>
+        <p>
+          Открывай кейсы, собирай предметы
+          и улучшай их!
+        </p>
 
-      <p>
-        Открывай кейсы и получай игровые предметы!
-      </p>
-
-      <button onclick="openCase()">
-        Открыть кейс — 500 ₽
-      </button>
-    </div>
+      </div>
 
 
-    <div class="card">
-      <h2>⬆️ Апгрейдер</h2>
+      <div class="reward-card">
 
-      <p>
-        Улучшай игровые предметы!
-      </p>
+        <h2>🎁 Почасовая награда</h2>
 
-      <button>
-        Скоро будет
-      </button>
-    </div>
+        <div class="reward-money">
+          +100 ₽
+        </div>
+
+        <p>
+          До следующей награды:
+        </p>
+
+        <div id="timer">
+          00:00:00
+        </div>
+
+        <button
+          id="rewardButton"
+          onclick="getReward()"
+        >
+          Забрать награду
+        </button>
+
+      </div>
+
+
+      <div class="stats">
+
+        <div class="stat">
+          <span>💰</span>
+          <strong id="statBalance">1000</strong>
+          <p>Баланс</p>
+        </div>
+
+        <div class="stat">
+          <span>🎒</span>
+          <strong id="itemCount">0</strong>
+          <p>Предметов</p>
+        </div>
+
+        <div class="stat">
+          <span>🎁</span>
+          <strong id="casesOpened">0</strong>
+          <p>Кейсов открыто</p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- КЕЙСЫ -->
+
+    <section id="cases" class="page">
+
+      <h1 class="page-title">
+        🎁 Игровые кейсы
+      </h1>
+
+
+      <div class="case-grid">
+
+
+        <div class="case-card">
+
+          <div class="case-icon">
+            📦
+          </div>
+
+          <h2>Обычный кейс</h2>
+
+          <p>
+            Базовые игровые предметы
+          </p>
+
+          <div class="price">
+            250 ₽
+          </div>
+
+          <button onclick="openCase('normal')">
+            Открыть
+          </button>
+
+        </div>
+
+
+
+        <div class="case-card rare">
+
+          <div class="case-icon">
+            💎
+          </div>
+
+          <h2>Редкий кейс</h2>
+
+          <p>
+            Более ценные предметы
+          </p>
+
+          <div class="price">
+            500 ₽
+          </div>
+
+          <button onclick="openCase('rare')">
+            Открыть
+          </button>
+
+        </div>
+
+
+
+        <div class="case-card epic">
+
+          <div class="case-icon">
+            🔥
+          </div>
+
+          <h2>Эпический кейс</h2>
+
+          <p>
+            Шанс получить легендарный предмет
+          </p>
+
+          <div class="price">
+            1000 ₽
+          </div>
+
+          <button onclick="openCase('epic')">
+            Открыть
+          </button>
+
+        </div>
+
+
+      </div>
+
+
+      <div id="caseResult" class="result-box">
+      </div>
+
+    </section>
+
+
+
+    <!-- АПГРЕЙДЕР -->
+
+    <section id="upgrade" class="page">
+
+      <h1 class="page-title">
+        ⬆️ Апгрейдер
+      </h1>
+
+
+      <div class="upgrade-container">
+
+
+        <div class="upgrade-side">
+
+          <h2>Твой предмет</h2>
+
+          <div id="upgradeItem" class="upgrade-item">
+
+            Выбери предмет из инвентаря
+
+          </div>
+
+        </div>
+
+
+        <div class="upgrade-center">
+
+          <div class="chance">
+
+            <span id="upgradeChance">
+              0%
+            </span>
+
+          </div>
+
+
+          <button
+            id="upgradeButton"
+            onclick="upgradeItem()"
+          >
+            ⬆️ УЛУЧШИТЬ
+          </button>
+
+        </div>
+
+
+        <div class="upgrade-side">
+
+          <h2>Возможный результат</h2>
+
+          <div id="upgradeTarget" class="upgrade-item">
+
+            Выбери предмет
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="upgrade-info">
+
+        <p>
+          Чем дороже желаемый предмет,
+          тем ниже шанс улучшения.
+        </p>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ИНВЕНТАРЬ -->
+
+    <section id="inventory" class="page">
+
+      <div class="inventory-header">
+
+        <h1 class="page-title">
+          🎒 Инвентарь
+        </h1>
+
+        <button
+          class="reset-button"
+          onclick="resetGame()"
+        >
+          🗑️ Сбросить игру
+        </button>
+
+      </div>
+
+
+      <div
+        id="inventoryList"
+        class="inventory-grid"
+      >
+
+        <p class="empty">
+          Инвентарь пуст
+        </p>
+
+      </div>
+
+
+    </section>
+
 
   </main>
+
+
+  <footer>
+
+    <p>
+      🎮 Game Upgrader
+    </p>
+
+    <small>
+      Все деньги и предметы являются виртуальными.
+    </small>
+
+  </footer>
+
 
   <script src="script.js"></script>
 
