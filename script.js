@@ -1,93 +1,59 @@
-/*
-=========================
-GAME UPGRADER
-=========================
-*/
+// ==========================
+// ДАННЫЕ
+// ==========================
+
+let balance = 5000;
+
+let inventory = [];
+
+let selectedItem = null;
+
+let targetItem = null;
 
 
-const START_BALANCE = 1000;
-
-const REWARD_AMOUNT = 100;
-
-const REWARD_TIME =
-  60 * 60 * 1000;
-
-
-/*
-=========================
-ДАННЫЕ ИГРЫ
-=========================
-*/
-
-
-let game = {
-
-  balance: START_BALANCE,
-
-  inventory: [],
-
-  casesOpened: 0,
-
-  lastReward: null,
-
-  selectedItem: null
-
-};
-
-
-/*
-=========================
-ПРЕДМЕТЫ
-=========================
-*/
-
+// ==========================
+// ПРЕДМЕТЫ
+// ==========================
 
 const items = [
 
   {
     name: "Деревянный меч",
-    value: 100,
+    value: 200,
     icon: "🗡️",
     rarity: "Обычный"
   },
 
   {
-    name: "Железный клинок",
-    value: 250,
+    name: "Железный меч",
+    value: 500,
     icon: "⚔️",
     rarity: "Редкий"
   },
 
   {
-    name: "Золотой топор",
-    value: 500,
-    icon: "🪓",
+    name: "Золотой меч",
+    value: 1000,
+    icon: "✨",
     rarity: "Редкий"
   },
 
   {
-    name: "Магический посох",
-    value: 1000,
-    icon: "🔮",
-    rarity: "Эпический"
-  },
-
-  {
     name: "Огненный меч",
-    value: 2000,
+    value: 2500,
     icon: "🔥",
     rarity: "Эпический"
   },
 
   {
-    name: "Корона короля",
+    name: "Ледяной меч",
     value: 5000,
-    icon: "👑",
-    rarity: "Легендарный"
+    icon: "❄️",
+    rarity: "Эпический"
   },
 
   {
-    name: "Драконий клинок",
+    name: "Меч дракона",
     value: 10000,
     icon: "🐉",
     rarity: "Легендарный"
@@ -96,329 +62,128 @@ const items = [
 ];
 
 
-/*
-=========================
-ЗАГРУЗКА
-=========================
-*/
-
+// ==========================
+// ЗАГРУЗКА СОХРАНЕНИЯ
+// ==========================
 
 function loadGame() {
 
-  const savedGame =
-    localStorage.getItem(
-      "gameUpgrader"
-    );
+  const saved =
+    localStorage.getItem("caseUpgrader");
 
 
-  if (savedGame) {
+  if (saved) {
 
-    game =
-      JSON.parse(savedGame);
+    const data =
+      JSON.parse(saved);
+
+
+    balance =
+      data.balance;
+
+
+    inventory =
+      data.inventory || [];
 
   }
 
 
-  updateUI();
+  updateBalance();
+
+  renderInventory();
 
 }
 
 
+// ==========================
+// СОХРАНЕНИЕ
+// ==========================
+
 function saveGame() {
 
+  const data = {
+
+    balance: balance,
+
+    inventory: inventory
+
+  };
+
+
   localStorage.setItem(
-    "gameUpgrader",
-    JSON.stringify(game)
+
+    "caseUpgrader",
+
+    JSON.stringify(data)
+
   );
 
 }
 
 
-/*
-=========================
-ИНТЕРФЕЙС
-=========================
-*/
+// ==========================
+// БАЛАНС
+// ==========================
 
-
-function updateUI() {
+function updateBalance() {
 
   document
     .getElementById("balance")
     .textContent =
-      game.balance;
-
-
-  document
-    .getElementById("statBalance")
-    .textContent =
-      game.balance;
-
-
-  document
-    .getElementById("itemCount")
-    .textContent =
-      game.inventory.length;
-
-
-  document
-    .getElementById("casesOpened")
-    .textContent =
-      game.casesOpened;
-
-
-  updateInventory();
-
-  updateReward();
+    balance;
 
 }
 
 
-/*
-=========================
-НАВИГАЦИЯ
-=========================
-*/
+// ==========================
+// СТРАНИЦЫ
+// ==========================
 
-
-function showSection(section) {
+function showPage(pageId) {
 
   const pages =
     document.querySelectorAll(".page");
 
 
-  pages.forEach(
-    page => {
+  pages.forEach(function(page) {
 
-      page.classList.remove(
-        "active"
-      );
+    page.classList.remove("active");
 
-    }
-  );
+  });
 
 
   document
-    .getElementById(section)
-    .classList.add(
-      "active"
-    );
+    .getElementById(pageId)
+    .classList.add("active");
 
 }
 
 
-/*
-=========================
-НАГРАДА
-=========================
-*/
+// ==========================
+// ОТКРЫТИЕ КЕЙСА
+// ==========================
 
+function openCase(price, type) {
 
-function getReward() {
-
-  const now = Date.now();
-
-
-  if (
-    !game.lastReward ||
-    now - game.lastReward
-    >= REWARD_TIME
-  ) {
-
-    game.balance +=
-      REWARD_AMOUNT;
-
-
-    game.lastReward =
-      now;
-
-
-    saveGame();
-
-    updateUI();
-
+  if (balance < price) {
 
     alert(
-      "🎉 Ты получил +100 игровых ₽!"
+      "Недостаточно игровых рублей!"
     );
-
-  }
-
-  else {
-
-    alert(
-      "⏳ Награда пока недоступна!"
-    );
-
-  }
-
-}
-
-
-/*
-=========================
-ТАЙМЕР
-=========================
-*/
-
-
-function updateReward() {
-
-  const timer =
-    document.getElementById(
-      "timer"
-    );
-
-
-  const button =
-    document.getElementById(
-      "rewardButton"
-    );
-
-
-  if (!game.lastReward) {
-
-    timer.textContent =
-      "Награда доступна!";
-
-
-    button.disabled =
-      false;
-
 
     return;
 
   }
 
 
-  const now =
-    Date.now();
+  balance =
+    balance - price;
 
 
-  const passed =
-    now - game.lastReward;
-
-
-  const remaining =
-    REWARD_TIME - passed;
-
-
-  if (remaining <= 0) {
-
-    timer.textContent =
-      "Награда доступна!";
-
-
-    button.disabled =
-      false;
-
-
-    return;
-
-  }
-
-
-  button.disabled =
-    true;
-
-
-  const hours =
-    Math.floor(
-      remaining / 3600000
-    );
-
-
-  const minutes =
-    Math.floor(
-      (remaining % 3600000)
-      / 60000
-    );
-
-
-  const seconds =
-    Math.floor(
-      (remaining % 60000)
-      / 1000
-    );
-
-
-  timer.textContent =
-    `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
-
-}
-
-
-function formatTime(number) {
-
-  return String(number)
-    .padStart(2, "0");
-
-}
-
-
-setInterval(
-  updateReward,
-  1000
-);
-
-
-/*
-=========================
-КЕЙСЫ
-=========================
-*/
-
-
-function openCase(type) {
-
-  let price;
+  let possibleItems = [];
 
 
   if (type === "normal") {
-
-    price = 250;
-
-  }
-
-
-  if (type === "rare") {
-
-    price = 500;
-
-  }
-
-
-  if (type === "epic") {
-
-    price = 1000;
-
-  }
-
-
-  if (
-    game.balance < price
-  ) {
-
-    alert(
-      "❌ Недостаточно игровых ₽!"
-    );
-
-
-    return;
-
-  }
-
-
-  game.balance -=
-    price;
-
-
-  let possibleItems;
-
-
-  if (
-    type === "normal"
-  ) {
 
     possibleItems =
       items.slice(0, 3);
@@ -426,9 +191,7 @@ function openCase(type) {
   }
 
 
-  if (
-    type === "rare"
-  ) {
+  if (type === "rare") {
 
     possibleItems =
       items.slice(1, 5);
@@ -436,308 +199,256 @@ function openCase(type) {
   }
 
 
-  if (
-    type === "epic"
-  ) {
+  if (type === "epic") {
 
     possibleItems =
-      items.slice(3);
+      items.slice(3, 6);
 
   }
 
 
-  const randomItem =
-    possibleItems[
-      Math.floor(
-        Math.random()
-        *
-        possibleItems.length
-      )
-    ];
+  const randomIndex =
+    Math.floor(
+
+      Math.random()
+      *
+      possibleItems.length
+
+    );
+
+
+  const item =
+    possibleItems[randomIndex];
 
 
   const newItem = {
 
-    ...randomItem,
-
     id:
       Date.now()
       +
-      Math.random()
+      Math.random(),
+
+    name:
+      item.name,
+
+    value:
+      item.value,
+
+    icon:
+      item.icon,
+
+    rarity:
+      item.rarity
 
   };
 
 
-  game.inventory.push(
+  inventory.push(
     newItem
   );
 
 
-  game.casesOpened++;
+  updateBalance();
 
+  renderInventory();
 
   saveGame();
 
-  updateUI();
 
+  document
+    .getElementById("result")
+    .innerHTML =
 
-  showCaseResult(
-    newItem
-  );
-
-}
-
-
-/*
-=========================
-РЕЗУЛЬТАТ КЕЙСА
-=========================
-*/
-
-
-function showCaseResult(item) {
-
-  const result =
-    document.getElementById(
-      "caseResult"
-    );
-
-
-  result.innerHTML = `
-
+    `
     🎉 Тебе выпало!
 
     <br><br>
 
     <strong>
 
-      ${item.icon}
-      ${item.name}
+      ${newItem.icon}
+      ${newItem.name}
 
     </strong>
 
-    <br>
+    <br><br>
 
-    💰 ${item.value} ₽
-
-  `;
+    💰 Цена: ${newItem.value} ₽
+    `;
 
 }
 
 
-/*
-=========================
-ИНВЕНТАРЬ
-=========================
-*/
+// ==========================
+// ИНВЕНТАРЬ
+// ==========================
 
+function renderInventory() {
 
-function updateInventory() {
-
-  const inventory =
+  const container =
     document.getElementById(
       "inventoryList"
     );
 
 
-  inventory.innerHTML = "";
+  container.innerHTML = "";
 
 
-  if (
-    game.inventory.length === 0
-  ) {
+  if (inventory.length === 0) {
 
-    inventory.innerHTML = `
-
-      <p class="empty">
-
-        🎒 Инвентарь пуст
-
-      </p>
-
-    `;
-
+    container.innerHTML =
+      "<p>Инвентарь пуст</p>";
 
     return;
 
   }
 
 
-  game.inventory.forEach(
-    item => {
+  inventory.forEach(function(item) {
 
-      const element =
-        document.createElement(
-          "div"
-        );
+    const div =
+      document.createElement("div");
 
 
-      element.className =
-        "inventory-item";
+    div.className =
+      "item";
 
 
-      element.innerHTML = `
+    div.innerHTML =
 
-        <div class="item-icon">
+      `
+      <div class="item-icon">
 
-          ${item.icon}
-
-        </div>
-
-
-        <div class="item-name">
-
-          ${item.name}
-
-        </div>
-
-
-        <div>
-
-          ${item.rarity}
-
-        </div>
-
-
-        <div class="item-value">
-
-          💰 ${item.value} ₽
-
-        </div>
-
-
-        <button
-          onclick="selectForUpgrade('${item.id}')"
-        >
-
-          ⬆️ Апгрейд
-
-        </button>
-
-      `;
-
-
-      inventory.appendChild(
-        element
-      );
-
-    }
-  );
-
-}
-
-
-/*
-=========================
-ВЫБОР ПРЕДМЕТА
-=========================
-*/
-
-
-function selectForUpgrade(id) {
-
-  const item =
-    game.inventory.find(
-      item =>
-        String(item.id)
-        ===
-        String(id)
-    );
-
-
-  if (!item) {
-
-    return;
-
-  }
-
-
-  game.selectedItem =
-    item;
-
-
-  document
-    .getElementById(
-      "upgradeItem"
-    )
-    .innerHTML = `
-
-      <div>
-
-        <div
-          style="font-size:50px"
-        >
-
-          ${item.icon}
-
-        </div>
-
-        <h3>
-
-          ${item.name}
-
-        </h3>
-
-        <p>
-
-          💰 ${item.value} ₽
-
-        </p>
+        ${item.icon}
 
       </div>
 
-    `;
+      <h3>
+
+        ${item.name}
+
+      </h3>
+
+      <p>
+
+        ${item.rarity}
+
+      </p>
+
+      <p>
+
+        💰 ${item.value} ₽
+
+      </p>
+
+      <button>
+
+        ⬆️ Апгрейд
+
+      </button>
+      `;
 
 
-  updateUpgradeTarget();
+    const button =
+      div.querySelector("button");
 
 
-  showSection(
-    "upgrade"
-  );
+    button.onclick =
+      function() {
+
+        selectItem(item.id);
+
+      };
+
+
+    container.appendChild(div);
+
+  });
 
 }
 
 
-/*
-=========================
-ЦЕЛЬ АПГРЕЙДА
-=========================
-*/
+// ==========================
+// ВЫБОР ПРЕДМЕТА
+// ==========================
+
+function selectItem(id) {
+
+  selectedItem =
+    inventory.find(function(item) {
+
+      return String(item.id)
+        === String(id);
+
+    });
 
 
-function updateUpgradeTarget() {
-
-  const item =
-    game.selectedItem;
-
-
-  if (!item) {
+  if (!selectedItem) {
 
     return;
 
   }
 
+
+  document
+    .getElementById("selectedItem")
+    .innerHTML =
+
+    `
+    <div>
+
+      <div style="font-size:50px">
+
+        ${selectedItem.icon}
+
+      </div>
+
+      <h3>
+
+        ${selectedItem.name}
+
+      </h3>
+
+      <p>
+
+        💰 ${selectedItem.value} ₽
+
+      </p>
+
+    </div>
+    `;
+
+
+  createTarget();
+
+
+  showPage("upgrade");
+
+}
+
+
+// ==========================
+// СОЗДАНИЕ ЦЕЛИ
+// ==========================
+
+function createTarget() {
 
   const betterItems =
-    items.filter(
-      target =>
-        target.value
-        >
-        item.value
-    );
+    items.filter(function(item) {
+
+      return item.value
+        > selectedItem.value;
+
+    });
 
 
-  if (
-    betterItems.length === 0
-  ) {
+  if (betterItems.length === 0) {
 
     document
-      .getElementById(
-        "upgradeTarget"
-      )
-      .textContent =
-        "Максимальный предмет";
+      .getElementById("targetItem")
+      .innerHTML =
+
+      "Это максимальный предмет!";
 
 
     return;
@@ -745,63 +456,58 @@ function updateUpgradeTarget() {
   }
 
 
-  const target =
+  targetItem =
     betterItems[
       Math.floor(
+
         Math.random()
         *
         betterItems.length
+
       )
     ];
 
 
-  game.upgradeTarget =
-    target;
-
-
   document
-    .getElementById(
-      "upgradeTarget"
-    )
-    .innerHTML = `
+    .getElementById("targetItem")
+    .innerHTML =
 
-      <div>
+    `
+    <div>
 
-        <div
-          style="font-size:50px"
-        >
+      <div style="font-size:50px">
 
-          ${target.icon}
-
-        </div>
-
-        <h3>
-
-          ${target.name}
-
-        </h3>
-
-        <p>
-
-          💰 ${target.value} ₽
-
-        </p>
+        ${targetItem.icon}
 
       </div>
 
+      <h3>
+
+        ${targetItem.name}
+
+      </h3>
+
+      <p>
+
+        💰 ${targetItem.value} ₽
+
+      </p>
+
+    </div>
     `;
 
 
   let chance =
+
     Math.floor(
 
       (
-        item.value
+        selectedItem.value
         /
-        target.value
+        targetItem.value
       )
       *
-      75
+      80
 
     );
 
@@ -820,266 +526,170 @@ function updateUpgradeTarget() {
   }
 
 
-  game.upgradeChance =
-    chance;
-
-
   document
-    .getElementById(
-      "upgradeChance"
-    )
+    .getElementById("chance")
     .textContent =
-      chance + "%";
+
+    chance + "%";
 
 }
 
 
-/*
-=========================
-АПГРЕЙД
-=========================
-*/
-
+// ==========================
+// АПГРЕЙД
+// ==========================
 
 function upgradeItem() {
 
-  const item =
-    game.selectedItem;
-
-
-  const target =
-    game.upgradeTarget;
-
-
   if (
-    !item ||
-    !target
+    !selectedItem ||
+    !targetItem
   ) {
 
     alert(
-      "Выбери предмет!"
+      "Сначала выбери предмет из инвентаря!"
     );
-
 
     return;
 
   }
+
+
+  const chanceText =
+    document
+      .getElementById("chance")
+      .textContent;
+
+
+  const chance =
+    Number(
+      chanceText.replace("%", "")
+    );
 
 
   const random =
     Math.random() * 100;
 
 
-  if (
-    random
-    <=
-    game.upgradeChance
-  ) {
+  const index =
+    inventory.findIndex(function(item) {
 
-    const index =
-      game.inventory.findIndex(
-        inventoryItem =>
-          inventoryItem.id
-          ===
-          item.id
-      );
+      return item.id
+        === selectedItem.id;
+
+    });
 
 
-    game.inventory.splice(
-      index,
-      1
-    );
+  // Удаляем старый предмет
 
+  inventory.splice(
+    index,
+    1
+  );
+
+
+  if (random <= chance) {
 
     const newItem = {
-
-      ...target,
 
       id:
         Date.now()
         +
-        Math.random()
+        Math.random(),
+
+      name:
+        targetItem.name,
+
+      value:
+        targetItem.value,
+
+      icon:
+        targetItem.icon,
+
+      rarity:
+        targetItem.rarity
 
     };
 
 
-    game.inventory.push(
+    inventory.push(
       newItem
     );
 
 
-    alert(
-
-      `🎉 УСПЕХ!
-
-${item.name}
-
-⬇️
-
-${newItem.name}`
-
-    );
-
-
-    game.selectedItem =
-      null;
-
-
-    game.upgradeTarget =
-      null;
-
-
-    saveGame();
-
-    updateUI();
-
-
     document
-      .getElementById(
-        "upgradeItem"
-      )
-      .textContent =
-        "Выбери предмет из инвентаря";
+      .getElementById("upgradeResult")
+      .innerHTML =
 
+      `
+      🎉 УСПЕХ!
 
-    document
-      .getElementById(
-        "upgradeTarget"
-      )
-      .textContent =
-        "Выбери предмет";
+      <br><br>
 
+      Ты получил:
 
-    document
-      .getElementById(
-        "upgradeChance"
-      )
-      .textContent =
-        "0%";
+      <br>
+
+      ${newItem.icon}
+      <strong>
+        ${newItem.name}
+      </strong>
+      `;
 
   }
-
 
   else {
 
-    const index =
-      game.inventory.findIndex(
-        inventoryItem =>
-          inventoryItem.id
-          ===
-          item.id
-      );
-
-
-    game.inventory.splice(
-      index,
-      1
-    );
-
-
-    alert(
-      "💥 Неудача! Предмет потерян."
-    );
-
-
-    game.selectedItem =
-      null;
-
-
-    game.upgradeTarget =
-      null;
-
-
-    saveGame();
-
-    updateUI();
-
-
     document
-      .getElementById(
-        "upgradeItem"
-      )
-      .textContent =
-        "Выбери предмет из инвентаря";
+      .getElementById("upgradeResult")
+      .innerHTML =
 
+      `
+      💥 НЕУДАЧА!
 
-    document
-      .getElementById(
-        "upgradeTarget"
-      )
-      .textContent =
-        "Выбери предмет";
+      <br><br>
 
-
-    document
-      .getElementById(
-        "upgradeChance"
-      )
-      .textContent =
-        "0%";
-
-  }
-
-}
-
-
-/*
-=========================
-СБРОС ИГРЫ
-=========================
-*/
-
-
-function resetGame() {
-
-  const confirmation =
-    confirm(
-      "Ты точно хочешь сбросить игру?"
-    );
-
-
-  if (!confirmation) {
-
-    return;
+      Предмет потерян.
+      `;
 
   }
 
 
-  localStorage.removeItem(
-    "gameUpgrader"
-  );
+  selectedItem = null;
+
+  targetItem = null;
 
 
-  game = {
+  document
+    .getElementById("selectedItem")
+    .textContent =
 
-    balance: START_BALANCE,
-
-    inventory: [],
-
-    casesOpened: 0,
-
-    lastReward: null,
-
-    selectedItem: null
-
-  };
+    "Ничего не выбрано";
 
 
-  updateUI();
+  document
+    .getElementById("targetItem")
+    .textContent =
+
+    "Выбери предмет";
 
 
-  alert(
-    "🔄 Игра сброшена!"
-  );
+  document
+    .getElementById("chance")
+    .textContent =
+
+    "0%";
+
+
+  renderInventory();
+
+  saveGame();
 
 }
 
 
-/*
-=========================
-СТАРТ
-=========================
-*/
-
+// ==========================
+// СТАРТ
+// ==========================
 
 loadGame();
