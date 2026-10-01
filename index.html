@@ -3,67 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Интерактивный Симулятор Лифта 2.0</title>
+    <title>Интерактивный Симулятор Лифта Премиум</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
         
-        <!-- ЛЕВАЯ СТОРОНА: Вид от первого лица -->
-        <div class="view-first-person">
-            
-            <!-- СЦЕНА 1: Вы стоите в холле перед лифтом -->
-            <div class="scene active" id="scene-hall">
-                <div class="hall-indicator">
-                    <div class="floor-num" id="hallDisplay">01</div>
-                    <div class="arrow" id="hallArrow">●</div>
+        <!-- БЛОК 1: Кабина лифта и Двери (Вид изнутри) -->
+        <div class="view-cabin">
+            <div class="block-title">КУПЕ КАБИНЫ</div>
+            <div class="cabin-interior">
+                <!-- ЖК-Медиаэкран лифта -->
+                <div class="media-screen">
+                    <div class="media-row">
+                        <div class="floor-num" id="mainDisplay">01</div>
+                        <div class="arrow" id="mainArrow">●</div>
+                    </div>
+                    <div class="status-text" id="statusText">СТЕНДБАЙ</div>
                 </div>
                 
-                <div class="elevator-portal">
-                    <div class="doors-container" id="hallDoors">
+                <!-- Зеркало в кабине -->
+                <div class="mirror">
+                    <div class="mirror-reflection"></div>
+                </div>
+
+                <!-- Раздвижные двери кабины -->
+                <div class="doors-portal">
+                    <div class="doors-wrapper" id="elevatorDoors">
                         <div class="door left-wing"></div>
                         <div class="door right-wing"></div>
                     </div>
-                    <!-- Проблеск кабины сзади -->
-                    <div class="cabin-preview"></div>
-                </div>
-
-                <div class="hall-controls">
-                    <div class="location-info">Вы находитесь на <span id="userFloorText">01</span> этаже</div>
-                    <button class="btn-call-elevator" id="btnCall">▲▼ ВЫЗВАТЬ ЛИФТ</button>
+                    <!-- Вид на стену шахты за дверями -->
+                    <div class="shaft-backwall"></div>
                 </div>
             </div>
-
-            <!-- СЦЕНА 2: Вы зашли ИНСАЙД (Внутрь кабины) -->
-            <div class="scene" id="scene-cabin">
-                <div class="cabin-interior">
-                    <!-- Левая часть кабины: Зеркало и медиа-экран -->
-                    <div class="cabin-left">
-                        <div class="cabin-media-screen">
-                            <div class="media-floor" id="cabinDisplay">01</div>
-                            <div class="media-status" id="cabinStatus">СТЕНДБАЙ</div>
-                        </div>
-                        <div class="cabin-mirror"></div>
-                    </div>
-
-                    <!-- Правая часть кабины: Большая сенсорная панель приказов -->
-                    <div class="cabin-right">
-                        <div class="touch-panel">
-                            <div class="panel-header">SMART ELEVATOR SYSTEM</div>
-                            <div class="buttons-grid" id="buttonsGrid"></div>
-                            <div class="panel-footer">=== OTIS / KONE 2026 ===</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Информационный подвал для игрока -->
-            <div class="status-bar" id="playerStatus">Вы стоите в холле. Нажмите кнопку вызова лифта.</div>
         </div>
 
-        <!-- ПРАВАЯ СТОРОНА: Интерактивный монитор шахты (как у вас) -->
+        <!-- БЛОК 2: Сенсорная Панель Приказов (Всегда доступна) -->
+        <div class="view-panel">
+            <div class="block-title">ПАНЕЛЬ ПРИКАЗОВ</div>
+            <div class="touch-panel">
+                <div class="panel-header">SMART LIFT SYSTEM</div>
+                
+                <!-- Сетка круглых кнопок 1-16 -->
+                <div class="buttons-grid" id="buttonsGrid"></div>
+                
+                <!-- Сервисные кнопки -->
+                <div class="service-buttons">
+                    <button class="btn-service" id="btnOpen">◄||►</button>
+                    <button class="btn-service" id="btnClose">►||◄</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- БЛОК 3: Монитор Шахты (Как на вашем скриншоте) -->
         <div class="view-shaft-schema">
-            <div class="schema-title">МОНИТОР ШАХТЫ</div>
+            <div class="block-title">МОНИТОР ШАХТЫ</div>
             <div class="shaft-container">
                 <div class="shaft-rail">
                     <div class="mini-car" id="miniCar">
@@ -75,7 +70,6 @@
         </div>
 
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
