@@ -1,326 +1,145 @@
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
 }
 
 body {
-  margin: 0;
-  background: #101014;
-  color: white;
-  font-family: Arial, sans-serif;
+    background-color: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #fff;
 }
 
-
-/* HEADER */
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 20px 8%;
-
-  background: #181820;
-
-  border-bottom: 1px solid #333;
+.simulator {
+    display: flex;
+    gap: 40px;
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25);
 }
 
-header h1 {
-  margin: 0;
+/* Шахта лифта */
+.shaft {
+    width: 120px;
+    height: 640px; /* 16 этажей по 40px */
+    background: #111;
+    border: 3px solid #555;
+    position: relative;
+    overflow: hidden;
 }
 
-.balance {
-  background: #252530;
-
-  padding: 12px 20px;
-
-  border-radius: 10px;
-
-  color: #ffd43b;
-
-  font-size: 20px;
+/* Кабина ЩЛЗ Зеленая */
+.elevator {
+    width: 100%;
+    height: 40px; /* Высота одного этажа */
+    background-color: #1e4620; /* Аутентичный зеленый цвет ЩЛЗ */
+    border: 2px solid #3a7d44;
+    position: absolute;
+    bottom: 0; /* Старт с 1 этажа */
+    transition: bottom 2s ease-in-out; /* Плавный ход лифта */
 }
 
-
-/* NAV */
-
-nav {
-  display: flex;
-
-  justify-content: center;
-
-  gap: 15px;
-
-  padding: 20px;
-
-  background: #15151c;
+/* Двери кабины */
+.doors {
+    display: flex;
+    width: 100%;
+    height: 100%;
 }
-
-nav button {
-  background: #252530;
-
-  color: white;
-
-  border: none;
-
-  padding: 12px 20px;
-
-  border-radius: 8px;
-
-  cursor: pointer;
-
-  font-size: 16px;
+.door {
+    width: 50%;
+    height: 100%;
+    background: #7f8c8d;
+    border: 1px solid #95a5a6;
+    transition: transform 1.5s ease-in-out;
 }
-
-nav button:hover {
-  background: #ff9800;
-}
-
-
-/* MAIN */
-
-main {
-  max-width: 1100px;
-
-  margin: auto;
-
-  padding: 40px 20px;
-}
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
-
-h2 {
-  text-align: center;
-
-  margin-bottom: 40px;
-}
-
-
-/* CASES */
-
-.cases {
-  display: grid;
-
-  grid-template-columns:
-    repeat(auto-fit, minmax(250px, 1fr));
-
-  gap: 25px;
-}
-
-.case {
-  background: #1c1c25;
-
-  padding: 30px;
-
-  border-radius: 15px;
-
-  text-align: center;
-
-  border: 1px solid #333;
-
-  transition: 0.2s;
-}
-
-.case:hover {
-  transform: translateY(-5px);
-
-  border-color: #ff9800;
-}
-
-.case-image {
-  font-size: 80px;
-
-  margin-bottom: 15px;
-}
-
-.case button {
-  background: #ff9800;
-
-  color: white;
-
-  border: none;
-
-  padding: 12px 25px;
-
-  border-radius: 8px;
-
-  cursor: pointer;
-
-  font-size: 16px;
-}
-
-.case button:hover {
-  background: #ffb300;
-}
-
-#result {
-  text-align: center;
-
-  margin-top: 40px;
-
-  font-size: 24px;
-}
-
-
-/* INVENTORY */
-
-#inventoryList {
-  display: grid;
-
-  grid-template-columns:
-    repeat(auto-fit, minmax(200px, 1fr));
-
-  gap: 20px;
-}
-
-.item {
-  background: #1c1c25;
-
-  padding: 20px;
-
-  text-align: center;
-
-  border-radius: 12px;
-
-  border: 1px solid #333;
-}
-
-.item-icon {
-  font-size: 50px;
-}
-
-.item button {
-  background: #4caf50;
-
-  color: white;
-
-  border: none;
-
-  padding: 10px 15px;
-
-  border-radius: 6px;
-
-  cursor: pointer;
-
-  margin-top: 10px;
-}
-
-
-/* UPGRADE */
-
-.info {
-  text-align: center;
-
-  color: #aaa;
-}
-
-.upgrade-box {
-  display: grid;
-
-  grid-template-columns:
-    1fr 100px 1fr;
-
-  gap: 20px;
-
-  align-items: center;
-
-  margin-top: 40px;
-}
-
-.upgrade-box h3 {
-  text-align: center;
-}
-
-.selected {
-  background: #1c1c25;
-
-  border: 2px dashed #555;
-
-  padding: 40px 20px;
-
-  min-height: 150px;
-
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-
-  text-align: center;
-
-  border-radius: 15px;
-}
-
-.arrow {
-  font-size: 50px;
-
-  text-align: center;
-}
-
-.chance {
-  text-align: center;
-
-  font-size: 25px;
-
-  margin: 30px;
-}
-
-#chance {
-  color: #ff9800;
-}
-
-.upgrade-button {
-  display: block;
-
-  margin: auto;
-
-  background: #ff9800;
-
-  color: white;
-
-  border: none;
-
-  padding: 15px 40px;
-
-  font-size: 20px;
-
-  border-radius: 10px;
-
-  cursor: pointer;
-}
-
-#upgradeResult {
-  text-align: center;
-
-  font-size: 22px;
-
-  margin-top: 30px;
-}
-
-
-/* MOBILE */
-
-@media (max-width: 700px) {
-
-  header {
+/* Анимация открытия */
+.elevator.doors-open .left-door { transform: translateX(-90%); }
+.elevator.doors-open .right-door { transform: translateX(90%); }
+
+/* Панель приказов (вертикальный пост) */
+.panel {
+    width: 180px;
+    background: linear-gradient(145deg, #cfd8dc, #b0bec5); /* Шлифованый алюминий */
+    border: 4px solid #78909c;
+    border-radius: 5px;
+    padding: 15px;
+    display: flex;
     flex-direction: column;
+    align-items: center;
+}
 
-    gap: 15px;
+.brand {
+    font-weight: bold;
+    color: #263238;
+    margin-bottom: 10px;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
 
+/* Семисегментное табло */
+.display {
+    width: 100%;
+    background: #000;
+    color: #ff3d00; /* Красная или зеленая индикация ЩЛЗ тех лет */
+    font-family: 'Courier New', monospace;
+    font-size: 28px;
     text-align: center;
-  }
+    padding: 5px 0;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    box-shadow: inset 0 0 10px rgba(255,61,0,0.5);
+}
 
-  .upgrade-box {
-    grid-template-columns: 1fr;
-  }
+/* Кнопки */
+.buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 15px;
+}
 
-  .arrow {
-    transform: rotate(90deg);
-  }
+.btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #546e7a;
+    background: #eceff1;
+    color: #37474f;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 0 #b0bec5;
+    transition: all 0.1s ease;
+}
+.btn:active {
+    transform: translateY(3px);
+    box-shadow: none;
+}
+/* Подсветка кнопки при вызове */
+.btn.active {
+    background: #ffeb3b;
+    box-shadow: 0 0 12px #ffeb3b;
+    border-color: #fbc02d;
+}
 
+.service-buttons {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    justify-content: center;
+}
+.btn.service {
+    width: 45px;
+    height: 35px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+.btn.alarm {
+    background: #ff5252;
+    color: white;
 }
