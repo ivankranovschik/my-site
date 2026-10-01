@@ -3,107 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Симулятор Лифтёра: Внештатная ситуация</title>
+    <title>Инженерный Симулятор Лифтового Оборудования</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game-container">
-        <!-- Левая часть: Шахта и Лифт -->
+    <div class="scada-container">
+        <!-- Левая часть: Мониторинг шахты -->
         <div class="shaft-section">
-            <div class="shaft">
-                <div class="floor-lines" id="floorLines"></div>
-                <div class="elevator" id="elevator">
-                    <div class="elevator-glow"></div>
-                    <div class="doors" id="doors">
-                        <div class="door left-door"></div>
-                        <div class="door right-door"></div>
+            <div class="section-title">МОНИТОР ШАХТЫ (16 ЭТАЖЕЙ)</div>
+            <div class="shaft-wrapper">
+                <!-- Цифры этажей слева от шахты -->
+                <div class="floor-labels" id="floorLabels"></div>
+                
+                <div class="shaft">
+                    <div class="floor-lines" id="floorLines"></div>
+                    <!-- Кабина лифта -->
+                    <div class="elevator" id="elevator">
+                        <div class="elevator-ceiling-light"></div>
+                        <div class="doors" id="doors">
+                            <div class="door left-door"></div>
+                            <div class="door right-door"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Центральная часть: Станция управления (Техэтаж) -->
-        <div class="control-room">
-            <div class="block-title">СТАНЦИЯ УПРАВЛЕНИЯ (ШУЛК)</div>
+        <!-- Правая часть: Станция управления ШУЛК/УЭЛ -->
+        <div class="control-panel">
+            <div class="section-title">СТАНЦИЯ УПРАВЛЕНИЯ ЛИФТОМ</div>
             
-            <div class="display-container">
-                <div class="arrow up" id="arrow-up">▲</div>
-                <div class="display" id="display">01</div>
-                <div class="arrow down" id="arrow-down">▼</div>
-                <div class="status-text" id="status-text">СТЕНДБАЙ</div>
+            <!-- Главное табло станции -->
+            <div class="main-display-unit">
+                <div class="direction-arrows">
+                    <span class="arrow" id="arrow-up">▲ ВВЕРХ</span>
+                    <span class="arrow" id="arrow-down">▼ ВНИЗ</span>
+                </div>
+                <div class="matrix-display" id="display">01</div>
+                <div class="system-status" id="status-text">ГОТОВ</div>
             </div>
 
-            <!-- Индикаторы поломок -->
-            <div class="tech-info">
-                <div class="info-row">Ошибка: <span id="error-code" class="text-ok">НЕТ</span></div>
-                <div class="info-row">Пассажиры: <span id="passenger-status">НЕТ</span></div>
+            <!-- Диагностический блок -->
+            <div class="diagnostic-block">
+                <div class="diag-row">Код ошибки ЦП: <span id="error-code" class="status-ok">НЕТ</span></div>
+                <div class="diag-row">Матрица безопасности: <span id="safety-chain" class="status-ok">ЗАМКНУТА</span></div>
+                <div class="diag-row">Статус кабины: <span id="passenger-status">СВОБОДНА</span></div>
             </div>
 
-            <!-- Инструменты лифтера -->
-            <div class="mechanic-tools">
-                <button class="btn-tool" id="btn-reboot">⚡ ТУМБЛЕР ПИТАНИЯ (СБРОС)</button>
-                <button class="btn-tool" id="btn-calibrate" disabled>🔄 ТОЧНАЯ КАЛИБРОВКА</button>
-                <button class="btn-tool repair-btn" id="btn-repair" disabled>🔧 ПОЧИНИТЬ ПРИВОД ДВЕРЕЙ</button>
+            <!-- Пульт инженера / Лифтёра -->
+            <div class="engineer-tools">
+                <div class="tools-title">ИНСТРУМЕНТЫ ВОССТАНОВЛЕНИЯ</div>
+                <button class="btn-eng" id="btn-reboot">
+                    <span class="icon">⚡</span> СБРОСИТЬ АВТОМАТ ПИТАНИЯ (QF1)
+                </button>
+                <button class="btn-eng" id="btn-calibrate" disabled>
+                    <span class="icon">🔄</span> ИНИЦИАЛИЗАЦИЯ ШАХТЫ (РЕЙС НА 1 ЭТ.)
+                </button>
             </div>
-        </div>
 
-        <!-- Правая часть: Пульт Заявок -->
-        <div class="job-board">
-            <div class="block-title">ЖУРНАЛ ЗАЯВОК ДИСПЕТЧЕРА</div>
-            <div class="log-container" id="job-log">
-                <div class="log-entry system">Система запущена. Лифт в норме.</div>
+            <!-- Журнал ОДС (Объединенной Диспетчерской Службы) -->
+            <div class="ods-journal">
+                <div class="tools-title">ЖУРНАЛ СОБЫТИЙ ОДС</div>
+                <div class="journal-log" id="job-log">
+                    <div class="log-row sys">Система телеметрии запущена. Ошибок нет.</div>
+                </div>
+                <div class="stats-row">Выполнено вызовов: <span id="score-count">0</span></div>
             </div>
-            <div class="score-board">Выполнено заявок: <span id="score-count">0</span></div>
         </div>
     </div>
     
-    <script src="script.js"></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Современный Симулятор Лифта</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="simulator">
-        <!-- Высокотехнологичная прозрачная/стеклянная шахта -->
-        <div class="shaft">
-            <!-- Разметка этажных линий для красоты -->
-            <div class="floor-lines" id="floorLines"></div>
-            
-            <div class="elevator" id="elevator">
-                <div class="elevator-glow"></div>
-                <div class="doors" id="doors">
-                    <div class="door left-door"></div>
-                    <div class="door right-door"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Сенсорная панель управления Smart Touch -->
-        <div class="panel">
-            <!-- Интеллектуальный ЖК-дисплей -->
-            <div class="display-container">
-                <div class="arrow up" id="arrow-up">▲</div>
-                <div class="display" id="display">01</div>
-                <div class="arrow down" id="arrow-down">▼</div>
-                <div class="status-text" id="status-text">СТЕНДБАЙ</div>
-            </div>
-            
-            <!-- Интерактивная сенсорная сетка -->
-            <div class="buttons-grid" id="buttonsGrid"></div>
-            
-            <!-- Скрытые сенсоры дверей -->
-            <div class="service-buttons">
-                <button class="btn-touch service" id="btn-open">◄||►</button>
-                <button class="btn-touch service" id="btn-close">►||◄</button>
-            </div>
-        </div>
-    </div>
     <script src="script.js"></script>
 </body>
 </html>
