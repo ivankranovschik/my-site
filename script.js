@@ -1,4 +1,233 @@
 const TOTAL_FLOORS = 16;
+const FLOOR_HEIGHT = 38.75; // Соответствует точной высоте сетки CSS
+
+let currentFloor = 1;
+let isMoving = false;
+let isDoorsOpen = false;
+let activeJob = null; 
+let score = 0;
+
+// Инженерные состояния (Только одна реальная ошибка F4)
+let isBroken = false;
+let errorCode = "НЕТ"; 
+let isCalibrated = true; 
+
+// DOM элементы
+const elevator = document.getElementById('elevator');
+const display = document.getElementById('display');
+const statusText = document.getElementById('status-text');
+const arrowUp = document.getElementById('arrow-up');
+const arrowDown = document.getElementById('arrow-down');
+const errDisplay = document.getElementById('error-code');
+const safetyChain = document.getElementById('safety-chain');
+const passengerStatus = document.getElementById('passenger-status');
+const jobLog = document.getElementById('job-log');
+const scoreCount = document.getElementById('score-count');
+
+// Кнопки
+const btnReboot = document.getElementById('btn-reboot');
+const btnCalibrate = document.getElementById('btn-calibrate');
+
+// Генерация линий шахты и боковой индикации этажей
+const floorLines = document.getElementById('floorLines');
+const floorLabels = document.getElementById('floorLabels');
+
+for(let i = TOTAL_FLOORS; i >= 1; i--) {
+    // Линии
+    const line = document.createElement('div');
+    line.classList.add('floor-line');
+    floorLines.appendChild(line);
+    
+    // Цифры этажей сбоку
+    const label = document.createElement('div');
+    label.innerText = String(i).padStart(2, '0');
+    floorLabels.appendChild(label);
+}
+
+const formatFloor = (num) => String(num).padStart(2, '0');
+
+function logODS(text, type = 'sys') {
+    const row = document.createElement('div');
+    row.classList.add('log-row', type);
+    const time = new Date().toLocaleTimeString();
+    row.innerText = `[${time}] ${text}`;
+    jobLog.appendChild(row);
+    jobLog.scrollTop = jobLog.scrollHeight;
+}
+
+// Поступление вызовов от жильцов
+function spawnCall() {
+    if (activeJob || isBroken) return; 
+
+    const start = Math.floor(Math.random() * TOTAL_FLOORS) + 1;
+    let target = Math.floor(Math.random() * TOTAL_FLOORS) + 1;
+    while (target === start) {
+        target = Math.floor(Math.random() * TOTAL_FLOORS) + 1;
+    }
+
+    activeJob = { start, target, stage: 'pickup' };
+    logODS(`ВЫЗОВ: Этаж ${start} >> На этаж ${target}.`, 'wrn');
+    passengerStatus.innerText = `Ожидание на ${start} эт.`;
+    
+    runElevator();
+}
+
+// Алгоритм движения главного привода лебёдки
+async function runElevator() {
+    if (!activeJob || isBroken) return;
+
+    isMoving = true;
+    let targetFloor = activeJob.stage === 'pickup' ? activeJob.start : activeJob.target;
+
+    if (activeJob.stage === 'delivery') {
+        passengerStatus.innerText = `Кабина: Пассажир (на ${targetFloor} эт.)`;
+    }
+
+    if (targetFloor > currentFloor) { arrowUp.classList.add('active'); statusText.innerText = "ПОДЪЕМ"; } 
+    else if (targetFloor < currentFloor) { arrowDown.classList.add('active'); statusText.innerText = "СПУСК"; }
+
+    while (currentFloor !== targetFloor && !isBroken) {
+        // РЕАЛИСТИЧНЫЙ ТРИГГЕР СБОЯ: Ошибка датчиков счёта этажей происходит только во время хода
+        if (Math.random() < 0.12) { 
+            triggerF4Error();
+            break;
+        }
+
+        if (currentFloor < targetFloor) currentFloor++;
+        else currentFloor--;
+
+        // Позиционирование кабины
+        elevator.style.bottom = `${(currentFloor - 1) * FLOOR_HEIGHT}px`;
+        display.innerText = formatFloor(currentFloor);
+
+        await new Promise(r => setTimeout(r, 1200)); // Скорость проезда этажа
+    }
+
+    if (isBroken) return; 
+
+    // Лифт успешно затормозил на этаже
+    arrowUp.classList.remove('active');
+    arrowDown.classList.remove('active');
+
+    if (activeJob.stage === 'pickup') {
+        await openDoors();
+        logODS(`Кабина зафиксирована на ${currentFloor} эт. Посадка пассажира.`, 'sys');
+        await new Promise(r => setTimeout(r, 2000));
+        await closeDoors();
+        
+        activeJob.stage = 'delivery';
+        runElevator(); 
+    } else {
+        await openDoors();
+        logODS(`Вызов завершен. Пассажир вышел на ${currentFloor} этаже.`, 'ok');
+        await new Promise(r => setTimeout(r, 2000));
+        await closeDoors();
+
+        activeJob = null;
+        isMoving = false;
+        passengerStatus.innerText = "СВОБОДНА";
+        statusText.innerText = "ГОТОВ";
+        score++;
+        scoreCount.innerText = score;
+    }
+}
+
+// СИМУЛЯЦИЯ АВАРИИ ПЛАТЫ УПРАВЛЕНИЯ
+function triggerF4Error() {
+    isBroken = true;
+    isMoving = false;
+    arrowUp.classList.remove('active');
+    arrowDown.classList.remove('active');
+    
+    elevator.classList.add('broken');
+    display.classList.add('emergency');
+
+    errorCode = "F4";
+    errDisplay.innerText = "F4";
+    errDisplay.className = "status-fail";
+    
+    safetyChain.innerText = "РАЗОРВАНА (АВАР)";
+    safetyChain.className = "status-fail";
+    
+    statusText.innerText = "БЛОКИРОВКА";
+
+    if (activeJob.stage === 'delivery') {
+        logODS(`🛑 СБОЙ ЦП: Ошибка F4 (Сбой датчиков замедления шахты). ПРЕВЫШЕНИЕ ХОДА. Пассажир заблокирован в кабине на уровне ${currentFloor} этажа!`, 'dmg');
+        passengerStatus.innerText = "🚨 АВАРИЙНЫЙ ПЛЕН!";
+    } else {
+        logODS(`⚠️ СБОЙ СТАНЦИИ: Ошибка F4. Цепь безопасности разомкнута. Лифт остановлен на ${currentFloor} этаже.`, 'dmg');
+        passengerStatus.innerText = "Отказ системы";
+    }
+    
+    isCalibrated = false; 
+}
+
+// ИНЖЕНЕРНЫЙ ЭТАП 1: Сброс питания (Вводной автомат QF1)
+btnReboot.addEventListener('click', async () => {
+    btnReboot.disabled = true;
+    logODS("Инженер: Размыкание контактов автомата питания QF1...", 'sys');
+    display.innerText = "  ";
+    errDisplay.innerText = "ВЫКЛ";
+    statusText.innerText = "НЕТ СВЯЗИ";
+    safetyChain.innerText = "ОБЕСТОЧЕНО";
+    safetyChain.className = "sys";
+    
+    await new Promise(r => setTimeout(r, 2500)); // Реалистичное время разряда конденсаторов частотника
+    
+    logODS("Инженер: Включение автомата QF1. Подача 380В на плату управления.", 'sys');
+    display.innerText = "88"; // Тест сегментов экрана при включении
+    await new Promise(r => setTimeout(r, 1200));
+
+    // Очищаем аварийный регистр
+    errorCode = "НЕТ";
+    errDisplay.innerText = "НЕТ";
+    errDisplay.className = "status-ok";
+    
+    safetyChain.innerText = "ЗАМКНУТА";
+    safetyChain.className = "status-ok";
+    
+    display.classList.remove('emergency');
+    display.innerText = "00"; // Память ЦП стёрта, лифт не знает где он
+    statusText.innerText = "ТРЕБУЕТСЯ КОРРЕКЦИЯ";
+    logODS("Плата ШУЛК перезапущена успешно. Координаты шахты утеряны (код 00). Необходим технический рейс инициализации.", 'wrn');
+    
+    btnCalibrate.disabled = false; // Разрешаем калибровку
+    btnReboot.disabled = false;
+});
+
+// ИНЖЕНЕРНЫЙ ЭТАП 2: Рейс инициализации / Калибровка
+btnCalibrate.addEventListener('click', async () => {
+    btnCalibrate.disabled = true;
+    logODS("ЦП: Запущен отсчет установочного рейса. Движение вниз на малой скорости (0.3 м/с)...", 'sys');
+    statusText.innerText = "КОРРЕКЦИЯ";
+
+    // Имитируем медленный, осторожный спуск кабины к первому этажу
+    while(currentFloor > 1) {
+        currentFloor--;
+        elevator.style.bottom = `${(currentFloor - 1) * FLOOR_HEIGHT}px`;
+        display.innerText = formatFloor(currentFloor);
+        await new Promise(r => setTimeout(r, 800)); // Замедленный ход
+    }
+
+    // Лифт сел на датчик точной остановки 1-го этажа
+    isCalibrated = true;
+    isBroken = false;
+    elevator.classList.remove('broken');
+    statusText.innerText = "ГОТОВ";
+    display.innerText = "01";
+    logODS("Лифт коснулся шунта 1-го этажа. Система позиционирования откалибрована. Режим нормальной работы восстановлен.", 'ok');
+
+    // Если во время поломки внутри были люди, возвращаемся спасать
+    if (activeJob) {
+        logODS("Диспетчер: Возобновление прерванного по аварии вызова...", 'sys');
+        runElevator();
+    }
+});
+
+// Автоматический шедулер вызовов жильцов
+setInterval(spawnCall, 8000);
+setTimeout(spawnCall, 1500);
+const TOTAL_FLOORS = 16;
 const FLOOR_HEIGHT = 40;
 
 let currentFloor = 1;
