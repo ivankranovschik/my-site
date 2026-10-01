@@ -3,6 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Симулятор Лифтёра: Внештатная ситуация</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Левая часть: Шахта и Лифт -->
+        <div class="shaft-section">
+            <div class="shaft">
+                <div class="floor-lines" id="floorLines"></div>
+                <div class="elevator" id="elevator">
+                    <div class="elevator-glow"></div>
+                    <div class="doors" id="doors">
+                        <div class="door left-door"></div>
+                        <div class="door right-door"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Центральная часть: Станция управления (Техэтаж) -->
+        <div class="control-room">
+            <div class="block-title">СТАНЦИЯ УПРАВЛЕНИЯ (ШУЛК)</div>
+            
+            <div class="display-container">
+                <div class="arrow up" id="arrow-up">▲</div>
+                <div class="display" id="display">01</div>
+                <div class="arrow down" id="arrow-down">▼</div>
+                <div class="status-text" id="status-text">СТЕНДБАЙ</div>
+            </div>
+
+            <!-- Индикаторы поломок -->
+            <div class="tech-info">
+                <div class="info-row">Ошибка: <span id="error-code" class="text-ok">НЕТ</span></div>
+                <div class="info-row">Пассажиры: <span id="passenger-status">НЕТ</span></div>
+            </div>
+
+            <!-- Инструменты лифтера -->
+            <div class="mechanic-tools">
+                <button class="btn-tool" id="btn-reboot">⚡ ТУМБЛЕР ПИТАНИЯ (СБРОС)</button>
+                <button class="btn-tool" id="btn-calibrate" disabled>🔄 ТОЧНАЯ КАЛИБРОВКА</button>
+                <button class="btn-tool repair-btn" id="btn-repair" disabled>🔧 ПОЧИНИТЬ ПРИВОД ДВЕРЕЙ</button>
+            </div>
+        </div>
+
+        <!-- Правая часть: Пульт Заявок -->
+        <div class="job-board">
+            <div class="block-title">ЖУРНАЛ ЗАЯВОК ДИСПЕТЧЕРА</div>
+            <div class="log-container" id="job-log">
+                <div class="log-entry system">Система запущена. Лифт в норме.</div>
+            </div>
+            <div class="score-board">Выполнено заявок: <span id="score-count">0</span></div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Современный Симулятор Лифта</title>
     <link rel="stylesheet" href="style.css">
 </head>
