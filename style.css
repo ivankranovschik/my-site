@@ -2,144 +2,191 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
-    background-color: #222;
+    background: radial-gradient(circle at center, #1a1c23 0%, #0f1015 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     color: #fff;
+    overflow: hidden;
 }
 
 .simulator {
     display: flex;
-    gap: 40px;
-    background: #333;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25);
+    gap: 50px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
 }
 
-/* Шахта лифта */
+/* Эстетичная Шахта */
 .shaft {
-    width: 120px;
-    height: 640px; /* 16 этажей по 40px */
-    background: #111;
-    border: 3px solid #555;
+    width: 140px;
+    height: 640px;
+    background: #0b0c10;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
     position: relative;
     overflow: hidden;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
 }
 
-/* Кабина ЩЛЗ Зеленая */
-.elevator {
-    width: 100%;
-    height: 40px; /* Высота одного этажа */
-    background-color: #1e4620; /* Аутентичный зеленый цвет ЩЛЗ */
-    border: 2px solid #3a7d44;
+/* Линии этажей в шахте для ощущения масштаба */
+.floor-lines {
     position: absolute;
-    bottom: 0; /* Старт с 1 этажа */
-    transition: bottom 2s ease-in-out; /* Плавный ход лифта */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none;
+    opacity: 0.15;
+}
+.floor-line {
+    width: 100%;
+    border-bottom: 1px dashed #fff;
+    height: 40px;
 }
 
-/* Двери кабины */
+/* Современная Кабина с панорамной подсветкой */
+.elevator {
+    width: calc(100% - 8px);
+    height: 38px;
+    margin: 1px 4px;
+    background: linear-gradient(135deg, #2c3e50, #1a252f);
+    border: 1.5px solid #00d2ff;
+    border-radius: 6px;
+    position: absolute;
+    bottom: 0;
+    transition: bottom 1.8s cubic-bezier(0.25, 1, 0.5, 1); /* Плавный пуск и торможение */
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+}
+
+/* Эффект внутреннего свечения кабины */
+.elevator-glow {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, rgba(0,210,255,0.2) 0%, transparent 80%);
+    pointer-events: none;
+}
+
+/* Премиальные стеклянные двери */
 .doors {
     display: flex;
     width: 100%;
     height: 100%;
+    padding: 2px;
 }
 .door {
     width: 50%;
     height: 100%;
-    background: #7f8c8d;
-    border: 1px solid #95a5a6;
-    transition: transform 1.5s ease-in-out;
+    background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.2) 100%);
+    border: 1px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(4px);
+    border-radius: 3px;
+    transition: transform 1.2s cubic-bezier(0.45, 0.05, 0.55, 0.95);
 }
-/* Анимация открытия */
-.elevator.doors-open .left-door { transform: translateX(-90%); }
-.elevator.doors-open .right-door { transform: translateX(90%); }
+.elevator.doors-open .left-door { transform: translateX(-95%); }
+.elevator.doors-open .right-door { transform: translateX(95%); }
 
-/* Панель приказов (вертикальный пост) */
+/* Сенсорный Smart-Пост управления */
 .panel {
-    width: 180px;
-    background: linear-gradient(145deg, #cfd8dc, #b0bec5); /* Шлифованый алюминий */
-    border: 4px solid #78909c;
-    border-radius: 5px;
-    padding: 15px;
+    width: 220px;
+    background: #14161d;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.brand {
-    font-weight: bold;
-    color: #263238;
-    margin-bottom: 10px;
+/* ЖК-Консоль */
+.display-container {
+    width: 100%;
+    background: #090a0f;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(0, 210, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+.display {
+    font-size: 36px;
+    font-weight: 700;
+    color: #00d2ff;
+    text-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
+    letter-spacing: 2px;
+}
+.arrow {
     font-size: 14px;
+    color: rgba(255,255,255,0.1);
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+.arrow.active {
+    color: #00ff88;
+    text-shadow: 0 0 8px #00ff88;
+}
+.status-text {
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    margin-top: 5px;
     letter-spacing: 1px;
 }
 
-/* Семисегментное табло */
-.display {
-    width: 100%;
-    background: #000;
-    color: #ff3d00; /* Красная или зеленая индикация ЩЛЗ тех лет */
-    font-family: 'Courier New', monospace;
-    font-size: 28px;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    box-shadow: inset 0 0 10px rgba(255,61,0,0.5);
-}
-
-/* Кнопки */
+/* Сенсорные Кнопки */
 .buttons-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 15px;
+    gap: 16px;
+    margin-bottom: 20px;
 }
 
-.btn {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 2px solid #546e7a;
-    background: #eceff1;
-    color: #37474f;
-    font-size: 18px;
-    font-weight: bold;
+.btn-touch {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 20px;
+    font-weight: 500;
     cursor: pointer;
-    box-shadow: 0 3px 0 #b0bec5;
-    transition: all 0.1s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.btn:active {
-    transform: translateY(3px);
-    box-shadow: none;
+.btn-touch:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
 }
-/* Подсветка кнопки при вызове */
-.btn.active {
-    background: #ffeb3b;
-    box-shadow: 0 0 12px #ffeb3b;
-    border-color: #fbc02d;
+/* Эффект активации сенсора */
+.btn-touch.active {
+    color: #00d2ff;
+    background: rgba(0, 210, 255, 0.1);
+    border-color: #00d2ff;
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+    text-shadow: 0 0 5px rgba(0, 210, 255, 0.5);
 }
 
 .service-buttons {
     display: flex;
-    gap: 8px;
+    gap: 12px;
     width: 100%;
-    justify-content: center;
 }
-.btn.service {
-    width: 45px;
-    height: 35px;
-    border-radius: 4px;
-    font-size: 12px;
-}
-.btn.alarm {
-    background: #ff5252;
-    color: white;
+.btn-touch.service {
+    flex: 1;
+    height: 45px;
+    font-size: 14px;
+    border-radius: 10px;
 }
