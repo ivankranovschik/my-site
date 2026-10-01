@@ -6,7 +6,7 @@
 }
 
 body {
-    background: radial-gradient(circle at center, #11131c 0%, #07080c 100%);
+    background: radial-gradient(circle at center, #11131c 0%, #06070a 100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,234 +17,213 @@ body {
 
 .app-container {
     display: flex;
-    gap: 25px;
-    background: #0d0f17;
+    gap: 20px;
+    background: #0d0f16;
     padding: 25px;
-    border-radius: 24px;
-    border: 1px solid #1e2235;
+    border-radius: 20px;
+    border: 1px solid #1f2436;
     box-shadow: 0 40px 90px rgba(0, 0, 0, 0.8);
-    width: 860px;
-    height: 650px;
+    width: 920px;
+    height: 600px;
 }
 
-/* ЛЕВАЯ ЧАСТЬ: ИНТЕРФЕЙС ОТ ПЕРВОГО ЛИЦА */
-.view-first-person {
-    flex: 1;
+.block-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: #475569;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #1f2436;
+    padding-bottom: 5px;
+    width: 100%;
+}
+
+/* БЛОК 1: КУПЕ КАБИНЫ */
+.view-cabin {
+    flex: 1.2;
     display: flex;
     flex-direction: column;
-    background: #131622;
-    border-radius: 16px;
-    padding: 20px;
-    border: 1px solid #1f2437;
+    background: #121520;
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid #1d2233;
     position: relative;
-    overflow: hidden;
 }
 
-/* Переключатель сцен */
-.scene {
-    display: none;
+.cabin-interior {
+    flex: 1;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-radius: 8px;
+    border: 1px solid #2d3748;
+    position: relative;
+    padding: 15px;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    height: 88%;
+    justify-content: space-between;
 }
-.scene.active {
-    display: flex;
-    animation: fadeIn 0.4s ease-in-out;
-}
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* СЦЕНА 1: ХОЛЛ */
-.hall-indicator {
-    width: 130px;
-    background: #040508;
+/* Современный медиа-экран */
+.media-screen {
+    width: 150px;
+    background: #04060a;
+    border-radius: 10px;
+    padding: 10px;
     border: 1px solid #00f2ff;
-    border-radius: 6px;
-    padding: 6px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+}
+.media-row {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
 }
 .floor-num {
     font-family: 'Courier New', monospace;
-    font-size: 28px;
+    font-size: 36px;
     font-weight: bold;
     color: #00f2ff;
-    text-shadow: 0 0 8px rgba(0, 242, 255, 0.5);
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.6);
 }
-.arrow { font-size: 18px; color: #334155; }
+.arrow { font-size: 22px; color: #222d3d; transition: color 0.2s; }
 .arrow.up { color: #10b981; text-shadow: 0 0 8px #10b981; }
 .arrow.down { color: #ef4444; text-shadow: 0 0 8px #ef4444; }
+.status-text { font-size: 9px; color: #475569; text-transform: uppercase; margin-top: 2px; letter-spacing: 1px; }
 
-/* Двери в холле */
-.elevator-portal {
-    width: 280px;
-    height: 300px;
-    background: #090a10;
-    border: 5px solid #334155;
+/* Зеркало */
+.mirror {
+    width: 110px;
+    height: 160px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    position: absolute;
+    left: 20px;
+    top: 130px;
+    backdrop-filter: blur(1px);
+}
+
+/* Двери лифта */
+.doors-portal {
+    width: 140px;
+    height: 220px;
+    background: #07080c;
+    border: 3px solid #475569;
     border-radius: 4px;
-    position: relative;
+    position: absolute;
+    right: 20px;
+    top: 100px;
     overflow: hidden;
 }
-.doors-container {
+.doors-wrapper {
     position: absolute;
     width: 100%; height: 100%;
     display: flex;
     z-index: 5;
 }
-.door {
+.door-wing {
     width: 50%; height: 100%;
-    background: linear-gradient(90deg, #475569 0%, #334155 50%, #1e293b 100%);
-    border: 1px solid #0f172a;
+    background: linear-gradient(90deg, #64748b 0%, #475569 50%, #334155 100%);
+    border: 1px solid #1e293b;
     transition: transform 1.2s cubic-bezier(0.45, 0, 0.25, 1);
 }
-.doors-container.open .left-wing { transform: translateX(-98%); }
-.doors-container.open .right-wing { transform: translateX(98%); }
+.doors-wrapper.open .left-wing { transform: translateX(-98%); }
+.doors-wrapper.open .right-wing { transform: translateX(98%); }
+.shaft-backwall { position: absolute; width: 100%; height: 100%; background: #111; z-index: 1; }
 
-.cabin-preview {
-    position: absolute;
-    width: 100%; height: 100%;
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    z-index: 1;
-}
 
-/* Кнопка вызова в холле */
-.hall-controls { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.location-info { font-size: 13px; color: #64748b; }
-.btn-call-elevator {
-    padding: 12px 30px;
-    background: #1e293b;
-    border: 1px solid #334155;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.btn-call-elevator:hover:not(:disabled) { border-color: #00f2ff; background: #24324a; }
-.btn-call-elevator.active { background: #00f2ff; color: #000; box-shadow: 0 0 15px #00f2ff; border-color: #00f2ff; }
-
-/* СЦЕНА 2: ВНУТРИ КАБИНЫ (Ультра Премиум) */
-.cabin-interior {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    gap: 20px;
-}
-.cabin-left {
-    flex: 1.2;
+/* БЛОК 2: ПАНЕЛЬ ПРИКАЗОВ */
+.view-panel {
+    width: 200px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    align-items: center;
-    justify-content: center;
-}
-/* Внутренний медиа-экран */
-.cabin-media-screen {
-    width: 160px;
-    background: #04060a;
+    background: #121520;
     border-radius: 12px;
     padding: 15px;
-    border: 1px solid #10b981;
-    text-align: center;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+    border: 1px solid #1d2233;
 }
-.media-floor {
-    font-size: 42px;
-    font-weight: 800;
-    color: #10b981;
-    text-shadow: 0 0 12px #10b981;
-    font-family: monospace;
-}
-.media-status { font-size: 10px; color: #64748b; letter-spacing: 1px; margin-top: 4px; text-transform: uppercase; }
-
-.cabin-mirror {
-    width: 160px;
-    height: 220px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 100%);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    backdrop-filter: blur(2px);
-}
-
-/* Сенсорная панель кнопок во всю стену */
-.cabin-right { flex: 1; display: flex; justify-content: center; }
 .touch-panel {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    padding: 15px 10px;
+    flex: 1;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 12px 8px;
     display: flex;
     flex-direction: column;
-    box-shadow: -10px 10px 25px rgba(0,0,0,0.4);
 }
-.panel-header { font-size: 9px; font-weight: bold; color: #475569; text-align: center; letter-spacing: 1px; margin-bottom: 12px; }
-.panel-footer { font-size: 8px; color: #334155; text-align: center; margin-top: auto; }
+.panel-header { font-size: 8px; font-weight: bold; color: #475569; text-align: center; margin-bottom: 12px; letter-spacing: 1px; }
 
 .buttons-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    gap: 10px;
     overflow-y: auto;
-    padding-right: 4px;
+    padding-right: 2px;
     max-height: 380px;
 }
-/* Округлая футуристичная кнопка */
+/* Абсолютно круглые, светящиеся кнопки */
 .btn-floor {
-    height: 38px;
-    background: rgba(255, 255, 255, 0.05);
-    color: #e2e8f0;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 50%; /* Круглые стильные кнопки */
-    width: 38px;
-    margin: 0 auto;
-    font-size: 13px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    color: #cbd5e1;
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    margin: 0 auto;
+    transition: all 0.2s;
 }
-.btn-floor:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.3); }
+.btn-floor:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
 .btn-floor.active {
-    background: rgba(16, 185, 129, 0.2);
-    color: #10b981;
-    border-color: #10b981;
-    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
-    text-shadow: 0 0 4px #10b981;
+    background: rgba(0, 242, 255, 0.15);
+    color: #00f2ff;
+    border-color: #00f2ff;
+    box-shadow: 0 0 12px rgba(0, 242, 255, 0.4);
+    text-shadow: 0 0 4px #00f2ff;
 }
 
-/* Статус-бар внизу */
-.status-bar {
-    margin-top: auto;
-    font-size: 12px;
-    color: #475569;
-    text-align: center;
-    border-top: 1px solid #1f2437;
-    padding-top: 12px;
-    width: 100%;
+.service-buttons { display: flex; gap: 8px; margin-top: auto; padding-top: 15px; }
+.btn-service {
+    flex: 1;
+    height: 32px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #fff;
+    font-size: 11px;
+    border-radius: 4px;
+    cursor: pointer;
 }
+.btn-service:hover { border-color: #00f2ff; }
 
-/* ПРАВАЯ ЧАСТЬ: МОНИТОР ШАХТЫ */
-.view-shaft-schema { width: 170px; display: flex; flex-direction: column; background: #090a10; border-radius: 16px; padding: 15px; border: 1px solid #1f2437; }
-.schema-title { font-size: 10px; font-weight: bold; color: #475569; text-align: center; letter-spacing: 1px; margin-bottom: 12px; }
-.shaft-container { flex: 1; display: flex; gap: 15px; }
-.shaft-rail { width: 16px; background: #040508; border: 1px solid #1a1f2c; border-radius: 4px; position: relative; height: 500px; }
+
+/* БЛОК 3: МОНИТОР ШАХТЫ */
+.view-shaft-schema {
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    background: #090a10;
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid #1d2233;
+}
+.shaft-container { flex: 1; display: flex; gap: 12px; }
+.shaft-rail { width: 14px; background: #040508; border: 1px solid #1a1f2c; border-radius: 4px; position: relative; height: 460px; }
 
 .mini-car {
-    width: 12px; height: 20px;
+    width: 10px; height: 18px;
     background: linear-gradient(135deg, #00f2ff 0%, #0066cc 100%);
     border: 1px solid #00f2ff;
     border-radius: 2px;
     position: absolute; left: 1px; bottom: 0;
-    transition: bottom 0.1s linear;
+    transition: bottom 0.08s linear;
     box-shadow: 0 0 10px #00f2ff;
 }
-.mini-car-light { width: 6px; height: 2px; background: #fff; margin: 2px auto 0; border-radius: 1px; }
+.mini-car-light { width: 4px; height: 1px; background: #fff; margin: 2px auto 0; }
 
-.floor-labels { flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-family: monospace; font-size: 11px; color: #334155; }
-.floor-label-item { height: 20px; display: flex; align-items: center; }
+.floor-labels { flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-family: monospace; font-size: 11px; color: #2d3748; }
+.floor-label-item { height: 18px; display: flex; align-items: center; }
 .floor-label-item.current-at-shaft { color: #00f2ff; font-weight: bold; }
