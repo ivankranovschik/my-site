@@ -3,75 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Инженерный Симулятор Лифтового Оборудования</title>
+    <title>Интерактивный Симулятор Лифта от 1-го Лица</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="scada-container">
-        <!-- Левая часть: Мониторинг шахты -->
-        <div class="shaft-section">
-            <div class="section-title">МОНИТОР ШАХТЫ (16 ЭТАЖЕЙ)</div>
-            <div class="shaft-wrapper">
-                <!-- Цифры этажей слева от шахты -->
-                <div class="floor-labels" id="floorLabels"></div>
-                
-                <div class="shaft">
-                    <div class="floor-lines" id="floorLines"></div>
-                    <!-- Кабина лифта -->
-                    <div class="elevator" id="elevator">
-                        <div class="elevator-ceiling-light"></div>
-                        <div class="doors" id="doors">
-                            <div class="door left-door"></div>
-                            <div class="door right-door"></div>
-                        </div>
+    <div class="app-container">
+        
+        <!-- ЛЕВАЯ СТОРОНА: Вид от первого лица -->
+        <div class="view-first-person">
+            <!-- Табло над дверями (или внутри кабины) -->
+            <div class="header-indicator">
+                <div class="floor-display" id="mainDisplay">01</div>
+                <div class="arrow-indicator" id="mainArrow">●</div>
+            </div>
+
+            <!-- Зона дверей лифта -->
+            <div class="elevator-view-box">
+                <!-- Внутренности кабины (видны, когда двери открыты) -->
+                <div class="elevator-interior">
+                    <div class="mirror"></div>
+                    <!-- Панель приказов внутри кабины -->
+                    <div class="car-panel" id="carPanel">
+                        <div class="panel-brand">SMART LIFT</div>
+                        <div class="buttons-grid" id="buttonsGrid"></div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Правая часть: Станция управления ШУЛК/УЭЛ -->
-        <div class="control-panel">
-            <div class="section-title">СТАНЦИЯ УПРАВЛЕНИЯ ЛИФТОМ</div>
+                <!-- Раздвижные двери холла/кабины -->
+                <div class="doors-wrapper" id="doorsWrapper">
+                    <div class="door-wing left-wing"></div>
+                    <div class="door-wing right-wing"></div>
+                </div>
+            </div>
+
+            <!-- Кнопка вызова на этаже (доступна, когда вы снаружи) -->
+            <div class="hall-call-box" id="hallCallBox">
+                <div class="current-location-text">Вы стоите на <span id="userFloorText">01</span> этаже</div>
+                <button class="btn-call" id="btnCallElevator">▲▼ Вызвать лифт</button>
+            </div>
             
-            <!-- Главное табло станции -->
-            <div class="main-display-unit">
-                <div class="direction-arrows">
-                    <span class="arrow" id="arrow-up">▲ ВВЕРХ</span>
-                    <span class="arrow" id="arrow-down">▼ ВНИЗ</span>
+            <!-- Статус для подсказок игроку -->
+            <div class="player-status" id="playerStatus">Лифт на 1 этаже. Двери закрыты. Нажмите «Вызвать лифт».</div>
+        </div>
+
+        <!-- ПРАВАЯ СТОРОНА: Схема движения в шахте -->
+        <div class="view-shaft-schema">
+            <div class="schema-title">МОНИТОР ШАХТЫ</div>
+            <div class="shaft-container">
+                <div class="shaft-rail">
+                    <!-- Кабина на схеме -->
+                    <div class="mini-car" id="miniCar">
+                        <div class="mini-car-light"></div>
+                    </div>
                 </div>
-                <div class="matrix-display" id="display">01</div>
-                <div class="system-status" id="status-text">ГОТОВ</div>
-            </div>
-
-            <!-- Диагностический блок -->
-            <div class="diagnostic-block">
-                <div class="diag-row">Код ошибки ЦП: <span id="error-code" class="status-ok">НЕТ</span></div>
-                <div class="diag-row">Матрица безопасности: <span id="safety-chain" class="status-ok">ЗАМКНУТА</span></div>
-                <div class="diag-row">Статус кабины: <span id="passenger-status">СВОБОДНА</span></div>
-            </div>
-
-            <!-- Пульт инженера / Лифтёра -->
-            <div class="engineer-tools">
-                <div class="tools-title">ИНСТРУМЕНТЫ ВОССТАНОВЛЕНИЯ</div>
-                <button class="btn-eng" id="btn-reboot">
-                    <span class="icon">⚡</span> СБРОСИТЬ АВТОМАТ ПИТАНИЯ (QF1)
-                </button>
-                <button class="btn-eng" id="btn-calibrate" disabled>
-                    <span class="icon">🔄</span> ИНИЦИАЛИЗАЦИЯ ШАХТЫ (РЕЙС НА 1 ЭТ.)
-                </button>
-            </div>
-
-            <!-- Журнал ОДС (Объединенной Диспетчерской Службы) -->
-            <div class="ods-journal">
-                <div class="tools-title">ЖУРНАЛ СОБЫТИЙ ОДС</div>
-                <div class="journal-log" id="job-log">
-                    <div class="log-row sys">Система телеметрии запущена. Ошибок нет.</div>
-                </div>
-                <div class="stats-row">Выполнено вызовов: <span id="score-count">0</span></div>
+                <!-- Метки этажей справа от рельса -->
+                <div class="floor-labels" id="floorLabels"></div>
             </div>
         </div>
+
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
