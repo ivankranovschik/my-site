@@ -1,33 +1,25 @@
 const TOTAL_FLOORS = 16;
-const SHAFT_HEIGHT = 480; // 500 высота рельса - 20 высота мини-кабины
+const SHAFT_HEIGHT = 442; // Высота рельса 460 - 18 высота мини-кабины
 const ONE_FLOOR_PX = SHAFT_HEIGHT / (TOTAL_FLOORS - 1);
 
-// Переменные системы
 let elevatorFloor = 1;
 let targetFloor = 1;
 let isMoving = false;
 let isDoorsOpen = false;
 
-let userFloor = 1;         // На каком этаже стоит юзер снаружи
-let isInsideCabin = false; // Находится ли юзер внутри кабины
-
 // DOM элементы
-const hallDisplay = document.getElementById('hallDisplay');
-const cabinDisplay = document.getElementById('cabinDisplay');
-const cabinStatus = document.getElementById('cabinStatus');
-const hallArrow = document.getElementById('hallArrow');
-const hallDoors = document.getElementById('hallDoors');
+const mainDisplay = document.getElementById('mainDisplay');
+const mainArrow = document.getElementById('mainArrow');
+const statusText = document.getElementById('statusText');
+const elevatorDoors = document.getElementById('elevatorDoors');
 const miniCar = document.getElementById('miniCar');
 const floorLabels = document.getElementById('floorLabels');
-const btnCall = document.getElementById('btnCall');
-const userFloorText = document.getElementById('userFloorText');
-const playerStatus = document.getElementById('playerStatus');
-
-const sceneHall = document.getElementById('scene-hall');
-const sceneCabin = document.getElementById('scene-cabin');
 const buttonsGrid = document.getElementById('buttonsGrid');
 
-// Генерация меток в шахте
+const btnOpen = document.getElementById('btnOpen');
+const btnClose = document.getElementById('btnClose');
+
+// 1. Генерация меток шахты (справа)
 for (let i = TOTAL_FLOORS; i >= 1; i--) {
     const item = document.createElement('div');
     item.classList.add('floor-label-item');
@@ -36,79 +28,62 @@ for (let i = TOTAL_FLOORS; i >= 1; i--) {
     floorLabels.appendChild(item);
 }
 
-// Генерация сенсорных кнопок внутри кабины
+// 2. Генерация сенсорных кнопок панели приказов (по центру)
 for (let i = TOTAL_FLOORS; i >= 1; i--) {
     const btn = document.createElement('button');
     btn.classList.add('btn-floor');
     btn.id = `btn-floor-${i}`;
     btn.innerText = i;
-    btn.addEventListener('click', () => selectFloorInside(i));
+    btn.addEventListener('click', () => sendElevatorTo(i));
     buttonsGrid.appendChild(btn);
 }
 
-function updateIndicators() {
+// Обновление экранов телеметрии
+function updateUI() {
     const displayStr = String(Math.round(elevatorFloor)).padStart(2, '0');
-    // Обновляем оба табло одновременно!
-    hallDisplay.innerText = displayStr;
-    cabinDisplay.innerText = displayStr;
+    mainDisplay.innerText = displayStr;
 
-    // Свечение этажа на боковом мониторе шахты
+    // Подсветка текущего этажа на схеме шахты
     document.querySelectorAll('.floor-label-item').forEach(el => el.classList.remove('current-at-shaft'));
     const currentLabel = document.getElementById(`label-floor-${Math.round(elevatorFloor)}`);
     if (currentLabel) currentLabel.classList.add('current-at-shaft');
 }
-updateIndicators();
+updateUI();
 
-// НАЖАТИЕ СНАРУЖИ: Вызов лифта
-btnCall.addEventListener('click', () => {
-    if (isMoving || isDoorsOpen) return;
-
-    btnCall.classList.add('active');
-    targetFloor = userFloor;
-
-    if (Math.round(elevatorFloor) === userFloor) {
-        btnCall.classList.remove('active');
-        openDoors();
-    } else {
-        playerStatus.innerText = `Лифт вызван на ${userFloor} этаж. Ожидание...`;
-        startElevatorLoop();
-    }
-});
-
-// НАЖАТИЕ ВНУТРИ: Выбор этажа
-function selectFloorInside(floor) {
-    if (!isInsideCabin || isMoving || isDoorsOpen) return;
+// Функция отправки лифта на выбранный этаж
+function sendElevatorTo(floor) {
+    if (isMoving) return; // Не прерывать ход, если уже едет
+    
     if (floor === Math.round(elevatorFloor)) {
-        playerStatus.innerText = "Вы уже на выбранном этаже. Ожидайте автоматического выхода.";
+        openDoors(); // Если нажали этаж, на котором стоим — просто открываем двери
         return;
     }
 
+    // Включаем подсветку кнопки
     document.getElementById(`btn-floor-${floor}`).classList.add('active');
     targetFloor = floor;
-    cabinStatus.innerText = "ЗАКРЫТИЕ";
 
+    // Сначала закрываем двери, если они открыты, затем едем
     closeDoors().then(() => {
-        playerStatus.innerText = `Лифт едет на ${targetFloor} этаж.`;
-        cabinStatus.innerText = "В ПУТИ";
-        startElevatorLoop();
+        startMovement();
     });
 }
 
-// ДВИЖЕНИЕ ЛИФТА
-function startElevatorLoop() {
+// АЛГОРИТМ ПЛАВНОГО ХОДА ЛИФТА
+function startMovement() {
     isMoving = true;
-    btnCall.disabled = true;
+    statusText.innerText = "В ДВИЖЕНИИ";
 
-    // Стрелочные индикаторы направления холла
+    // Анимация стрелки на медиа-экране
     if (targetFloor > elevatorFloor) {
-        hallArrow.innerText = "▲"; hallArrow.className = "arrow up";
+        mainArrow.innerText = "▲"; mainArrow.className = "arrow up";
     } else {
-        hallArrow.innerText = "▼"; hallArrow.className = "arrow down";
+        mainArrow.innerText = "▼"; mainArrow.className = "arrow down";
     }
 
-    let speed = 0.05; // Скорость хода
+    let speed = 0.04; // Плавная скорость
 
-    function step() {
+    function animate() {
         if (!isMoving) return;
 
         if (elevatorFloor < targetFloor) {
@@ -119,84 +94,60 @@ function startElevatorLoop() {
             if (elevatorFloor <= targetFloor) { elevatorFloor = targetFloor; isMoving = false; }
         }
 
-        // Синхронизация мини-кабины на рельсе
+        // Двигаем машинку на схеме
         miniCar.style.bottom = `${(elevatorFloor - 1) * ONE_FLOOR_PX}px`;
-        updateIndicators();
-
-        if (isInsideCabin) {
-            userFloor = Math.round(elevatorFloor);
-            userFloorText.innerText = String(userFloor).padStart(2, '0');
-        }
+        updateUI();
 
         if (isMoving) {
-            requestAnimationFrame(step);
+            requestAnimationFrame(animate);
         } else {
-            arriveAtFloor();
+            arriveAtDestination();
         }
     }
-    requestAnimationFrame(step);
+    requestAnimationFrame(animate);
 }
 
-// ПРИБЫТИЕ ЛИФТА И СМЕНА СЦЕН
-function arriveAtFloor() {
-    hallArrow.innerText = "●";
-    hallArrow.className = "arrow";
-    btnCall.classList.remove('active');
+// ПРИБЫТИЕ НА ЭТАЖ
+function arriveAtDestination() {
+    mainArrow.innerText = "●";
+    mainArrow.className = "arrow";
+    statusText.innerText = "ПРИБЫЛ";
     
-    // Гасим кнопку на панели приказов
-    const floorBtn = document.getElementById(`btn-floor-${targetFloor}`);
-    if (floorBtn) floorBtn.classList.remove('active');
+    // Выключаем подсветку кнопки
+    const activeBtn = document.getElementById(`btn-floor-${targetFloor}`);
+    if (activeBtn) activeBtn.classList.remove('active');
 
-    if (!isInsideCabin) {
-        // СИТУАЦИЯ: Лифт приехал к нам в холл
-        openDoors().then(() => {
-            playerStatus.innerText = "Лифт прибыл! Вы зашли в кабину.";
-            setTimeout(() => {
-                // Переключаем сцену ВНУТРЬ кабины
-                isInsideCabin = true;
-                sceneHall.classList.remove('active');
-                sceneCabin.classList.add('active');
-                cabinStatus.innerText = "ВЫБЕРИТЕ ЭТАЖ";
-            }, 800);
-        });
-    } else {
-        // СИТУАЦИЯ: Мы приехали на нужный этаж изнутри
-        cabinStatus.innerText = "ПРИБЫЛ";
-        playerStatus.innerText = `Вы приехали на ${targetFloor} этаж и вышли в холл.`;
-        
+    // Автоматическое открытие дверей по прибытии
+    openDoors().then(() => {
         setTimeout(() => {
-            // Переключаем сцену ОБРАТНО в холл
-            isInsideCabin = false;
-            sceneCabin.classList.remove('active');
-            sceneHall.classList.add('active');
-            
-            userFloor = Math.round(elevatorFloor);
-            userFloorText.innerText = String(userFloor).padStart(2, '0');
-            
-            // Открываем двери холла на новом этаже
-            openDoors().then(() => {
-                setTimeout(() => { closeDoors(); }, 3000);
-            });
-        }, 1000);
-    }
+            if (!isMoving && isDoorsOpen) closeDoors();
+        }, 3500); // Двери стоят открытыми 3.5 секунды
+    });
 }
 
-// АНИМАЦИИ ДВЕРЕЙ
+// УПРАВЛЕНИЕ ДВЕРЬМИ (Возвращают Промисы для синхронизации с ходом)
 function openDoors() {
     return new Promise(resolve => {
+        if (isMoving) return resolve();
         isDoorsOpen = true;
-        hallDoors.classList.add('open');
+        statusText.innerText = "ОТКРЫТО";
+        elevatorDoors.classList.add('open');
         setTimeout(() => resolve(), 1200);
     });
 }
 
 function closeDoors() {
     return new Promise(resolve => {
-        hallDoors.classList.remove('open');
+        isDoorsOpen = false;
+        statusText.innerText = "ЗАКРЫТИЕ";
+        elevatorDoors.classList.remove('open');
         setTimeout(() => {
-            isDoorsOpen = false;
-            btnCall.disabled = false;
+            statusText.innerText = "СТЕНДБАЙ";
             resolve();
         }, 1200);
     });
 }
+
+// Привязка сервисных кнопок принудительного открытия/закрытия
+btnOpen.addEventListener('click', () => { if(!isMoving && !isDoorsOpen) openDoors(); });
+btnClose.addEventListener('click', () => { if(isDoorsOpen) closeDoors(); });
