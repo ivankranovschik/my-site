@@ -1,185 +1,40 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Case Upgrader</title>
-
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Симулятор лифта ЩЛЗ 2011 (16 этажей)</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <div class="simulator">
+        <!-- Шахта лифта -->
+        <div class="shaft">
+            <div class="elevator" id="elevator">
+                <div class="doors" id="doors">
+                    <div class="door left-door"></div>
+                    <div class="door right-door"></div>
+                </div>
+            </div>
+        </div>
 
-  <header>
-    <h1>🎮 CASE UPGRADER</h1>
-
-    <div class="balance">
-      💰 <span id="balance">5000</span> ₽
+        <!-- Панель управления ЩЛЗ внутри кабины -->
+        <div class="panel">
+            <div class="brand">ЩЛЗ 2011</div>
+            <!-- Электронное табло -->
+            <div class="display" id="display">1</div>
+            
+            <!-- Сетка кнопок 1-16 -->
+            <div class="buttons-grid" id="buttonsGrid"></div>
+            
+            <!-- Служебные кнопки -->
+            <div class="service-buttons">
+                <button class="btn service" id="btn-open">◄►</button>
+                <button class="btn service" id="btn-close">►◄</button>
+                <button class="btn service alarm" id="btn-alarm">🔔</button>
+            </div>
+        </div>
     </div>
-  </header>
-
-
-  <nav>
-    <button onclick="showPage('cases')">
-      🎁 Кейсы
-    </button>
-
-    <button onclick="showPage('inventory')">
-      🎒 Инвентарь
-    </button>
-
-    <button onclick="showPage('upgrade')">
-      ⬆️ Апгрейдер
-    </button>
-  </nav>
-
-
-  <main>
-
-
-    <!-- КЕЙСЫ -->
-
-    <section id="cases" class="page active">
-
-      <h2>🎁 Кейсы</h2>
-
-      <div class="cases">
-
-        <div class="case">
-
-          <div class="case-image">📦</div>
-
-          <h3>Обычный кейс</h3>
-
-          <p>Цена: 500 ₽</p>
-
-          <button onclick="openCase(500, 'normal')">
-            Открыть
-          </button>
-
-        </div>
-
-
-        <div class="case">
-
-          <div class="case-image">💎</div>
-
-          <h3>Редкий кейс</h3>
-
-          <p>Цена: 1000 ₽</p>
-
-          <button onclick="openCase(1000, 'rare')">
-            Открыть
-          </button>
-
-        </div>
-
-
-        <div class="case">
-
-          <div class="case-image">🔥</div>
-
-          <h3>Эпический кейс</h3>
-
-          <p>Цена: 2000 ₽</p>
-
-          <button onclick="openCase(2000, 'epic')">
-            Открыть
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <div id="result"></div>
-
-    </section>
-
-
-
-    <!-- ИНВЕНТАРЬ -->
-
-    <section id="inventory" class="page">
-
-      <h2>🎒 Инвентарь</h2>
-
-      <div id="inventoryList"></div>
-
-    </section>
-
-
-
-    <!-- АПГРЕЙДЕР -->
-
-    <section id="upgrade" class="page">
-
-      <h2>⬆️ Апгрейдер</h2>
-
-      <p class="info">
-        Выбери предмет из инвентаря
-      </p>
-
-
-      <div class="upgrade-box">
-
-        <div>
-
-          <h3>Твой предмет</h3>
-
-          <div id="selectedItem" class="selected">
-            Ничего не выбрано
-          </div>
-
-        </div>
-
-
-        <div class="arrow">
-          ⬆️
-        </div>
-
-
-        <div>
-
-          <h3>Новый предмет</h3>
-
-          <div id="targetItem" class="selected">
-            Выбери предмет
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="chance">
-
-        Шанс:
-        <strong id="chance">0%</strong>
-
-      </div>
-
-
-      <button
-        class="upgrade-button"
-        onclick="upgradeItem()"
-      >
-
-        УЛУЧШИТЬ
-
-      </button>
-
-
-      <p id="upgradeResult"></p>
-
-    </section>
-
-
-  </main>
-
-
-  <script src="script.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>
