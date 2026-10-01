@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Интерактивный Симулятор Лифта от 1-го Лица</title>
+    <title>Интерактивный Симулятор Лифта 2.0</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,52 +11,65 @@
         
         <!-- ЛЕВАЯ СТОРОНА: Вид от первого лица -->
         <div class="view-first-person">
-            <!-- Табло над дверями (или внутри кабины) -->
-            <div class="header-indicator">
-                <div class="floor-display" id="mainDisplay">01</div>
-                <div class="arrow-indicator" id="mainArrow">●</div>
+            
+            <!-- СЦЕНА 1: Вы стоите в холле перед лифтом -->
+            <div class="scene active" id="scene-hall">
+                <div class="hall-indicator">
+                    <div class="floor-num" id="hallDisplay">01</div>
+                    <div class="arrow" id="hallArrow">●</div>
+                </div>
+                
+                <div class="elevator-portal">
+                    <div class="doors-container" id="hallDoors">
+                        <div class="door left-wing"></div>
+                        <div class="door right-wing"></div>
+                    </div>
+                    <!-- Проблеск кабины сзади -->
+                    <div class="cabin-preview"></div>
+                </div>
+
+                <div class="hall-controls">
+                    <div class="location-info">Вы находитесь на <span id="userFloorText">01</span> этаже</div>
+                    <button class="btn-call-elevator" id="btnCall">▲▼ ВЫЗВАТЬ ЛИФТ</button>
+                </div>
             </div>
 
-            <!-- Зона дверей лифта -->
-            <div class="elevator-view-box">
-                <!-- Внутренности кабины (видны, когда двери открыты) -->
-                <div class="elevator-interior">
-                    <div class="mirror"></div>
-                    <!-- Панель приказов внутри кабины -->
-                    <div class="car-panel" id="carPanel">
-                        <div class="panel-brand">SMART LIFT</div>
-                        <div class="buttons-grid" id="buttonsGrid"></div>
+            <!-- СЦЕНА 2: Вы зашли ИНСАЙД (Внутрь кабины) -->
+            <div class="scene" id="scene-cabin">
+                <div class="cabin-interior">
+                    <!-- Левая часть кабины: Зеркало и медиа-экран -->
+                    <div class="cabin-left">
+                        <div class="cabin-media-screen">
+                            <div class="media-floor" id="cabinDisplay">01</div>
+                            <div class="media-status" id="cabinStatus">СТЕНДБАЙ</div>
+                        </div>
+                        <div class="cabin-mirror"></div>
+                    </div>
+
+                    <!-- Правая часть кабины: Большая сенсорная панель приказов -->
+                    <div class="cabin-right">
+                        <div class="touch-panel">
+                            <div class="panel-header">SMART ELEVATOR SYSTEM</div>
+                            <div class="buttons-grid" id="buttonsGrid"></div>
+                            <div class="panel-footer">=== OTIS / KONE 2026 ===</div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Раздвижные двери холла/кабины -->
-                <div class="doors-wrapper" id="doorsWrapper">
-                    <div class="door-wing left-wing"></div>
-                    <div class="door-wing right-wing"></div>
-                </div>
-            </div>
-
-            <!-- Кнопка вызова на этаже (доступна, когда вы снаружи) -->
-            <div class="hall-call-box" id="hallCallBox">
-                <div class="current-location-text">Вы стоите на <span id="userFloorText">01</span> этаже</div>
-                <button class="btn-call" id="btnCallElevator">▲▼ Вызвать лифт</button>
             </div>
             
-            <!-- Статус для подсказок игроку -->
-            <div class="player-status" id="playerStatus">Лифт на 1 этаже. Двери закрыты. Нажмите «Вызвать лифт».</div>
+            <!-- Информационный подвал для игрока -->
+            <div class="status-bar" id="playerStatus">Вы стоите в холле. Нажмите кнопку вызова лифта.</div>
         </div>
 
-        <!-- ПРАВАЯ СТОРОНА: Схема движения в шахте -->
+        <!-- ПРАВАЯ СТОРОНА: Интерактивный монитор шахты (как у вас) -->
         <div class="view-shaft-schema">
             <div class="schema-title">МОНИТОР ШАХТЫ</div>
             <div class="shaft-container">
                 <div class="shaft-rail">
-                    <!-- Кабина на схеме -->
                     <div class="mini-car" id="miniCar">
                         <div class="mini-car-light"></div>
                     </div>
                 </div>
-                <!-- Метки этажей справа от рельса -->
                 <div class="floor-labels" id="floorLabels"></div>
             </div>
         </div>
