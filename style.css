@@ -2,233 +2,261 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
-    background-color: #0b0c10;
+    background: radial-gradient(circle at center, #1e2230 0%, #0f111a 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    color: #e2e8f0;
+    color: #fff;
     overflow: hidden;
 }
 
-.scada-container {
+.app-container {
     display: flex;
     gap: 30px;
-    background: #141722;
+    background: #141622;
     padding: 25px;
-    border-radius: 12px;
-    border: 1px solid #232936;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
-    width: 860px;
-    height: 700px;
+    border-radius: 20px;
+    border: 1px solid #25293c;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7);
+    width: 820px;
+    height: 640px;
 }
 
-.section-title {
-    font-size: 11px;
-    font-weight: 700;
-    color: #64748b;
-    letter-spacing: 1.5px;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    border-bottom: 1px solid #232936;
-    padding-bottom: 6px;
-}
-
-/* ШАХТА И ИНДИКАЦИЯ */
-.shaft-section {
-    display: flex;
-    flex-direction: column;
-    width: 200px;
-}
-.shaft-wrapper {
-    display: flex;
-    height: 620px;
-    gap: 10px;
-}
-.floor-labels {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-end;
-    width: 30px;
-    font-family: 'Courier New', monospace;
-    font-size: 11px;
-    color: #475569;
-    padding: 11px 0;
-}
-
-.shaft {
+/* ЛЕВАЯ ЧАСТЬ: ВИД ОТ ПЕРВОГО ЛИЦА */
+.view-first-person {
     flex: 1;
-    background: linear-gradient(180deg, #07080c 0%, #0c0e14 100%);
-    border: 2px solid #1e293b;
-    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #1a1d29;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #2a2f42;
+}
+
+/* Электронное табло */
+.header-indicator {
+    width: 140px;
+    background: #090a10;
+    border: 2px solid #38bdf8;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+}
+.floor-display {
+    font-family: 'Courier New', monospace;
+    font-size: 32px;
+    font-weight: bold;
+    color: #38bdf8;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+}
+.arrow-indicator {
+    font-size: 20px;
+    color: #475569;
+    transition: color 0.3s;
+}
+.arrow-indicator.active-up { color: #10b981; text-shadow: 0 0 8px #10b981; }
+.arrow-indicator.active-down { color: #ef4444; text-shadow: 0 0 8px #ef4444; }
+
+/* Портал лифта */
+.elevator-view-box {
+    width: 320px;
+    height: 340px;
+    background: #111;
+    border: 6px solid #334155;
+    border-radius: 4px;
     position: relative;
     overflow: hidden;
-    box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
 }
-.floor-lines {
+
+/* Внутренности кабины за дверями */
+.elevator-interior {
     position: absolute;
     width: 100%;
     height: 100%;
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+.mirror {
+    width: 120px;
+    height: 200px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(1px);
+    border-radius: 2px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+/* Внутренняя панель кнопок */
+.car-panel {
+    width: 110px;
+    height: 100%;
+    background: linear-gradient(180deg, #475569 0%, #334155 100%);
+    border-radius: 6px;
+    border: 1px solid #64748b;
+    padding: 10px 6px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    align-items: center;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.4);
+    opacity: 0.3; /* Затемнена, когда мы снаружи */
+    transition: opacity 0.5s;
+}
+.inside .car-panel { opacity: 1; } /* Подсвечивается, когда зашли внутрь */
+
+.panel-brand { font-size: 8px; font-weight: bold; color: #94a3b8; letter-spacing: 1px; margin-bottom: 8px; }
+
+.buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    overflow-y: auto;
+    flex: 1;
+    width: 100%;
+    padding-right: 2px;
+}
+.btn-floor {
+    height: 26px;
+    background: #e2e8f0;
+    color: #1e293b;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-floor.active {
+    background: #0ea5e9;
+    color: #fff;
+    border-color: #38bdf8;
+    box-shadow: 0 0 8px #0ea5e9;
+}
+.btn-floor:disabled { cursor: not-allowed; }
+
+/* Раздвижные двери */
+.doors-wrapper {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    z-index: 10;
     pointer-events: none;
 }
-.floor-line {
-    width: 100%;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    height: 38.75px; /* Идеальное распределение на 16 этажей */
-}
-
-/* РЕАЛИСТИЧНАЯ КАБИНА С ДВЕРЬМИ */
-.elevator {
-    width: calc(100% - 10px);
-    height: 36px;
-    margin: 1px 5px;
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    border: 1px solid #38bdf8;
-    border-radius: 4px;
-    position: absolute;
-    bottom: 0;
-    transition: bottom 1.2s cubic-bezier(0.45, 0, 0.15, 1); /* Плавный пуск и доводка */
-    box-shadow: 0 0 20px rgba(56, 189, 248, 0.2), inset 0 0 10px rgba(56, 189, 248, 0.1);
-    z-index: 10;
-}
-
-/* Верхнее светодиодное освещение купе */
-.elevator-ceiling-light {
-    position: absolute;
-    top: 0; left: 10%; width: 80%; height: 3px;
-    background: #e0f2fe;
-    box-shadow: 0 2px 10px #sky-400;
-    border-radius: 0 0 2px 2px;
-}
-
-/* Аварийное состояние купе */
-.elevator.broken {
-    border-color: #ef4444 !important;
-    box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);
-    animation: engine-vibration 0.15s infinite alternate;
-}
-@keyframes engine-vibration {
-    0% { transform: translateY(0.5px); }
-    100% { transform: translateY(-0.5px); }
-}
-
-/* Шлифованная сталь дверей */
-.doors { display: flex; width: 100%; height: 100%; padding: 1px; }
-.door {
+.door-wing {
     width: 50%;
     height: 100%;
     background: linear-gradient(90deg, #64748b 0%, #475569 50%, #334155 100%);
     border: 1px solid #1e293b;
-    box-shadow: inset -1px 0 2px rgba(255,255,255,0.1);
-    transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+    transition: transform 1.4s cubic-bezier(0.45, 0, 0.25, 1);
 }
-.elevator.doors-open .left-door { transform: translateX(-98%); }
-.elevator.doors-open .right-door { transform: translateX(98%); }
+/* Анимация открытия */
+.doors-open .left-wing { transform: translateX(-98%); }
+.doors-open .right-wing { transform: translateX(98%); }
 
-
-/* СТАНЦИЯ УПРАВЛЕНИЯ */
-.control-panel {
-    flex: 1;
-    background: #0f111a;
-    border-radius: 8px;
-    border: 1px solid #1e293b;
-    padding: 20px;
+/* Панель вызова на этаже */
+.hall-call-box {
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
 }
-
-/* Профессиональное табло */
-.main-display-unit {
-    background: #04060a;
-    border: 1px solid #232936;
+.current-location-text { font-size: 13px; color: #94a3b8; }
+.btn-call {
+    width: 180px;
+    padding: 12px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #fff;
+    font-weight: bold;
     border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-call:hover:not(:disabled) { background: #334155; border-color: #0ea5e9; }
+.btn-call.active { background: #0ea5e9; border-color: #38bdf8; box-shadow: 0 0 15px rgba(14,165,233,0.4); }
+.btn-call:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.player-status { margin-top: auto; font-size: 12px; color: #64748b; text-align: center; line-height: 1.4; width: 100%; border-top: 1px solid #2a2f42; padding-top: 10px;}
+
+
+/* ПРАВАЯ ЧАСТЬ: СХЕМА ШАХТЫ */
+.view-shaft-schema {
+    width: 180px;
+    background: #0f111a;
+    border-radius: 12px;
+    border: 1px solid #232936;
     padding: 15px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
 }
-.matrix-display {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 52px;
-    font-weight: bold;
-    color: #10b981;
-    text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
-    letter-spacing: 3px;
-    margin: 5px 0;
-}
-.matrix-display.emergency {
-    color: #ef4444;
-    text-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
-}
-.direction-arrows { font-size: 10px; color: #334155; font-weight: 700; gap: 15px; display: flex; }
-.arrow.active { color: #10b981; text-shadow: 0 0 5px #10b981; }
-.system-status { font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+.schema-title { font-size: 11px; font-weight: bold; color: #475569; text-align: center; letter-spacing: 1px; margin-bottom: 15px; }
 
-/* Лог диагностики */
-.diagnostic-block {
-    margin: 15px 0;
-    background: #141722;
-    border: 1px solid #232936;
-    border-radius: 6px;
-    padding: 12px;
-}
-.diag-row { font-size: 12px; margin-bottom: 6px; color: #94a3b8; }
-.diag-row span { font-weight: bold; font-family: monospace; }
-.status-ok { color: #10b981; }
-.status-fail { color: #ef4444; animation: telemetry-blink 1s infinite; }
-@keyframes telemetry-blink { 50% { opacity: 0.4; } }
-
-/* Инструменты */
-.tools-title { font-size: 10px; font-weight: 700; color: #475569; letter-spacing: 1px; margin-bottom: 10px; text-transform: uppercase; }
-.engineer-tools { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-.btn-eng {
-    background: #1e293b;
-    border: 1px solid #334155;
-    color: #f1f5f9;
-    padding: 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 11px;
-    font-weight: 600;
-    text-align: left;
-    transition: all 0.2s;
+.shaft-container {
+    flex: 1;
     display: flex;
-    align-items: center;
-    gap: 10px;
+    gap: 15px;
+    position: relative;
 }
-.btn-eng:hover:not(:disabled) { background: #334155; border-color: #38bdf8; }
-.btn-eng:disabled { opacity: 0.15; cursor: not-allowed; }
+.shaft-rail {
+    width: 24px;
+    background: #07080c;
+    border: 1px solid #1e293b;
+    border-radius: 4px;
+    position: relative;
+    height: 520px; /* Фиксированная высота рельса движения */
+}
 
-/* Лог ОДС */
-.ods-journal {
+/* Кабина на мини-схеме */
+.mini-car {
+    width: 18px;
+    height: 24px;
+    background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+    border: 1px solid #38bdf8;
+    border-radius: 3px;
+    position: absolute;
+    left: 2px;
+    bottom: 0; /* Стартует снизу (1 этаж) */
+    transition: bottom 0.1s linear; /* Пошаговое плавное обновление */
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+    display: flex;
+    justify-content: center;
+}
+.mini-car-light { width: 10px; height: 2px; background: #fff; margin-top: 2px; border-radius: 1px; box-shadow: 0 1px 4px #fff; }
+
+/* Разметка цифр этажей */
+.floor-labels {
     flex: 1;
     display: flex;
     flex-direction: column;
-}
-.journal-log {
-    flex: 1;
-    background: #06080c;
-    border: 1px solid #1e293b;
-    border-radius: 6px;
-    padding: 10px;
-    overflow-y: auto;
+    justify-content: space-between;
     font-family: 'Courier New', monospace;
     font-size: 11px;
-    height: 120px;
+    color: #475569;
+    padding: 4px 0;
 }
-.log-row { margin-bottom: 6px; padding-left: 6px; border-left: 2px solid #38bdf8; line-height: 1.3; }
-.log-row.sys { border-color: #475569; color: #64748b; }
-.log-row.wrn { border-color: #f59e0b; color: #f59e0b; }
-.log-row.dmg { border-color: #ef4444; color: #ef4444; }
-.log-row.ok { border-color: #10b981; color: #10b981; }
-
-.stats-row { margin-top: 10px; font-size: 12px; font-weight: bold; color: #10b981; text-align: right; }
+.floor-label-item {
+    height: 24px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+.floor-label-item.current-at-shaft {
+    color: #38bdf8;
+    font-weight: bold;
+}
