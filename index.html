@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Симулятор лифта ЩЛЗ 2011 (16 этажей)</title>
+    <title>Современный Симулятор Лифта</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="simulator">
-        <!-- Шахта лифта -->
+        <!-- Высокотехнологичная прозрачная/стеклянная шахта -->
         <div class="shaft">
+            <!-- Разметка этажных линий для красоты -->
+            <div class="floor-lines" id="floorLines"></div>
+            
             <div class="elevator" id="elevator">
+                <div class="elevator-glow"></div>
                 <div class="doors" id="doors">
                     <div class="door left-door"></div>
                     <div class="door right-door"></div>
@@ -18,20 +22,23 @@
             </div>
         </div>
 
-        <!-- Панель управления ЩЛЗ внутри кабины -->
+        <!-- Сенсорная панель управления Smart Touch -->
         <div class="panel">
-            <div class="brand">ЩЛЗ 2011</div>
-            <!-- Электронное табло -->
-            <div class="display" id="display">1</div>
+            <!-- Интеллектуальный ЖК-дисплей -->
+            <div class="display-container">
+                <div class="arrow up" id="arrow-up">▲</div>
+                <div class="display" id="display">01</div>
+                <div class="arrow down" id="arrow-down">▼</div>
+                <div class="status-text" id="status-text">СТЕНДБАЙ</div>
+            </div>
             
-            <!-- Сетка кнопок 1-16 -->
+            <!-- Интерактивная сенсорная сетка -->
             <div class="buttons-grid" id="buttonsGrid"></div>
             
-            <!-- Служебные кнопки -->
+            <!-- Скрытые сенсоры дверей -->
             <div class="service-buttons">
-                <button class="btn service" id="btn-open">◄►</button>
-                <button class="btn service" id="btn-close">►◄</button>
-                <button class="btn service alarm" id="btn-alarm">🔔</button>
+                <button class="btn-touch service" id="btn-open">◄||►</button>
+                <button class="btn-touch service" id="btn-close">►||◄</button>
             </div>
         </div>
     </div>
