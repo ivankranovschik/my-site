@@ -1,30 +1,33 @@
 const TOTAL_FLOORS = 16;
-const SHAFT_HEIGHT = 496; // Доступный пиксельный путь кабины в шахте (520 - 24 высота кабины)
-const ONE_FLOOR_PX = SHAFT_HEIGHT / (TOTAL_FLOORS - 1); // Расстояние между этажами на схеме
+const SHAFT_HEIGHT = 480; // 500 высота рельса - 20 высота мини-кабины
+const ONE_FLOOR_PX = SHAFT_HEIGHT / (TOTAL_FLOORS - 1);
 
-// Состояния лифта
-let elevatorFloor = 1;      // Где сейчас лифт физически (может быть дробным при движении)
-let targetFloor = 1;        // Куда лифт направляется
+// Переменные системы
+let elevatorFloor = 1;
+let targetFloor = 1;
 let isMoving = false;
 let isDoorsOpen = false;
 
-// Состояния игрока
-let userFloor = 1;          // На каком этаже сейчас стоит человек
-let isInsideCar = false;    // Находится ли человек внутри кабины лифта
+let userFloor = 1;         // На каком этаже стоит юзер снаружи
+let isInsideCabin = false; // Находится ли юзер внутри кабины
 
 // DOM элементы
-const mainDisplay = document.getElementById('mainDisplay');
-const mainArrow = document.getElementById('mainArrow');
-const doorsWrapper = document.getElementById('doorsWrapper');
+const hallDisplay = document.getElementById('hallDisplay');
+const cabinDisplay = document.getElementById('cabinDisplay');
+const cabinStatus = document.getElementById('cabinStatus');
+const hallArrow = document.getElementById('hallArrow');
+const hallDoors = document.getElementById('hallDoors');
 const miniCar = document.getElementById('miniCar');
 const floorLabels = document.getElementById('floorLabels');
-const btnCallElevator = document.getElementById('btnCallElevator');
+const btnCall = document.getElementById('btnCall');
 const userFloorText = document.getElementById('userFloorText');
 const playerStatus = document.getElementById('playerStatus');
-const elevatorViewBox = document.getElementById('elevatorViewBox');
+
+const sceneHall = document.getElementById('scene-hall');
+const sceneCabin = document.getElementById('scene-cabin');
 const buttonsGrid = document.getElementById('buttonsGrid');
 
-// Генерируем метки этажей на схеме шахты (сверху вниз)
+// Генерация меток в шахте
 for (let i = TOTAL_FLOORS; i >= 1; i--) {
     const item = document.createElement('div');
     item.classList.add('floor-label-item');
@@ -33,181 +36,167 @@ for (let i = TOTAL_FLOORS; i >= 1; i--) {
     floorLabels.appendChild(item);
 }
 
-// Генерируем сенсорные кнопки внутри кабины (1-16)
+// Генерация сенсорных кнопок внутри кабины
 for (let i = TOTAL_FLOORS; i >= 1; i--) {
     const btn = document.createElement('button');
     btn.classList.add('btn-floor');
     btn.id = `btn-floor-${i}`;
     btn.innerText = i;
-    btn.addEventListener('click', () => pressFloorInside(i));
+    btn.addEventListener('click', () => selectFloorInside(i));
     buttonsGrid.appendChild(btn);
 }
 
-// Обновление подсветки текущего этажа на схеме
-function updateShaftLabelsHighlight() {
-    const roundedFloor = Math.round(elevatorFloor);
+function updateIndicators() {
+    const displayStr = String(Math.round(elevatorFloor)).padStart(2, '0');
+    // Обновляем оба табло одновременно!
+    hallDisplay.innerText = displayStr;
+    cabinDisplay.innerText = displayStr;
+
+    // Свечение этажа на боковом мониторе шахты
     document.querySelectorAll('.floor-label-item').forEach(el => el.classList.remove('current-at-shaft'));
-    const activeLabel = document.getElementById(`label-floor-${roundedFloor}`);
-    if (activeLabel) activeLabel.classList.add('current-at-shaft');
+    const currentLabel = document.getElementById(`label-floor-${Math.round(elevatorFloor)}`);
+    if (currentLabel) currentLabel.classList.add('current-at-shaft');
 }
-updateShaftLabelsHighlight();
+updateIndicators();
 
-// Функция изменения статуса и подсказок для игрока
-function setStatus(text) {
-    playerStatus.innerText = text;
-}
-
-// КНОПКА: Вызов лифта снаружи (с этажа, где стоит юзер)
-btnCallElevator.addEventListener('click', () => {
+// НАЖАТИЕ СНАРУЖИ: Вызов лифта
+btnCall.addEventListener('click', () => {
     if (isMoving || isDoorsOpen) return;
-    
-    btnCallElevator.classList.add('active');
+
+    btnCall.classList.add('active');
     targetFloor = userFloor;
-    
+
     if (Math.round(elevatorFloor) === userFloor) {
-        // Лифт уже на нашем этаже
-        btnCallElevator.classList.remove('active');
-        openDoorsSequence();
+        btnCall.classList.remove('active');
+        openDoors();
     } else {
-        setStatus(`Лифт вызван на ${userFloor} этаж. Ожидайте...`);
-        startMovement();
+        playerStatus.innerText = `Лифт вызван на ${userFloor} этаж. Ожидание...`;
+        startElevatorLoop();
     }
 });
 
-// НАЖАТИЕ НА КНОПКУ ВНУТРИ КАБИНЫ
-function pressFloorInside(floor) {
-    if (!isInsideCar || isMoving || isDoorsOpen) return;
+// НАЖАТИЕ ВНУТРИ: Выбор этажа
+function selectFloorInside(floor) {
+    if (!isInsideCabin || isMoving || isDoorsOpen) return;
     if (floor === Math.round(elevatorFloor)) {
-        setStatus("Вы уже находитесь на этом этаже.");
+        playerStatus.innerText = "Вы уже на выбранном этаже. Ожидайте автоматического выхода.";
         return;
     }
 
-    // Подсвечиваем нажатую кнопку
     document.getElementById(`btn-floor-${floor}`).classList.add('active');
     targetFloor = floor;
-    
-    closeDoorsSequence().then(() => {
-        setStatus(`Лифт плавно поехал на ${targetFloor} этаж...`);
-        startMovement();
+    cabinStatus.innerText = "ЗАКРЫТИЕ";
+
+    closeDoors().then(() => {
+        playerStatus.innerText = `Лифт едет на ${targetFloor} этаж.`;
+        cabinStatus.innerText = "В ПУТИ";
+        startElevatorLoop();
     });
 }
 
-// СИСТЕМА ПЛАВНОГО ДВИЖЕНИЯ (Таймер высокого разрешения)
-function startMovement() {
+// ДВИЖЕНИЕ ЛИФТА
+function startElevatorLoop() {
     isMoving = true;
-    btnCallElevator.disabled = true;
-    
-    // Стрелки направления на табло
+    btnCall.disabled = true;
+
+    // Стрелочные индикаторы направления холла
     if (targetFloor > elevatorFloor) {
-        mainArrow.innerText = "▲";
-        mainArrow.className = "arrow-indicator active-up";
+        hallArrow.innerText = "▲"; hallArrow.className = "arrow up";
     } else {
-        mainArrow.innerText = "▼";
-        mainArrow.className = "arrow-indicator active-down";
+        hallArrow.innerText = "▼"; hallArrow.className = "arrow down";
     }
 
-    let speed = 0.04; // Скорость перемещения между этажами за один кадр анимации
+    let speed = 0.05; // Скорость хода
 
-    function moveFrame() {
+    function step() {
         if (!isMoving) return;
 
         if (elevatorFloor < targetFloor) {
             elevatorFloor += speed;
-            if (elevatorFloor >= targetFloor) {
-                elevatorFloor = targetFloor;
-                isMoving = false;
-            }
+            if (elevatorFloor >= targetFloor) { elevatorFloor = targetFloor; isMoving = false; }
         } else if (elevatorFloor > targetFloor) {
             elevatorFloor -= speed;
-            if (elevatorFloor <= targetFloor) {
-                elevatorFloor = targetFloor;
-                isMoving = false;
-            }
+            if (elevatorFloor <= targetFloor) { elevatorFloor = targetFloor; isMoving = false; }
         }
 
-        // 1. Движение кабины на боковой схеме (в пикселях)
-        const bottomPx = (elevatorFloor - 1) * ONE_FLOOR_PX;
-        miniCar.style.bottom = `${bottomPx}px`;
+        // Синхронизация мини-кабины на рельсе
+        miniCar.style.bottom = `${(elevatorFloor - 1) * ONE_FLOOR_PX}px`;
+        updateIndicators();
 
-        // 2. Обновление табло от 1-го лица
-        mainDisplay.innerText = String(Math.round(elevatorFloor)).padStart(2, '0');
-        updateShaftLabelsHighlight();
-
-        // Если едем вместе с лифтом, наш этаж меняется параллельно
-        if (isInsideCar) {
+        if (isInsideCabin) {
             userFloor = Math.round(elevatorFloor);
             userFloorText.innerText = String(userFloor).padStart(2, '0');
         }
 
         if (isMoving) {
-            requestAnimationFrame(moveFrame);
+            requestAnimationFrame(step);
         } else {
-            // Лифт прибыл на целевой этаж
-            onElevatorArrived();
+            arriveAtFloor();
         }
     }
-
-    requestAnimationFrame(moveFrame);
+    requestAnimationFrame(step);
 }
 
-// ЛИФТ ПРИБЫЛ
-function onElevatorArrived() {
-    mainArrow.innerText = "●";
-    mainArrow.className = "arrow-indicator";
-    btnCallElevator.classList.remove('active');
+// ПРИБЫТИЕ ЛИФТА И СМЕНА СЦЕН
+function arriveAtFloor() {
+    hallArrow.innerText = "●";
+    hallArrow.className = "arrow";
+    btnCall.classList.remove('active');
     
-    // Гасим кнопку внутри кабины
-    document.getElementById(`btn-floor-${targetFloor}`).classList.remove('active');
+    // Гасим кнопку на панели приказов
+    const floorBtn = document.getElementById(`btn-floor-${targetFloor}`);
+    if (floorBtn) floorBtn.classList.remove('active');
 
-    openDoorsSequence().then(() => {
-        if (!isInsideCar) {
-            setStatus("Лифт прибыл. Двери открыты. Вы автоматически ВОШЛИ в кабину.");
-            // Игрок заходит в кабину
-            isInsideCar = true;
-            document.body.classList.add('inside'); // Для CSS (подсветить панель)
-            document.getElementById('doorsWrapper').parentElement.classList.add('inside');
-            hallCallBox.style.display = "none"; // Прячем кнопку вызова этажа, так как мы внутри
-            
-            // Ждем 4 секунды, пока игрок внутри выбирает этаж. Если ничего не нажал — двери закроются.
+    if (!isInsideCabin) {
+        // СИТУАЦИЯ: Лифт приехал к нам в холл
+        openDoors().then(() => {
+            playerStatus.innerText = "Лифт прибыл! Вы зашли в кабину.";
             setTimeout(() => {
-                if (!isMoving && isDoorsOpen) {
-                    closeDoorsSequence().then(() => {
-                        setStatus("Вы внутри кабины. Выберите этаж на вертикальной панели.");
-                    });
-                }
-            }, 5000);
-        } else {
-            // Мы приехали на нужный этаж изнутри
-            setStatus(`Вы приехали на ${userFloor} этаж! Вы автоматически ВЫШЛИ в холл.`);
-            isInsideCar = false;
-            document.body.classList.remove('inside');
-            document.getElementById('doorsWrapper').parentElement.classList.remove('inside');
-            hallCallBox.style.display = "flex"; // Возвращаем кнопку вызова этажа холла
+                // Переключаем сцену ВНУТРЬ кабины
+                isInsideCabin = true;
+                sceneHall.classList.remove('active');
+                sceneCabin.classList.add('active');
+                cabinStatus.innerText = "ВЫБЕРИТЕ ЭТАЖ";
+            }, 800);
+        });
+    } else {
+        // СИТУАЦИЯ: Мы приехали на нужный этаж изнутри
+        cabinStatus.innerText = "ПРИБЫЛ";
+        playerStatus.innerText = `Вы приехали на ${targetFloor} этаж и вышли в холл.`;
+        
+        setTimeout(() => {
+            // Переключаем сцену ОБРАТНО в холл
+            isInsideCabin = false;
+            sceneCabin.classList.remove('active');
+            sceneHall.classList.add('active');
+            
+            userFloor = Math.round(elevatorFloor);
             userFloorText.innerText = String(userFloor).padStart(2, '0');
             
-            setTimeout(() => {
-                if (!isMoving && isDoorsOpen) closeDoorsSequence();
-            }, 3000);
-        }
-    });
+            // Открываем двери холла на новом этаже
+            openDoors().then(() => {
+                setTimeout(() => { closeDoors(); }, 3000);
+            });
+        }, 1000);
+    }
 }
 
-// АНИМАЦИИ ДВЕРЕЙ (Возвращают промисы для синхронизации)
-function openDoorsSequence() {
+// АНИМАЦИИ ДВЕРЕЙ
+function openDoors() {
     return new Promise(resolve => {
         isDoorsOpen = true;
-        doorsWrapper.classList.add('doors-open');
-        setTimeout(() => resolve(), 1400); // Время анимации дверей в CSS
+        hallDoors.classList.add('open');
+        setTimeout(() => resolve(), 1200);
     });
 }
 
-function closeDoorsSequence() {
+function closeDoors() {
     return new Promise(resolve => {
-        doorsWrapper.classList.remove('doors-open');
+        hallDoors.classList.remove('open');
         setTimeout(() => {
             isDoorsOpen = false;
-            btnCallElevator.disabled = false;
+            btnCall.disabled = false;
             resolve();
-        }, 1400);
+        }, 1200);
     });
 }
